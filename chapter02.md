@@ -47,12 +47,12 @@ new BigInteger(Random, int, int);     // 나옴
 * 인터페이스는 메서드를 가질 수 없으므로 전용 클래스를 만든다. (`SomeType SomeTypes.getSomeType()`)
   > 이거 자바 8부터 [인터페이스에 메서드 추가가 가능](https://blog.naver.com/amas1004/222287203050)한데 `static`도 가능한가?
 * 인터페이스 기반의 장점은 API의 규모가 줄어드는 것이 아니라 개념상의 무게감 conceptual weight이 줄어든 것이다.
-* Java Collection API 에 32개의 비 `public` 구현 클래스들이 있지만 `java.util.Collection`을 구현하므로 따로 문서화할 필요가 없다.
+    * Java Collection API 에 32개의 비 `public` 구현 클래스들이 있지만 `java.util.Collection`을 구현하므로 따로 문서화할 필요가 없다.
 * 버전에 따라서 다른 구현체를 리턴할 수도 있으므로 유지보수성이 높아진다.
 * `java.util.EnumSet`([규칙 32](chapter06.md))은 `public` 생성자가 없고 정적 팩토리 메서드 뿐이다.
-  * `enum` 상수의 개수가 64개 이하인 경우 내부적으로 `long` 변수의 비트를 활용하는 버전(`RegularEnumSet`)을 리턴
-  * 64개 초과인 경우 `long` 형 배열을 사용하는 `JumboEnumSet` 을 리턴한다.
-  * 다음 릴리즈에서 `JumboEnumSet`이 성능이 만족하지 않는다면 `MegaEnumSet`이라던가 `GigaEnumSet`으로 변경될 수 있다.
+    * `enum` 상수의 개수가 64개 이하인 경우 내부적으로 `long` 변수의 비트를 활용하는 버전(`RegularEnumSet`)을 리턴
+    * 64개 초과인 경우 `long` 형 배열을 사용하는 `JumboEnumSet` 을 리턴한다.
+    * 다음 릴리즈에서 `JumboEnumSet`이 성능이 만족하지 않는다면 `MegaEnumSet`이라던가 `GigaEnumSet`으로 변경될 수 있다.
 
 서비스 제공자 프레임워크service provider framework (eg: JDBC):
 
@@ -89,16 +89,16 @@ Map<String, List<String>> m = new HashMap<>(); // java 1.7 이것도 충분히 �
 ### 정적 팩터리메서드의 단점
 
 * `public`, `protected` 생성자가 없으므로 하위 클래스를 만들 수 없다.
-* 상속inheritance 대신 복합compsition 기법을 권장하는 의미에서는 더 좋을 수도 있다.
+    * 상속inheritance 대신 복합compsition 기법을 권장하는 의미에서는 더 좋을 수도 있다.
 * 팩터리 메서드가 문법적이나 javadoc 문서 등에서 일반 메서드와 구분이 되지 않는다
-* 생성자를 쓰지 말고 팩터리 메서드를 쓰도록 설계된 객체의 사용법을 파악하기 쉽지 않다.
-* 많이 사용되는 이름
-  * `valueOf()`
-  * `of()`
-  * `getInstance()`
-  * `newInstance()`
-  * `SomeType getSomeType()`
-  * `SomeType newSomeType()`
+    * 생성자를 쓰지 말고 팩터리 메서드를 쓰도록 설계된 객체의 사용법을 파악하기 쉽지 않다.
+    * 많이 사용되는 이름
+        * `valueOf()`
+        * `of()`
+        * `getInstance()`
+        * `newInstance()`
+        * `SomeType getSomeType()`
+        * `SomeType newSomeType()`
 
 ### 결론
 
