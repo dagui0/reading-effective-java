@@ -107,6 +107,160 @@ Map<String, List<String>> m = new HashMap<>(); // java 1.7 이것도 충분히 �
 
 ## 규칙 2: 생성자 인자가 많을 때는 Builder 패턴 적용을 고려하라
 
+생성에 필요한 인자 중 선택적 인자가 많은 경우 생성자나 팩토리 메서드의 모두 문제가 있다.
+
+### 점층적 생성자 패턴
+
+```java
+private class NutritionFacts {
+    private final int servingSize;      // 필수
+    private final int servings;         // 필수
+    private final int calories;         // 선택
+    private final int fat;              // 선택
+    private final int soduim;           // 선택
+    private final int carbohydrate;     // 선택
+
+    public NutritionFacts(int servingSize, int servings) {
+        this(servingSize, servings, 0);
+    }
+    public NutritionFacts(int servingSize, int servings, int calories) {
+        this(servingSize, servings, calories, 0);
+    }
+    public NutritionFacts(int servingSize, int servings, int calories, int fat) {
+        this(servingSize, servings, calories, fat, 0);
+    }
+    public NutritionFacts(int servingSize, int servings, int calories, int fat, int soduim) {
+        this(servingSize, servings, calories, fat, soduim, 0);
+    }
+    public NutritionFacts(int servingSize, int servings, int calories, int fat, int soduim, int carbohydrate) {
+        this.servingSize = servingSize;
+        this.servings = servings;
+        this.calories = calories;
+        this.fat = fat;
+        this.soduim = soduim;
+        this.carbohydrate = carbohydrate;
+    }
+}
+
+NutritionFacts nf = new NutritionFacts(240, 8, 100, 3, 25, 27);
+```
+
+* 인자 수가 늘어남에 따라 코드 작성이 번거롭고 읽기 어려운 코드가 된다.
+
+### JavaBeans 패턴
+
+```java
+private class NutritionFacts {
+    private int servingSize = -1;   // 필수
+    private int servings = -1;      // 필수
+    private int calories = 0;       // 선택
+    private int fat = 0;            // 선택
+    private int soduim = 0;         // 선택
+    private int carbohydrate = 0;   // 선택
+
+    public NutritionFacts() {}
+
+    public setServingSzie(int servingSize) { this.servingSize = servingSize; }
+    public setServings(int servings) { this.servings = servings; }
+    public setCalories(int calories) { this.calories = calories; }
+    public setFat(int fat) { this.fat = fat; }
+    public setSodium(int sodium) { this.sodium = sodium; }
+    public setCarbohydrate(int carbohydrate) { this.carbohydrate = carbohydrate; }
+}
+
+NutritionFacts nf = new NutritionFacts();
+nf.setServingSzie(240);
+nf.setServings(8);
+nf.setCalories(100);
+nf.setFat(3);
+nf.setSodium(35);
+nf.setCarbohydrate(27);
+```
+
+* 1회의 함수 호출로 생성할 수 없으므로 객체의 일관성consistency가 일시적으로 깨지는 시점이 있다.
+* 변경 불가능한 객체를 만들 수 없다.
+
+### Builder 패턴
+
+GoF의 [Builder 패턴](https://inpa.tistory.com/entry/GOF-%F0%9F%92%A0-%EB%B9%8C%EB%8D%94Builder-%ED%8C%A8%ED%84%B4-%EB%81%9D%ED%8C%90%EC%99%95-%EC%A0%95%EB%A6%AC)은 생성자 패턴의 안전성과 자바빈 패턴의 가독성을 모두 제공하는 대안이다.
+
+```java
+private class NutritionFacts {
+    private final int servingSize;      // 필수
+    private final int servings;         // 필수
+    private final int calories;         // 선택
+    private final int fat;              // 선택
+    private final int soduim;           // 선택
+    private final int carbohydrate;     // 선택
+
+    public static class Builder {
+        private final int servingSize;  // 필수
+        private final int servings;     // 필수
+        private int calories = 0;       // 선택
+        private int fat = 0;            // 선택
+        private int soduim = 0;         // 선택
+        private int carbohydrate = 0;   // 선택
+
+        public Builder(int servingSize, int servings) {
+            this.servingSize = servingSize;
+            this.servings = servings;
+        }
+        public Builder calories(int calories) { this.calories = calories; return this; }
+        public Builder fat(int fat) { this.fat = fat; return this; }
+        public Builder soduim(int soduim) { this.soduim = soduim; return this; }
+        public Builder carbohydrate(int carbohydrate) { this.carbohydrate = carbohydrate; return this; }
+
+        public NutritionFacts build() {
+            return new NutritionFacts(this);
+        }
+    }
+
+    private NutritionFacts(Builder builder) {
+        this.servingSize = builder.servingSize;
+        this.servings = builder.servings;
+        this.calories = builder.calories;
+        this.fat = builder.fat;
+        this.soduim = builder.soduim;
+        this.carbohydrate = builder.carbohydrate;
+    }
+}
+
+NutritionFacts nf = new NutritionFacts.Builder(240, 8)
+                        .calories(100).fat(3).sodium(35).carbohydrate(27)
+                        .build();
+```
+
+* [Ada](https://www.adaic.org/resources/add_content/docs/95style/html/sec_5/5-2-2.html),
+  [Python](https://int-i.github.io/python/2020-06-04/python-keyword-args/#google_vignette)의
+  경우 선택적 인자에 이름을 붙일 수 있든데 비슷한 코드를 만들 수 있다.
+* 생성자와 마찬가지로 [불변식(invariant)](https://banaba.tistory.com/34)을 적용할 수 있다.
+    * `build()` 또는 `private` 생성자에서 에서 불변식 검사를 할 경우 실제 객체의 값을 두고 검사할 수 있다.([규칙 39](chapter07.md))
+        * 이 경우 오류 발생시 `IllegalStateException`을 던져야 한다.([규칙 60](chapter09.md))
+            * 이렇게 던져진 예외에는 어떤 불변식 위반이 문제인지 알 수 있도록 상세 정보가 포함되어야 한다.([규칙 63](chapter09.md))
+    * 여러 인자에 걸쳐서 불변식을 검사하려면 여러 인자를 받는 setter 메소드에를 만들면 된다.
+        * 이 경우 오류 발생시 `IllegalArgumentException`을 던져야 한다.
+* setter 메소드마다 따로따로 호출되므로, 여러개의 가변수 인자(varargs)를 받을수 있다.
+* 유연하게 확장 가능하다.
+    * 자동으로 증가하는 일련번호 등 추가적인 기능을 처리할 수 있다.
+    * 설정 변수를 사용해서 생성될 객체를 바꿀 수도 있다. 이 경우 [GoF의 추상적 팩토리 패턴](https://junhkang.com/posts/61/)이 될 수 있다.
+    * 제네릭을 사용하면 여러 자료형에 적용할 수도 있다.
+      ```java
+      public interface Builder<T> {
+        public T build();
+      }
+
+      Tree buildTree(Builder<? extends Node> nodeBuilder) { ... }
+      ```
+
+### Builder 패턴의 단점
+
+* 객체를 생성하기 위해 Builder객체를 생성해야 하므로 객체 생성 오버헤드가 증가한다.
+* 생성자 보다 코드 량이 많아지므로 인자 수가 많은 경우 또는 많아질 가능성이 있는 경우등 잘 판단해야 한다.
+
+### 결론
+
+* 인자 수가 많은 생성자를 대체할 수 있다.
+* 대부분의 인자가 선택적인 경우 적용할 수 있다.
 
 ## 규칙 3: `private` 생성자나 `enum` 자료형은 싱글턴 패턴을 따르도록 설계하라
 
