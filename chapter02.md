@@ -52,14 +52,14 @@ new BigInteger(Random, int, int);     // 나옴
 
 `public`으로 선언되지 않은 하위 클래스를 리턴 가능하다.
 
-인터페이스 기반 프레임워크 interface-based framework ([규칙 18](chapter04.md)):
+인터페이스 기반 프레임워크 interface-based framework ([규칙 18](chapter04.md#규칙-18-추상-클래스-대신-인터페이스를-사용하라)):
 
 * 인터페이스는 메서드를 가질 수 없으므로 전용 클래스를 만든다. (`SomeType SomeTypes.getSomeType()`)
   > 이거 자바 8부터 [인터페이스에 메서드 추가가 가능](https://blog.naver.com/amas1004/222287203050)한데 `static`도 가능한가?
 * 인터페이스 기반의 장점은 API의 규모가 줄어드는 것이 아니라 개념상의 무게감 conceptual weight이 줄어든 것이다.
     * Java Collection API 에 32개의 비 `public` 구현 클래스들이 있지만 `java.util.Collection`을 구현하므로 따로 문서화할 필요가 없다.
 * 버전에 따라서 다른 구현체를 리턴할 수도 있으므로 유지보수성이 높아진다.
-* `java.util.EnumSet`([규칙 32](chapter06.md))은 `public` 생성자가 없고 정적 팩토리 메서드 뿐이다.
+* `java.util.EnumSet`([규칙 32](chapter06.md#규칙-32-비트필드bit-field-대신-enumset을-사용하라))은 `public` 생성자가 없고 정적 팩토리 메서드 뿐이다.
     * `enum` 상수의 개수가 64개 이하인 경우 내부적으로 `long` 변수의 비트를 활용하는 버전(`RegularEnumSet`)을 리턴
     * 64개 초과인 경우 `long` 형 배열을 사용하는 `JumboEnumSet` 을 리턴한다.
     * 다음 릴리즈에서 `JumboEnumSet`이 성능이 만족하지 않는다면 `MegaEnumSet`이라던가 `GigaEnumSet`으로 변경될 수 있다.
@@ -244,9 +244,9 @@ NutritionFacts nf = new NutritionFacts.Builder(240, 8)
   [Python](https://int-i.github.io/python/2020-06-04/python-keyword-args/#google_vignette)의
   경우 선택적 인자에 이름을 붙일 수 있든데 비슷한 코드를 만들 수 있다.
 * 생성자와 마찬가지로 [불변식(invariant)](https://banaba.tistory.com/34)을 적용할 수 있다.
-    * `build()` 또는 `private` 생성자에서 에서 불변식 검사를 할 경우 실제 객체의 값을 두고 검사할 수 있다.([규칙 39](chapter07.md))
-        * 이 경우 오류 발생시 `IllegalStateException`을 던져야 한다.([규칙 60](chapter09.md))
-            * 이렇게 던져진 예외에는 어떤 불변식 위반이 문제인지 알 수 있도록 상세 정보가 포함되어야 한다.([규칙 63](chapter09.md))
+    * `build()` 또는 `private` 생성자에서 에서 불변식 검사를 할 경우 실제 객체의 값을 두고 검사할 수 있다.([규칙 39](chapter07.md#규칙-39-필요하다면-방어적-복사본을-만들라))
+        * 이 경우 오류 발생시 `IllegalStateException`을 던져야 한다.([규칙 60](chapter09.md#규칙-60-표준-예외를-사용하라))
+            * 이렇게 던져진 예외에는 어떤 불변식 위반이 문제인지 알 수 있도록 상세 정보가 포함되어야 한다.([규칙 63](chapter09.md#규칙-63-어떤-오류인지를-드러내는-정보를-상세한-메시지에-담으라))
     * 여러 인자에 걸쳐서 불변식을 검사하려면 여러 인자를 받는 setter 메소드에를 만들면 된다.
         * 이 경우 오류 발생시 `IllegalArgumentException`을 던져야 한다.
 * setter 메소드마다 따로따로 호출되므로, 여러개의 가변수 인자(varargs)를 받을수 있다.
