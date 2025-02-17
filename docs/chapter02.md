@@ -281,10 +281,14 @@ NutritionFacts3 nf3 = new NutritionFacts3.Builder(240, 8)
 싱글턴 구현 방법1:
 
 ```java
-public class Elvis {
-    public static final Elvis INSTANCE = new Elvis();
-    private Elvis() { }
-    public void leavTheBuilding() { }
+public class Elvis1 {
+    public static final Elvis1 INSTANCE = new Elvis1();
+    private Elvis1() { }
+    
+    private String name = "Elvis Presley";
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public void leaveTheBuilding() { }
 }
 ```
 
@@ -313,12 +317,17 @@ public class Private {
 * 싱글턴 패턴의 팩토리 메소드를 통해서 성능이 향상되기는 힘든데 JVM에 의해서 거의 대부분 inline 함수로 변환된다.
 
 ```java
-public class Elvis {
-    private static final Elvis INSTANCE = new Elvis();
-    private Elvis() { }
-    public static Elvis getInstance() { return INSTANCE; }
-    public void leavTheBuilding() { }
+public class Elvis2 {
+    private static final Elvis2 INSTANCE = new Elvis2();
+    private Elvis2() { }
+    public static Elvis2 getInstance() { return INSTANCE; }
+    
+    private String name = "Elvis Presley";
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public void leaveTheBuilding() { }
 }
+
 ```
 
 싱글턴 팩토리 메소드를 만들 때 장점:
@@ -334,26 +343,34 @@ public class Elvis {
     * 만일 역직렬화 과정에서 자동으로 호출되는 `readObject()`가 있더라도 `readResolve()`에서 반환한 인스턴스로 대체된다. 그리고 `readObject()`를 통해 자동으로 만들어진 인스턴스는 가비지 컬렉션 대상이 된다.
 
 ```java
-public class Elvis implements Serializable {
-    private transient static final Elvis INSTANCE = new Elvis();
-    private Elvis() { }
-    public static Elvis getInstance() { return INSTANCE; }
-    public void leavTheBuilding() { }
+public class Elvis3 implements Serializable {
+    private static final Elvis3 INSTANCE = new Elvis3();
+    private Elvis3() { }
+    public static Elvis3 getInstance() { return INSTANCE; }
+    
+    private transient String name = "Elvis Presley";    // transient
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public void leaveTheBuilding() { }
 
     private Object readResolve() {
         // 동일한 Elvis 객체가 반환되도록 하는 동시에 가짜 Elvis 객체는 가비지컬렉터가 처리하도록 한다.
         return INSTANCE;
     }
 }
+
 ```
 
 ### 결론: 원소가 하나뿐인 `enum` 자료형을 이용한 싱글턴 구현
 
 ```java
-public enum Elvis {
+public enum Elvis4 {
     INSTANCE;
 
-    public void leaveTheBuilding();
+    private String name = "Elvis Presley";
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public void leaveTheBuilding() { }
 }
 ```
 
@@ -384,7 +401,7 @@ public class MyFunctions {
 ```java
 String s = new Strign("stringette");    // 곤란하다
 String s = "stringette";                // 바람직하다
-Boolean b = new Boolean("true");        // 곤란하다
+Boolean b = new Boolean("true");        // 곤란하다 (deprecated from 9)
 Boolean b = Boolean.valueOf("true");    // 바람직하다
 ```
 
@@ -452,6 +469,8 @@ public static void main(String[] args) {
     System.out.println(sum);
 }
 ```
+
+* 테스트 결과: `Long`인 경우 6초 걸림, `long`인 경우 1초 걸림
 
 ### 적절한 객체의 사용은 문제가 되지 않는다.
 
@@ -532,6 +551,9 @@ public Object pop() {
 * 이러한 문제가 발생할 수 있다는 것을 인지하고 미리 방지 대책을 세워야 한다.
 
 ## 규칙 7: 종료자(finalizer) 사용을 피하라
+
+[추가] 수많은 문제를 가지고 있던 `finalize()`는 결국 Java 9부터 deprecated 되었다고 한다.
+[Java finalize() 은퇴식](https://jaeyeong951.medium.com/finalize-%EC%9D%80%ED%87%B4%EC%8B%9D-4a52fb855910)
 
 ### 선 결론: 종료자(finalizer)는 99.99% 쓸데 없다
 
@@ -620,3 +642,18 @@ public class Bar extends Foo {
 * 종료 메소드 없이 종료되는 경우에 대한 로그를 찍도록 하라
 * 굳이 `finalize()`를 사용해야 하는 경우라면 `super.finalize()`를 잊지 말자.
 
+### [추가] Java 7 `try-with-resources` 문 추가
+
+`AutoClosable` 인터페이스를 구현한 객체에 대해서 [`try-with-resources`](https://mangkyu.tistory.com/217) 문을 지원하게 되었다.
+
+```java
+public static void main(String args[]) throws IOException {
+    try (FileInputStream is = new FileInputStream("file.txt");
+         BufferedInputStream bis = new BufferedInputStream(is)) {
+        int data;
+        while ((data = bis.read()) != -1) {
+            System.out.print((char) data);
+        }
+    }
+}
+```
