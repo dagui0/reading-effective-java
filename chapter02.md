@@ -531,4 +531,90 @@ public Object pop() {
 
 ## 규칙 7: 종료자(finalizer) 사용을 피하라
 
+### 선 결론: 종료자(finalizer)는 99.99% 쓸데 없다
+
+* 예측 불가능하며 (언제 실행될지 알 수 없어)
+* 대체로 위험하고 (심지어 제대로 실행되지 않을 수도 있어)
+* 일반적으로 필요 없다. (가비지 컬렉터가 있으므로)
+
+### 종료자(finalizer)의 쓰레기 같은 특징
+
+* Java는 C++과는 달리 가비지컬렉터가 메모리 해제를 해주므로 보통 필요 없다.
+* 그러나 언제 해제된다는 보장이 없으므로 빨리 해제되어야 할 자원은 명시적으로 해제시키야 한다. (DB Connection, Lock 등등)
+* finalizer가 있는 경우 오히려 해제가 지연되는 경우가 있다. finalizer를 실행하는 쓰레드가 우선순위가 낮은 경우 finalize가 계속 밀린다.
+* Java Spec에는 finalizer가 언제 실행되어야 한다는 이야기도 없을 뿐만 아니라, 심지어 반드시 실행되어야 한다는 말도 없다.
+* `System.gc()`, `System.runFinalization()` 도 가능성을 높여줄 뿐 실행을 보장하지는 않는다.
+    * `System.runFinalizersOnExit()`, `Runtime.runFinalizersOnExit()`은 보장하긴 했었다. 지금은 deprecated.
+* 실행이 되더라도 끝까지 실행된다는 보장이 없다.
+    * 중간에 예외가 발생하면 아무런 경고나 오류메시지 없이 실행이 중단된다.
+* finalizer를 사용하면 프로그램 성능이 심각하게 떨어질 수 있다.
+
+### 명시적인 종료 메소드를 만들자
+
+`close()`, `release()`, `dispose()`, `flush()` 따위를 만들고  `try`-`finally`와 함께 사용하도록 한다.
+
+```java
+Handle h = openHandle();
+
+try {
+    h.doSomething();
+}
+finally {
+    h.close();
+}
+```
+
+* 명시적인 종료메소드를 만들고 안전장치로 finalizer에서 호출하도록 할 수는 있다.
+    * 이 경우 명시적올 호출되지 않은 종료메소드를 finalizer가 로그를 남기도록 해서 버그를 잡는 것이 좋다.
+
+### 네이티브 피어native peer를 사용하는 경우는 유의미함
+
+네이티브 피어란 네이티브 메소드를 통해 기능을 수행하는 네이티브 객체를 의미한다.
+
+네이티브 피어는 일반적인 객체가 아니므로 JVM이 상황을 알 수 없으므로 중요한 자원을 사용하지 않는다면 finalizer를 사용하는 것도 좋다.
+
+### `finalize()`와 상속
+
+finalizer를 가진 클래스의 하위클래스에서 finalizer를 재정의하면 상위 클래스의 해제 동작을 수행하지 않는다.
+반드시 `super.finalize()`를 명시적으로 호출해 줘야 한다.
+
+```java
+@Override
+protected void finalize() throws Throwable {
+    try {
+        // do something to finalize
+    }
+    finally {
+        super.finalize();
+    }
+}
+```
+
+더 좋은 방법은 모든 클래스에 부모와 상관없이 자기의 뒷처리를 하는 익명 클래스 객체를 만들면 좋다.
+
+```java
+public class Foo {
+    private final Object finalizeGuardian = new Object() {
+        @Override
+        protected void finalize() thorws Throwable {
+            // finalize Foo
+        }
+    }
+}
+
+public class Bar extends Foo {
+    private final Object finalizeGuardian = new Object() {
+        @Override
+        protected void finalize() thorws Throwable {
+            // finalize Bar
+        }
+    }
+}
+```
+
+### 최종 결론
+
+* 자원 해제 등 후처리를 위한 명시적인 종료 메소드를 반드시 만들고
+* 종료 메소드 없이 종료되는 경우에 대한 로그를 찍도록 하라
+* 굳이 `finalize()`를 사용해야 하는 경우라면 `super.finalize()`를 잊지 말자.
 
