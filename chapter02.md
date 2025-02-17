@@ -274,6 +274,94 @@ NutritionFacts nf = new NutritionFacts.Builder(240, 8)
 
 ## 규칙 3: `private` 생성자나 `enum` 자료형은 싱글턴 패턴을 따르도록 설계하라
 
+### 싱글턴 패턴과 관련된 문제들
+
+[싱글턴 패턴](https://inpa.tistory.com/entry/GOF-%F0%9F%92%A0-%EC%8B%B1%EA%B8%80%ED%86%A4Singleton-%ED%8C%A8%ED%84%B4-%EA%BC%BC%EA%BC%BC%ED%95%98%EA%B2%8C-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90)의 대표적 단점은 테스트 하기 어려워 진다는 것.
+
+싱글턴 구현 방법1:
+
+```java
+public class Elvis {
+    public static final Elvis INSTANCE = new Elvis();
+    private Elvis() { }
+    public void leavTheBuilding() { }
+}
+```
+
+[참고] `private` 생성자를 강제로 실행시켜 객체를 만드는 방법:
+
+```java
+import java.lang.reflect.Constructor;
+
+public class PrivateInvoker {
+    public static void main(String[] args) throws Exception {
+        // 리플렉션의 setAccessiable() 메소드를 통해 private로 선언된 생성자의 호출 권한을 획득한다.
+        Constructor<?> con = Private.class.getDeclaredConstructors()[0];
+        con.setAccessible(true);
+        Private p = (Private)con.newInstance();
+    }
+}
+
+public class Private {
+    private Private() {
+        System.out.println("Oh, no!");
+    }
+}
+```
+
+싱글턴 구현 방법2:
+* 싱글턴 패턴의 팩토리 메소드를 통해서 성능이 향상되기는 힘든데 JVM에 의해서 거의 대부분 inline 함수로 변환된다.
+
+```java
+public class Elvis {
+    private static final Elvis INSTANCE = new Elvis();
+    private Elvis() { }
+    public static Elvis getInstance() { return INSTANCE; }
+    public void leavTheBuilding() { }
+}
+```
+
+싱글턴 팩토리 메소드를 만들 때 장점:
+* 인터페이스를 변경하지 않고 싱글턴 로직을 변경할 수 있다.(eg: 스레드별 객체 사용 등)
+* 제네릭 타입을 수용하기 쉽다. ([규칙 27](chapter05.md#규칙-27-가능하면-제네릭-메서드로-만들-것))
+
+### 싱글턴 패턴을 직렬화serialize 하려면 `Serializable`을 구현하는 것만으로는 불가능 하다.
+
+역직렬화deserialize될 때 여러개의 객체가 생길수 있기 때문
+
+* 모든 필드를 [`transient`](https://nesoy.github.io/blog/Java-transient) 로 선언하고
+* [`readResolve()`](https://madplay.github.io/post/what-is-readresolve-method-and-writereplace-method)를 추가해야 한다.
+    * 만일 역직렬화 과정에서 자동으로 호출되는 `readObject()`가 있더라도 `readResolve()`에서 반환한 인스턴스로 대체된다. 그리고 `readObject()`를 통해 자동으로 만들어진 인스턴스는 가비지 컬렉션 대상이 된다.
+
+```java
+public class Elvis implements Serializable {
+    private transient static final Elvis INSTANCE = new Elvis();
+    private Elvis() { }
+    public static Elvis getInstance() { return INSTANCE; }
+    public void leavTheBuilding() { }
+
+    private Object readResolve() {
+        // 동일한 Elvis 객체가 반환되도록 하는 동시에 가짜 Elvis 객체는 가비지컬렉터가 처리하도록 한다.
+        return INSTANCE;
+    }
+}
+```
+
+### 결론: 원소가 하나뿐인 `enum` 자료형을 이용한 싱글턴 구현
+
+```java
+public enum Elvis {
+    INSTANCE;
+
+    public void leaveTheBuilding();
+}
+```
+
+기능적으로는 `public` 필드를 사용한 1번 방법과 동일하지만
+* 더 간결하고
+* 직렬화에 안전하고
+* 리플렉션 공격에도 안전하다.
+* 킹갓짱굳임
 
 ## 규칙 4: 객체 생성을 막을 때는 `private` 생성자를 사용하라
 
