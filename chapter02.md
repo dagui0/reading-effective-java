@@ -514,13 +514,15 @@ public Object pop() {
 * 다만 `null`처리에 너무 강박관념을 가지지는 마라, `null`처리는 규범norm이라기 보다는 예외적인 조치가 되어야 한다.
 * `Stack` 클래스의 예는 `Stack` 클래스가 메모리를 자체적으로 관리하기 때문에 발생하는 문제이고 예외조치가 필요한 상황이었던 것이었다.
 
-### 자체적으로 메모리 관리하는 크래스 주의 사항
+### 자체적으로 메모리 관리하는 클래스 주의 사항
 
 * 자체적으로 관리하는 메모리가 있는 클래스를 만들 때는 메모리 누수가 발생하지 않도록 주의해야한다.
 * 캐시cache도 메모리 누수가 발생할 수 있다.
     * [`WeakHashMap`](https://bepoz-study-diary.tistory.com/340)을 이용해서 캐시를 구현하면, 키에 대한 참조가 만료되는 순간 값도 참조가 해제된다.
-    * 캐시 정리를 위한 백그라운드 쓰레드를 이용하는 경우(`Timer` 또는 `ScheduledThreadPoolExecutor`)
-      [`LinkedHashMap`](https://hbase.tistory.com/136) 을 사용하면 [`removeEldestEntry()`](https://codingdog.tistory.com/entry/java-linkedhashmap-removeeldestentry-%EB%A9%94%EC%86%8C%EB%93%9C%EC%97%90-%EB%8C%80%ED%95%B4-%EC%95%8C%EC%95%84%EB%B4%85%EC%8B%9C%EB%8B%A4)를 사용할 수 있어서 좋다.
+    * 캐시 정리를 위한 백그라운드 쓰레드를 이용하는 경우([`Timer`](https://blog.naver.com/highkrs/220283709171) 
+      또는 [`ScheduledThreadPoolExecutor`](https://junuuu.tistory.com/1017))
+      [`LinkedHashMap`](https://hbase.tistory.com/136) 을 사용하면
+      [`removeEldestEntry()`](https://codingdog.tistory.com/entry/java-linkedhashmap-removeeldestentry-%EB%A9%94%EC%86%8C%EB%93%9C%EC%97%90-%EB%8C%80%ED%95%B4-%EC%95%8C%EC%95%84%EB%B4%85%EC%8B%9C%EB%8B%A4)를 사용할 수 있어서 좋다.
 * 리스너listener와 callback을 등록하는 패턴의 경우도 메모리 누수가 쉽게 발생할 수 있다.
     * 가비지 컬렉터가 즉시 처리하도록 하기위한 가장 좋은 방법은 리스너 참조를 `WeakHashMap`의 키로 저장하는 방법이다.
 
