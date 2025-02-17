@@ -518,9 +518,9 @@ public Object pop() {
 
 * 자체적으로 관리하는 메모리가 있는 클래스를 만들 때는 메모리 누수가 발생하지 않도록 주의해야한다.
 * 캐시cache도 메모리 누수가 발생할 수 있다.
-    * `WeakHashMap`을 이용해서 캐시를 구현하면, 키에 대한 참조가 만료되는 순간 값도 참조가 해제된다.
+    * [`WeakHashMap`](https://bepoz-study-diary.tistory.com/340)을 이용해서 캐시를 구현하면, 키에 대한 참조가 만료되는 순간 값도 참조가 해제된다.
     * 캐시 정리를 위한 백그라운드 쓰레드를 이용하는 경우(`Timer` 또는 `ScheduledThreadPoolExecutor`)
-      `LinkedHashMap` 을 사용하면 `removeEldestEntry()`를 사용할 수 있어서 좋다.
+      [`LinkedHashMap`](https://hbase.tistory.com/136) 을 사용하면 [`removeEldestEntry()`](https://codingdog.tistory.com/entry/java-linkedhashmap-removeeldestentry-%EB%A9%94%EC%86%8C%EB%93%9C%EC%97%90-%EB%8C%80%ED%95%B4-%EC%95%8C%EC%95%84%EB%B4%85%EC%8B%9C%EB%8B%A4)를 사용할 수 있어서 좋다.
 * 리스너listener와 callback을 등록하는 패턴의 경우도 메모리 누수가 쉽게 발생할 수 있다.
     * 가비지 컬렉터가 즉시 처리하도록 하기위한 가장 좋은 방법은 리스너 참조를 `WeakHashMap`의 키로 저장하는 방법이다.
 
