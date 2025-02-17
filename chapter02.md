@@ -8,7 +8,7 @@
 * [**규칙 4**: 객체 생성을 막을 때는 `private` 생성자를 사용하라](#규칙-4-객체-생성을-막을-때는-private-생성자를-사용하라)
 * [**규칙 5**: 불필요한 객체는 만들지 말라](#규칙-5-불필요한-객체는-만들지-말라)
 * [**규칙 6**: 유효기간이 지난 객체 참조는 폐기하라](#규칙-6-유효기간이-지난-객체-참조는-폐기하라)
-* [**규칙 7**: 종료자 사용을 피하라](#규칙-7-종료자-사용을-피하라)
+* [**규칙 7**: 종료자(finalizer) 사용을 피하라](#규칙-7-종료자-finalizer-사용을-피하라)
 
 ## 규칙 1: 생성자 대신 정적 펙터리 메서드를 사용할 수 없는지 생각해 보라
 
@@ -464,7 +464,71 @@ public static void main(String[] args) {
 
 ## 규칙 6: 유효기간이 지난 객체 참조는 폐기하라
 
+가비지컬렉터를 가지고 있는 Java 에서 메모리 누수가 발생한다고?
 
-## 규칙 7: 종료자 사용을 피하라
+```java
+public class Stack {
+    private Object[] elements;
+    private int size;
+    private static final int DEFAULT_INITIAL_CAPACITY = 16;
+
+    public Stack() {
+        element = new Object[DEFAULT_INITIAL_CAPACITY];
+    }
+
+    public void push(Object e) {
+        ensureCapacity();
+        elements[size++] = e;
+    }
+
+    public Object pop() {
+        if (size == 0)
+            throw new EmptyStackException();
+        return elements[--size];
+    }
+
+    /**
+     * 적어도 하나 이상의 원소를 담을 공간을 보장한다.
+     * 배열의 길이를 늘려야 할 때마다 대략 두배가 늘어난다.
+     */
+    private void ensureCapacity() {
+        if (elements.length == size)
+            elements = Arrays.copyOf(elements, 2 * size + 1);
+    }
+}
+```
+
+* `pop()`의 `elements[--size]`를 하더라도 객체 참조가 끊어지지 않기 때문에 메모리가 해제되지 않음
+* 원소를 `pop()`한 후 객체 참조를 끊어줘야 한다.
+
+```java
+public Object pop() {
+    if (size == 0)
+        throw new EmptyStackException();
+    Object e = elements[--size];
+    elements[size] = null;
+    return e;
+}
+```
+
+* 다만 `null`처리에 너무 강박관념을 가지지는 마라, `null`처리는 규범norm이라기 보다는 예외적인 조치가 되어야 한다.
+* `Stack` 클래스의 예는 `Stack` 클래스가 메모리를 자체적으로 관리하기 때문에 발생하는 문제이고 예외조치가 필요한 상황이었던 것이었다.
+
+### 자체적으로 메모리 관리하는 크래스 주의 사항
+
+* 자체적으로 관리하는 메모리가 있는 클래스를 만들 때는 메모리 누수가 발생하지 않도록 주의해야한다.
+* 캐시cache도 메모리 누수가 발생할 수 있다.
+    * `WeakHashMap`을 이용해서 캐시를 구현하면, 키에 대한 참조가 만료되는 순간 값도 참조가 해제된다.
+    * 캐시 정리를 위한 백그라운드 쓰레드를 이용하는 경우(`Timer` 또는 `ScheduledThreadPoolExecutor`)
+      `LinkedHashMap` 을 사용하면 `removeEldestEntry()`를 사용할 수 있어서 좋다.
+* 리스너listener와 callback을 등록하는 패턴의 경우도 메모리 누수가 쉽게 발생할 수 있다.
+    * 가비지 컬렉터가 즉시 처리하도록 하기위한 가장 좋은 방법은 리스너 참조를 `WeakHashMap`의 키로 저장하는 방법이다.
+
+### 결론
+
+* 메모리 누수는 보통 별 증상이 없기 때문에 테스트 과정에서 쉽게 발견되지 않고 수년간 시스템에 남아 있을 수 있다.
+* 이러한 문제가 발생할 수 있다는 것을 인지하고 미리 방지 대책을 세워야 한다.
+
+## 규칙 7: 종료자(finalizer) 사용을 피하라
 
 
