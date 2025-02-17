@@ -365,9 +365,102 @@ public enum Elvis {
 
 ## 규칙 4: 객체 생성을 막을 때는 `private` 생성자를 사용하라
 
+* `java.util.Arrays`, `java.util.Collections` 같은 정적 메소드 모음집 클래스를 만들 때는 `private` 생성자를 만들자.
+    * 생성자를 만들지 않으면 기본default 생성자가 자동으로 만들어지기 때문.
+
+```java
+public class MyFunctions {
+    private MyFunctions() {
+        throw new AssertionError();
+    }
+
+    public static void Foo() {}
+    public static void Bar() {}
+}
+```
 
 ## 규칙 5: 불필요한 객체는 만들지 말라
 
+```java
+String s = new Strign("stringette");    // 곤란하다
+String s = "stringette";                // 바람직하다
+Boolean b = new Boolean("true");        // 곤란하다
+Boolean b = Boolean.valueOf("true");    // 바람직하다
+```
+
+### 비용이 많이 드는 객체를 재활용하는 방법
+
+문제 코드: 비용이 많이 드는 `Calendar` 객체를 매 메소드 호출시 마다 생성한다.
+
+```java
+public class Person {
+    private final Date birthDate;
+
+    public boolean isBabyBoomer() {
+        Calendar gmtCal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        gmtCal.set(1946, Calendar.JANUARY, 1, 0, 0, 0);
+        Date boomStart = gmtCal.getTime();
+        getCal.set(1965, Calendar.JANUARY, 1, 0, 0, 0);
+        Date boomEnd = gmtCal.getTime();
+
+        return birthDate.compareTo(boomStart) >= 0 && birthDate.compareTo(boomEnd) < 0;
+    }
+}
+```
+
+정적 초기화 블럭static initializer으로 개선:
+
+```java
+public class Person {
+    private final Date birthDate;
+    private static final BOOM_START;
+    private static final BOOM_END;
+
+    static {
+        Calendar gmtCal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        gmtCal.set(1946, Calendar.JANUARY, 1, 0, 0, 0);
+        BOOM_START = gmtCal.getTime();
+        getCal.set(1965, Calendar.JANUARY, 1, 0, 0, 0);
+        BOOM_END = gmtCal.getTime();
+    }
+
+    public boolean isBabyBoomer() {
+        return birthDate.compareTo(BOOM_START) >= 0 && birthDate.compareTo(BOOM_END) < 0;
+    }
+}
+```
+
+`isBabyBoomer()`가 한번도 실행되지 않는 경우를 위해서
+초기화 지연lazy initialization 방법([규칙 71](chapter10.md#규칙-71-초기화-지연은-신중하게-하라))을 쓸 수 있으나 **추천하지 않는다**. \
+초기화를 지연시키면 구현이 복잡해지고 추가적인 성능 개선이 어렵기 때문이다.([규칙 55](chapter08.md#규칙-55-신중하게-최적화하라))
+
+### 어댑터 패턴과 객체 생성
+
+* 뷰View라고도 불리는 어댑터 패턴의 경우 내부 객체backing object를 다루는 것 이외의 다른 정보를 가지지 않으므로 하나 이상의 객체를 만들 필요가 없다.
+    * 예를 들어 `Map` 인터페이스의 `keySet()` 메소드로 얻는 `Map`에 대한 `Set` 뷰는 여러번 호출해도 같은 객체를 리턴한다.
+
+### 자동 객체화autoboxing과 객체 생성
+
+Java 5 부터 기본 자료형(eg: `int`)과 객체형(eg: `Integer`)을 자동으로 변환해주는 boxing, unboxing이 지원되는데 주의해야 한다.
+
+```java
+public static void main(String[] args) {
+    Long sum = 0L;
+    for (long i = 0L; i < Integer.MAX_VALUE; i++ ) {
+        sum += i;       // Long 객체가 2억개 생긴다.
+    }
+    System.out.println(sum);
+}
+```
+
+### 적절한 객체의 사용은 문제가 되지 않는다.
+
+* 객체 생성자에서 하는 일이 작고 명확하다면 객체의 생성과 반환은 신속하게 처리된다.
+* 객체 풀object pool의 경우도 극단적으로 객체 생성 비용이 높지 않다면 사용하지 않는 것이 좋다.
+* 객체 풀은 코드가 어려워지고, 메모리를 많이 쓰고, 성능도 떨어진다.
+* 최신 JVM은 고도로 최적화된 가비지 컬렉터를 사용하므로 가벼운 객체는 풀을 사용하는 것 보다 훨씬 성능이 좋다.
+* 방어적 카피([규칙 39](chapter07.md#규칙-39-필요하다면-방어적-복사본을-만들라))의 방어적 복사가 요구되는 상황에서는
+  재사용을 하려고 하는 것이 더 비용이 높다는 점 주의하라.
 
 ## 규칙 6: 유효기간이 지난 객체 참조는 폐기하라
 
