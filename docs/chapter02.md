@@ -122,37 +122,37 @@ Map<String, List<String>> m = new HashMap<>(); // java 1.7 이것도 충분히 �
 ### 점층적 생성자 패턴
 
 ```java
-private class NutritionFacts {
+public class NutritionFacts1 {
     private final int servingSize;      // 필수
     private final int servings;         // 필수
     private final int calories;         // 선택
     private final int fat;              // 선택
-    private final int soduim;           // 선택
+    private final int sodium;           // 선택
     private final int carbohydrate;     // 선택
 
-    public NutritionFacts(int servingSize, int servings) {
+    public NutritionFacts1(int servingSize, int servings) {
         this(servingSize, servings, 0);
     }
-    public NutritionFacts(int servingSize, int servings, int calories) {
+    public NutritionFacts1(int servingSize, int servings, int calories) {
         this(servingSize, servings, calories, 0);
     }
-    public NutritionFacts(int servingSize, int servings, int calories, int fat) {
+    public NutritionFacts1(int servingSize, int servings, int calories, int fat) {
         this(servingSize, servings, calories, fat, 0);
     }
-    public NutritionFacts(int servingSize, int servings, int calories, int fat, int soduim) {
-        this(servingSize, servings, calories, fat, soduim, 0);
+    public NutritionFacts1(int servingSize, int servings, int calories, int fat, int sodium) {
+        this(servingSize, servings, calories, fat, sodium, 0);
     }
-    public NutritionFacts(int servingSize, int servings, int calories, int fat, int soduim, int carbohydrate) {
+    public NutritionFacts1(int servingSize, int servings, int calories, int fat, int sodium, int carbohydrate) {
         this.servingSize = servingSize;
         this.servings = servings;
         this.calories = calories;
         this.fat = fat;
-        this.soduim = soduim;
+        this.sodium = sodium;
         this.carbohydrate = carbohydrate;
     }
 }
 
-NutritionFacts nf = new NutritionFacts(240, 8, 100, 3, 25, 27);
+NutritionFacts1 nf1 = new NutritionFacts1(240, 8, 100, 3, 25, 27);
 ```
 
 * 인자 수가 늘어남에 따라 코드 작성이 번거롭고 읽기 어려운 코드가 된다.
@@ -160,31 +160,31 @@ NutritionFacts nf = new NutritionFacts(240, 8, 100, 3, 25, 27);
 ### JavaBeans 패턴
 
 ```java
-private class NutritionFacts {
+public class NutritionFacts2 {
     private int servingSize = -1;   // 필수
     private int servings = -1;      // 필수
     private int calories = 0;       // 선택
     private int fat = 0;            // 선택
-    private int soduim = 0;         // 선택
+    private int sodium = 0;         // 선택
     private int carbohydrate = 0;   // 선택
 
-    public NutritionFacts() {}
+    public NutritionFacts2() {}
 
-    public setServingSzie(int servingSize) { this.servingSize = servingSize; }
-    public setServings(int servings) { this.servings = servings; }
-    public setCalories(int calories) { this.calories = calories; }
-    public setFat(int fat) { this.fat = fat; }
-    public setSodium(int sodium) { this.sodium = sodium; }
-    public setCarbohydrate(int carbohydrate) { this.carbohydrate = carbohydrate; }
+    public void setServingSize(int servingSize) { this.servingSize = servingSize; }
+    public void setServings(int servings) { this.servings = servings; }
+    public void setCalories(int calories) { this.calories = calories; }
+    public void setFat(int fat) { this.fat = fat; }
+    public void setSodium(int sodium) { this.sodium = sodium; }
+    public void setCarbohydrate(int carbohydrate) { this.carbohydrate = carbohydrate; }
 }
 
-NutritionFacts nf = new NutritionFacts();
-nf.setServingSzie(240);
-nf.setServings(8);
-nf.setCalories(100);
-nf.setFat(3);
-nf.setSodium(35);
-nf.setCarbohydrate(27);
+NutritionFacts2 nf2 = new NutritionFacts2();
+nf2.setServingSize(240);
+nf2.setServings(8);
+nf2.setCalories(100);
+nf2.setFat(3);
+nf2.setSodium(35);
+nf2.setCarbohydrate(27);
 ```
 
 * 1회의 함수 호출로 생성할 수 없으므로 객체의 일관성consistency가 일시적으로 깨지는 시점이 있다.
@@ -195,12 +195,12 @@ nf.setCarbohydrate(27);
 GoF의 [Builder 패턴](https://inpa.tistory.com/entry/GOF-%F0%9F%92%A0-%EB%B9%8C%EB%8D%94Builder-%ED%8C%A8%ED%84%B4-%EB%81%9D%ED%8C%90%EC%99%95-%EC%A0%95%EB%A6%AC)은 생성자 패턴의 안전성과 자바빈 패턴의 가독성을 모두 제공하는 대안이다.
 
 ```java
-private class NutritionFacts {
+public class NutritionFacts3 {
     private final int servingSize;      // 필수
     private final int servings;         // 필수
     private final int calories;         // 선택
     private final int fat;              // 선택
-    private final int soduim;           // 선택
+    private final int sodium;           // 선택
     private final int carbohydrate;     // 선택
 
     public static class Builder {
@@ -208,7 +208,7 @@ private class NutritionFacts {
         private final int servings;     // 필수
         private int calories = 0;       // 선택
         private int fat = 0;            // 선택
-        private int soduim = 0;         // 선택
+        private int sodium = 0;         // 선택
         private int carbohydrate = 0;   // 선택
 
         public Builder(int servingSize, int servings) {
@@ -217,27 +217,27 @@ private class NutritionFacts {
         }
         public Builder calories(int calories) { this.calories = calories; return this; }
         public Builder fat(int fat) { this.fat = fat; return this; }
-        public Builder soduim(int soduim) { this.soduim = soduim; return this; }
+        public Builder sodium(int sodium) { this.sodium = sodium; return this; }
         public Builder carbohydrate(int carbohydrate) { this.carbohydrate = carbohydrate; return this; }
 
-        public NutritionFacts build() {
-            return new NutritionFacts(this);
+        public NutritionFacts3 build() {
+            return new NutritionFacts3(this);
         }
     }
 
-    private NutritionFacts(Builder builder) {
+    private NutritionFacts3(Builder builder) {
         this.servingSize = builder.servingSize;
         this.servings = builder.servings;
         this.calories = builder.calories;
         this.fat = builder.fat;
-        this.soduim = builder.soduim;
+        this.sodium = builder.sodium;
         this.carbohydrate = builder.carbohydrate;
     }
 }
 
-NutritionFacts nf = new NutritionFacts.Builder(240, 8)
-                        .calories(100).fat(3).sodium(35).carbohydrate(27)
-                        .build();
+NutritionFacts3 nf3 = new NutritionFacts3.Builder(240, 8)
+        .calories(100).fat(3).sodium(35).carbohydrate(27)
+        .build();
 ```
 
 * [Ada](https://www.adaic.org/resources/add_content/docs/95style/html/sec_5/5-2-2.html),
