@@ -1,0 +1,49 @@
+package com.yidigun.utils;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class HashCodeBuilderTest {
+
+    @Test
+    public void testCheckingWorked() {
+
+        Test1 t1 = new Test1(1, 2);
+
+        int actual = HashCodeBuilder.calculateHashCode(t1.a, t1.b);
+
+        int expected = 17;
+        expected = 31 * expected + t1.a;
+        expected = 31 * expected + t1.b;
+
+        assertEquals(expected, actual);
+    }
+}
+
+class Test1 {
+    int a = 0, b = 0;
+
+    public Test1() {}
+
+    public Test1(int a, int b) {
+        this.a = a;
+        this.b = b;
+    }
+
+    public int getA() {
+        return a;
+    }
+
+    public void setA(int a) {
+        this.a = a;
+    }
+
+    public int getB() {
+        return b;
+    }
+
+    public void setB(int b) {
+        this.b = b;
+    }
+}
