@@ -10,6 +10,25 @@ public class NutritionFacts2 {
 
     public NutritionFacts2() {}
 
+    public int getServingSize() {
+        return servingSize;
+    }
+    public int getServings() {
+        return servings;
+    }
+    public int getCalories() {
+        return calories;
+    }
+    public int getFat() {
+        return fat;
+    }
+    public int getSodium() {
+        return sodium;
+    }
+    public int getCarbohydrate() {
+        return carbohydrate;
+    }
+
     public void setServingSize(int servingSize) { this.servingSize = servingSize; }
     public void setServings(int servings) { this.servings = servings; }
     public void setCalories(int calories) { this.calories = calories; }
