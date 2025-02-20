@@ -250,9 +250,9 @@ public class Member {
 ```
 
 * Alejandro: 비교하면 안된다. 관리상 기록을 위한 것이지 객체의 속성이라고 볼 수 없음
-* Rakesh: 모두 비교해야 pure java지만 관리용 날짜는 빼는것이 적절함
+* Leeturn: 모두 비교해야 pure java지만 관리용 날짜는 빼는것이 적절함
 * Scully: 생성 수정 날짜는 비교에서 빼야함
-* Bertta: 오딧 날짜는 빼고 비교해야함
+* Lucie: 오딧 날짜는 빼고 비교해야함
 
 ## 규칙 9: `equals`를 재정의할 때는 반드시 `hashCode`도 재정의하라
 
