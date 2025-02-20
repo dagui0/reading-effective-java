@@ -1,9 +1,9 @@
 package effectivejava.chapter03.rule09;
 
-public class PhoneNumber1 {
+public class PhoneNumber {
     private final short areaCode, prefix, lineNumber;
 
-    public PhoneNumber1(int areaCode, int prefix, int lineNumber) {
+    public PhoneNumber(int areaCode, int prefix, int lineNumber) {
         checkRange(areaCode, 999, "area code");
         checkRange(prefix, 9999, "prefix");
         checkRange(lineNumber, 9999, "line number");
@@ -21,9 +21,18 @@ public class PhoneNumber1 {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof PhoneNumber1))
+        if (!(o instanceof PhoneNumber))
             return false;
-        PhoneNumber1 pn = (PhoneNumber1)o;
+        PhoneNumber pn = (PhoneNumber)o;
         return pn.areaCode == areaCode && pn.prefix == prefix && pn.lineNumber == lineNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 27;
+        result = 31 * result + (int)areaCode;
+        result = 31 * result + (int)prefix;
+        result = 31 * result + (int)lineNumber;
+        return result;
     }
 }

@@ -492,7 +492,7 @@ public class Stack {
     private static final int DEFAULT_INITIAL_CAPACITY = 16;
 
     public Stack() {
-        element = new Object[DEFAULT_INITIAL_CAPACITY];
+        elements = new Object[DEFAULT_INITIAL_CAPACITY];
     }
 
     public void push(Object e) {
