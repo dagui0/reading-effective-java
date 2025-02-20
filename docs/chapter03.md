@@ -9,6 +9,7 @@
 * [**규칙 10**: `toString`은 항상 재정의하라](#규칙-10-tostring은-항상-재정의하라)
 * [**규칙 11**: `clone`을 재정의할 때는 신중하라](#규칙-11-clone을-재정의할-때는-신중하라)
   * [**[추가]** 깊은 복사(deep copy)가 문제되는 경우](#추가-깊은-복사deep-copy가-문제되는-경우)
+  * [**[추가]** `clone()` 관련 토론 주제: Prototype 패턴이 의미가 있는가?](#추가-clone-관련-토론-주제-prototype-패턴이-의미가-있는가)
 * [**규칙 12**: `Comparable` 구현을 고려하라](#규칙-12-comparable-구현을-고려하라)
   * [**[추가]** `CompareToBuilder` 유틸리티](#추가-comparetobuilder-유틸리티)
 * [**[추가]** Pattern variable](#추가-pattern-variable)
@@ -215,6 +216,7 @@ boolean equals(Object o) {
 
 `equals()`관련 추가적인 지침들
 
+* [추가] `null` 일 수 있는 필드를 비교할 때는 [`Objects.equals()`](https://docs.oracle.com/javase/8/docs/api/java/util/Objects.html)를 사용하라. (Java 7 부터 추가)
 * `equals`를 재정의할 때는 반드시 `hashCode`도 재정의하라. [규칙 9](#규칙-9-equals를-재정의할-때는-반드시-hashcode도-재정의하라)
 * `@Override public boolean equals(Object o)` 시그니처를 변경하지 마라. 인자 자료형을 바꾸게 되면 재정의(override)가 안될 수 있다.
 * 과도한 동치성에 집착하지 마라. [토론 필요](#equals관련-토론-주제)
@@ -252,6 +254,8 @@ public class Member {
     }
 }
 ```
+
+스터디 멤버 의견:
 
 * Alejandro: 비교하면 안된다. 관리상 기록을 위한 것이지 객체의 속성이라고 볼 수 없음
 * Leeturn: 모두 비교해야 pure java지만 관리용 날짜는 빼는것이 적절함
@@ -487,6 +491,24 @@ private <T extends Serializable> T deepCopyUsingSerialize(T o) {
 }
 ```
 
+### [추가] `clone()` 관련 토론 주제: Prototype 패턴이 의미가 있는가?
+
+GoF의 [Prototype 패턴](https://tmd8633.tistory.com/26)은 복제(clone)를 통해 객체를 생성하는 방법을 제시한다.
+
+* Java의 `clone()`이 문제가 많아서 사용이 권장되지 않는다.
+* `Object.clone()`, `Arrays.copyOf()`(내부적으로는 `System.arraycopy()`)은 native 코드이므로 빠르고 효율적이라고 가정하더라도 언어가 커버해주는 범위가 너무 적은듯 하다
+* 실제로 Prototype 패턴이 유의미한 경우가 있을까?
+  * 블로그 등에서는 DB에서 조회한 객체는 초기화 비용이 높으므로 유의미하다고 주장하지만, DB 처리 프로그램에서 데이터 객체의 복제가 필요한 경우는 보지 못했다.
+  * GUI 프로그램 같은 경우 의미가 있는 경우가 있을까?
+
+스터디 멤버 의견:
+
+* Alejandro: 
+* Leeturn: 
+* Scully: 
+* Lucie: 
+
+
 ## 규칙 12: `Comparable` 구현을 고려하라
 
 * `compareTo()` 메소드는 `equals()`와 비슷한 역할을 하지만, `Object`에 기본으로 존재하지 않는다.
@@ -555,7 +577,6 @@ class Member implements Comparable<Member> {
     }
 }
 ```
-
 
 ## [추가] Pattern variable
 

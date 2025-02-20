@@ -31,6 +31,7 @@
   * [**규칙 10**: `toString`은 항상 재정의하라](docs/chapter03.md#규칙-10-tostring은-항상-재정의하라)
   * [**규칙 11**: `clone`을 재정의할 때는 신중하라](docs/chapter03.md#규칙-11-clone을-재정의할-때는-신중하라)
     * [**[추가]** 깊은 복사(deep copy)가 문제되는 경우](docs/chapter03.md#추가-깊은-복사deep-copy가-문제되는-경우)
+    * [**[추가]** `clone()` 관련 토론 주제: Prototype 패턴이 의미가 있는가?](docs/chapter03.md#추가-clone-관련-토론-주제-prototype-패턴이-의미가-있는가)
   * [**규칙 12**: `Comparable` 구현을 고려하라](docs/chapter03.md#규칙-12-comparable-구현을-고려하라)
     * [**[추가]** `CompareToBuilder` 유틸리티](docs/chapter03.md#추가-comparetobuilder-유틸리티)
   * [**[추가]** Pattern variable](docs/chapter03.md#추가-pattern-variable)
