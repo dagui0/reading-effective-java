@@ -12,12 +12,14 @@ public class CaseInsensitiveStringTest {
         CaseInsensitiveString1 cis1 = new CaseInsensitiveString1("abc");
         CaseInsensitiveString1 cis2 = new CaseInsensitiveString1("ABC");
         assertEquals(cis1, cis2);
+        assertEquals(cis2, cis1);
     }
 
     @Test
     public void testCaseInsensitiveString1EqualsWithString() {
         String s1 = "ABC";
         CaseInsensitiveString1 cis1 = new CaseInsensitiveString1("abc");
+        assertEquals(cis1, s1);
         assertNotEquals(s1, cis1);
     }
 
