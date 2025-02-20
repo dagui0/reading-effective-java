@@ -25,7 +25,7 @@
     * [**[추가]** Java 7 `try-with-resources` 문](docs/chapter02.md#추가-java-7-try-with-resources-문)
 * [3장 모든 객체의 공통 메서드](docs/chapter03.md)
   * [**규칙 8**: `equals`를 재정의할 때는 일반 규약을 따르라](docs/chapter03.md#규칙-8-equals를-재정의할-때는-일반-규약을-따르라)
-    * [`equals()`관련 토론 주제: 어디까지 비교할 것인가?](docs/chapter03.md#equals관련-토론-주제-어디까지-비교할-것인가)
+    * [**[추가]** `equals()`관련 토론 주제: 어디까지 비교할 것인가?](docs/chapter03.md##추가-equals관련-토론-주제-어디까지-비교할-것인가)
   * [**규칙 9**: `equals`를 재정의할 때는 반드시 `hashCode`도 재정의하라](docs/chapter03.md#규칙-9-equals를-재정의할-때는-반드시-hashcode도-재정의하라)
     * [**[추가]** `HashCodeBuilder` 유틸리티](docs/chapter03.md#추가-hashcodebuilder-유틸리티)
   * [**규칙 10**: `toString`은 항상 재정의하라](docs/chapter03.md#규칙-10-tostring은-항상-재정의하라)

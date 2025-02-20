@@ -3,7 +3,7 @@
 ## 목차
 
 * [**규칙 8**: `equals`를 재정의할 때는 일반 규약을 따르라](#규칙-8-equals를-재정의할-때는-일반-규약을-따르라)
-  * [`equals()`관련 토론 주제: 어디까지 비교할 것인가?](#equals관련-토론-주제-어디까지-비교할-것인가)
+  * [**[추가]** `equals()`관련 토론 주제: 어디까지 비교할 것인가?](#추가-equals관련-토론-주제-어디까지-비교할-것인가)
 * [**규칙 9**: `equals`를 재정의할 때는 반드시 `hashCode`도 재정의하라](#규칙-9-equals를-재정의할-때는-반드시-hashcode도-재정의하라)
   * [**[추가]** `HashCodeBuilder` 유틸리티](#추가-hashcodebuilder-유틸리티)
 * [**규칙 10**: `toString`은 항상 재정의하라](#규칙-10-tostring은-항상-재정의하라)
@@ -219,7 +219,7 @@ boolean equals(Object o) {
 * `@Override public boolean equals(Object o)` 시그니처를 변경하지 마라. 인자 자료형을 바꾸게 되면 재정의(override)가 안될 수 있다.
 * 과도한 동치성에 집착하지 마라. [토론 필요](#equals관련-토론-주제)
 
-### `equals()`관련 토론 주제: 어디까지 비교할 것인가?
+### [추가] `equals()`관련 토론 주제: 어디까지 비교할 것인가?
 
 다음과 같은 테이블에 대한 DTO(Data Transfer Object)가 있다고 할 때,
 `equals()`에서는 `regDate`, `modDate`를 비교할 필요가 있을까?
