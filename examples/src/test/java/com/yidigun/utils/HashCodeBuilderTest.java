@@ -19,6 +19,16 @@ public class HashCodeBuilderTest {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void testCheckingEquality() {
+
+        Test1 t1 = new Test1(1, 2);
+        Test1 t2 = new Test1(1, 2);
+
+        assertEquals(t1, t2);
+        assertEquals(t1.hashCode(), t2.hashCode());
+    }
 }
 
 class Test1 {
@@ -62,6 +72,6 @@ class Test1 {
         return new HashCodeBuilder()
                 .append(a)
                 .append(b)
-                .calculateHashCode();
+                .toHashCode();
     }
 }

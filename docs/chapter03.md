@@ -3,10 +3,14 @@
 ## 목차
 
 * [**규칙 8**: `equals`를 재정의할 때는 일반 규약을 따르라](#규칙-8-equals를-재정의할-때는-일반-규약을-따르라)
+  * [`equals()`관련 토론 주제: 어디까지 비교할 것인가?](#equals관련-토론-주제-어디까지-비교할-것인가)
 * [**규칙 9**: `equals`를 재정의할 때는 반드시 `hashCode`도 재정의하라](#규칙-9-equals를-재정의할-때는-반드시-hashcode도-재정의하라)
+  * [**[추가]** `HashCodeBuilder` 유틸리티](#추가-hashcodebuilder-유틸리티)
 * [**규칙 10**: `toString`은 항상 재정의하라](#규칙-10-tostring은-항상-재정의하라)
 * [**규칙 11**: `clone`을 재정의할 때는 신중하라](#규칙-11-clone을-재정의할-때는-신중하라)
+  * [**[추가]** 깊은 복사(deep copy)가 문제되는 경우](#추가-깊은-복사deep-copy가-문제되는-경우)
 * [**규칙 12**: `Comparable` 구현을 고려하라](#규칙-12-comparable-구현을-고려하라)
+  * [**[추가]** `CompareToBuilder` 유틸리티](#추가-comparetobuilder-유틸리티)
 * [**[추가]** Pattern variable](#추가-pattern-variable)
 * [**[추가]** Record Class](#추가-record-class)
 
@@ -324,7 +328,9 @@ public class PhoneNumber {
 }
 ```
 
-위 방법을 적용한 `HashCodeBuilder` 유틸리티:
+### [추가] `HashCodeBuilder` 유틸리티
+
+위 방법을 적용한 `HashCodeBuilder` 유틸리티
 
 * 예제: [HashCodeBuilder.java](../examples/src/main/java/com/yidigun/utils/HashCodeBuilder.java)
 * 예제: [HashCodeBuilderTest.java](../examples/src/test/java/com/yidigun/utils/HashCodeBuilderTest.java)
@@ -355,8 +361,197 @@ class Test1 {
 
 ## 규칙 11: `clone`을 재정의할 때는 신중하라
 
+### 선 결론: `Cloneable` 인터페이스는 문제가 많으므로 지양하라
+
+* 그럼에도 불구하고 널리 사용되고 있으므로 문제점과 사용법을 알아놓을 필요가 있다.
+* `Cloneable`과 `clone()`의 동작 방식을 잘 알게 되면, 웬만해선 사용하지 않을거라 믿는다.
+
+#### `Cloneable` 인터페이스와 `Object.clone()`의 문제점
+
+* `Cloneable` 인터페이스에는 `clone()` 메소드가 없다.
+  * `Comparable.compareTo()` 같은 다른 인터페이스와는 동작 방식이 매우 다르다.
+  * `Cloneable`을 구현하고나면 대부분 `Object`의 `private Object clone()`을 `public`으로 재정의할 필요가 있다.
+* `Cloneable` 인터페이스는 `Object.clone()` 메서드가 호출되었을 때 복제를 할지 말지 결정하게 하는 마커(marker)임
+  * `Object.clone()`(많은 경우 하위 클래스에 의해서 `super.clone()`)이 호출되면, \
+    현재 클래스(`Object`가 아니고 호출된 하위 클래스)가 `Cloneable` 인터페이스를 구현한 경우 복제본을 리턴한다.
+  * 현재 클래스가 `Cloneable`이 아니면 `CloneNotSupportedException`을 던진다.
+* `CloneNotSupportedException` 은 checked 예외이므로 `clone()`을 호출할때 반드시 `try-catch`가 필요하다.
+  * 하지만 `Cloneable`을 구현한 이상 실제로 던져지지 않기 때문에 불필요한 예외처리이다.
+* `Object.clone()`은 얕은 복사(shallow copy)를 수행한다.
+  * 객체의 필드가 참조 타입인 경우, 참조된 객체는 복제되지 않고 참조만 복사된다.
+  * 따라서 참조된 객체가 변경되면 복제본도 영향을 받는다.
+  * 복합(composite) 객체의 경우 반드시 깊은 복사(deep copy)를 수행하도록 `clone()`을 재정의해야 한다.
+* `Object.clone()`은 생성자를 호출하지 않는다.
+  * 생성자가 필요한 초기화 작업이 있는 경우, 복제본을 생성한 후에 초기화 작업을 수행해야 한다.
+  * 이것은 상속트리가 깊어서 복잡한 단계의 `super()`를 통해 초기화되는 경우 문제가 발생할 가능성이 높다.
+  * 복제되더라도 다른 값을 가져야 하는 필드인데 `final`인 경우 등의 경우 변경할 방법이 없다. \
+    `final`한 필드라도 `final`로 선언하면 안된다. (eg: 객체 생성 일련번호, 객체 생성 타임스탬프)
+* `clone()`을 재정의 하는 경우에 상속 트리상의 모든 클래스들이
+  각자 자신에게 맞는 제대로된 `clone()`을 재정의 해야한다. 
+
+### 그나마 올바른 `Cloneable` 사용법
+
+* 반드시 `clone()`을 재정의한다. (아래 내용은 모두 상위 클래스의 메소드를 재정의할 때 변경 가능한 것들이다.)
+  * 접근 제한자를 `public`으로 변경한다.
+  * 리턴형을 클래스 타입으로 변경한다.
+  * `CloneNotSupportedException`을 던지지 않도록 한다.
+* 그나마 올바른 `clone()`의 구현 방법
+  * `super.clone()` 호출
+  * 객체 필드에 대해서 깊은 복사(deep copy) 수행
+    * 불변 객체에 대해서는 복사하지 않을 수 있다. (eg: String)
+    * 멤버 객체: `clone()`을 하여 재설정해줘야 한다. (`Cloneable`한 객체의 멤버들도 `Cloneable`해야 함)
+    * 멤버 객체가 또 복합 객체인 경우 재귀적으로 깊은 복사가 필요하다.
+      * 배열: 배열의 `clone()`은 얕은 복사(shallow copy)이므로 `Arrays.copyOf()` 사용.
+      * Collection API: 모두 `Cloneable`을 구현하고 있으므로 `ArrayList.clone()`, `HashMap.clone()` 등 사용 가능 하지만 역시 얕은 복사이므로 `new`+`addAll()`이나 루프를 사용해야 한다.
+
+### `clone()`같은 것이 필요할때 가장 좋은 방법
+
+* 복사 생성자를 제공 또는 내부적으로는 생성자를 사용하는 팩토리 메소드를 제공
+* 생성자를 사용하므로 `final` 필드와 이슈가 없음
+* 생성자나 팩토리 메소드는 인터페이스를 인자로 받을 수 있음
+  * 변환 생성자(conversion constructor), 변환 팩토리(conversion factory)라고 한다.
+  * `treeSet = new TreeSet(hashSet)` 같이 호환되는 다른 객체로 부터 변환 생성 가능
+
+```java
+public class PhoneNumber {
+    private final short areaCode, prefix, lineNumber;
+    public PhoneNumber(int areaCode, int prefix, int lineNumber) {
+        this.areaCode = areaCode;
+        this.prefix = prefix;
+        this.lineNumber = lineNumber;
+    }
+    public PhoneNumber(PhoneNumber pn) {
+        this.areaCode = pn.areaCode;
+        this.prefix = pn.prefix;
+        this.lineNumber = pn.lineNumber;
+    }
+    public static PhoneNumber newInstance(PhoneNumber pn) {
+        return new PhoneNumber(pn.areaCode, pn.prefix, pn.lineNumber);
+    }
+}
+```
+
+### 결론
+
+* `Cloneable`과 `clone()`은 문제가 많으므로 쓰지 마라. 절대 쓰지 마라.
+
+### [추가] 깊은 복사(deep copy)가 문제되는 경우
+
+만약 같은 객체가 2번 추가되어있는 경우, 깊은 복사를 하는 과정에서 2번 복제되어서 원본과 다른 동작을 하게 될 수 있다.
+
+예제: [DeepCopyTest.java](../examples/src/test/java/effectivejava/chapter03/rule11/DeepCopyTest.java)
+
+```java
+@Test
+public void testDeepCopyArrayListHavingDuplicatedElements() {
+
+    // 원본 리스트는 같은 객체가 2번 추가 되어 있음
+    ArrayList<Member> members = new ArrayList<>();
+    members.add(new Member("Alejandro"));
+    members.add(members.get(0));
+
+    // 복제된 리스트는 복제되면서 다른 객체가 2번 추가됨
+    ArrayList<Member> newList = new ArrayList<>();
+    for (Member member : members) {
+        newList.add(member.clone());
+    }
+
+    // 원본: 같은 객체
+    assertSame(members.get(0).getName(), members.get(1).getName());
+
+    // 카피본: 다른 객체
+    assertNotSame(newList.get(0).getName(), newList.get(1).getName());
+}
+```
+
+이 문제가 만약 중요한 상황이라면 해결이 쉽지 않은데 비용이 높을것이 예상되지만 직렬화(serialize)를 통해 가능하긴 하다.
+
+```java
+private <T extends Serializable> T deepCopyUsingSerialize(T o) {
+    try {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(bos);
+        out.writeObject(o);
+        out.close();
+
+        ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
+
+        @SuppressWarnings("unchecked")
+        T copy = (T) in.readObject();
+        in.close();
+
+        return copy;
+    } catch (IOException | ClassNotFoundException e) {
+        throw new IllegalStateException(e);
+    }
+}
+```
 
 ## 규칙 12: `Comparable` 구현을 고려하라
+
+* `compareTo()` 메소드는 `equals()`와 비슷한 역할을 하지만, `Object`에 기본으로 존재하지 않는다.
+* 순서를 정할 수 있는 값 객체(value object)의 경우 `Comparable`과 `compareTo()`를 구현하는 것이 좋다.
+* 정렬에 사용할 수 있을 뿐만 아니라 중복 제거에도 사용될 수 있다. (`Set.sort()`)
+
+### `compareTo()` 의 요건
+
+`compareTo()` 구현 방법은 `equals()`와 비슷한 부분이 있다.
+
+* 두 값이 같을 경우: `0`
+* 내가 작을 경우(this < o): 양수(`-1`)
+* 내가 클 경우(this > o): 음수(`1`)
+* 많은 경우 `-1`, `0`, `1` 이겠지만, 규약상 "음수", `0`, "양수"라는 것을 명심해야 한다.
+  * `a.compareTo(b) == -1`는 문제가 될 수 있다. `a.compareTo(b) < 0`으로 사용할 것
+
+`sign()`은 정수값의 부호를 리턴함 -1, 0, 1:
+
+* **대칭성(symmetric)**: `sign(x.compareTo(y)) == sign(y.compareTo(x))`
+* **추이성(transitive)**: `x.compareTo(y) > 0 && y.compareTo(z) > 0`면 `x.compareTo(z) > 0`
+* **일관성(consistency)**: `x.compareTo(y) == 0`이면 `sign(x.compareTo(z)) == sign(y.compareTo(z))`
+* `this.compareTo(o) == 0`라면 논리상 `this.equals(o) == true` 라야 하지만, 그리고 강력히 권장하지만 필수는 아님
+  * `compareTo()`와 `equals()`의 결과가 동일하게 나오도록 구현하는 것이 좋다.(라고 쓰고 반드시라고 읽는다)
+  * Collection API의 일부 클래스는 동일성 비교를 위해 `equals()` 대신 `compareTo() == 0`을 사용한다. (`TreeSet` 등)
+  * 만약 다르게 구현되어야 한다면 반드시 문서화할것 (eg: `BigDecimal`) \
+    ([ComparableTest.java](../examples/src/test/java/effectivejava/chapter03/rule12/ComparableTest.java) testBigDecimalEquality())
+
+### `compareTo()` 구현 방법
+
+* `public <T> T int compareTo(T o)` 이므로 타입 캐스팅이 필요 없고, `instanceof`도 필요 없다.
+  * 클래스가 다르면 무조건 `ClassCastException` 됨
+* `hashCode()` 가 제대로 구현되지 않으면 컬렉션 사용시 문제가 되는 것 처럼, `compareTo()` 마찬가지 문제가 될 수 있다.
+* `equals()` 사례 처럼 `Comparable` 구현한 클래스의 서브클래싱도 마찬가지로 문제가 된다.
+  * 복합 객체(composite, HAS-A 관계)를 사용하여 확장할 것
+* 자료형 별 비교 방법
+  * 정수형 필드의 경우 `this.value - that.value` 연산을 통해서 효율적으로 계산할 수 있지만, overflow를 주의해야 한다.
+    * 두 값의 차이가 `Integer.MAX_VALUE` 보다 작은 경우에만 사용 가능하다. \
+      ([ComparableTest.java](../examples/src/test/java/effectivejava/chapter03/rule12/ComparableTest.java) testIntegerCompareToOverflow())
+  * `float`, `double`은 `Float.compare()`, `Double.compare()`를 사용한다.
+  * 객체형 필드는 `compareTo()`를 호출한다.
+* `compareTo()`는 `equals()`와 다르게 `null`을 받을 수 없다. `null`을 받을 수 있게 하려면 `Comparator`를 사용해야 한다.
+
+### [추가] `CompareToBuilder` 유틸리티
+
+위 방법을 적용한 `CompareToBuilder` 유틸리티
+
+* 예제: [CompareToBuilder.java](../examples/src/main/java/com/yidigun/utils/CompareToBuilder.java)
+* 예제: [CompareToBuilderTest.java](../examples/src/test/java/com/yidigun/utils/CompareToBuilderTest.java)
+
+```java
+class Member implements Comparable<Member> {
+    private String name;
+    private int age;
+    private String job;
+  
+    @Override
+    public int compareTo(Member o) {
+        return new CompareToBuilder()
+              .compare(name, o.name)
+              .compare(age, o.age)
+              .compare(job, o.job)
+              .toComparison();
+    }
+}
+```
 
 
 ## [추가] Pattern variable

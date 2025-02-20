@@ -5,6 +5,7 @@
 * 이 책은 순서대로 읽는 것을 기준으로 만들어지지 않았으며 각 78개의 절은 독립적으로 읽을 수 있다.
 * 성능 문제는 다루지 않는다. 명료하고 정확하고 사용이 편리하고 안정적이고 유연하고 유지보수가 쉬운 프로그램을 만드는 방법을 알면 필요한 수준의 성능을 내는 것은 상대적으로 쉽다.
 * 접근 권한을 명시하지 않았을때 의미가 분명한 package-private라는 용어를 쓰지만 정확한 용어는 default access 이다.
+* "[추가]"라고 표시된 내용은 책에 없는 내용이다.
 
 ### 용어 번역의 문제
 
@@ -21,12 +22,17 @@
   * [**규칙 5**: 불필요한 객체는 만들지 말라](docs/chapter02.md#규칙-5-불필요한-객체는-만들지-말라)
   * [**규칙 6**: 유효기간이 지난 객체 참조는 폐기하라](docs/chapter02.md#규칙-6-유효기간이-지난-객체-참조는-폐기하라)
   * [**규칙 7**: 종료자(finalizer) 사용을 피하라](docs/chapter02.md#규칙-7-종료자finalizer-사용을-피하라)
+    * [**[추가]** Java 7 `try-with-resources` 문](docs/chapter02.md#추가-java-7-try-with-resources-문)
 * [3장 모든 객체의 공통 메서드](docs/chapter03.md)
   * [**규칙 8**: `equals`를 재정의할 때는 일반 규약을 따르라](docs/chapter03.md#규칙-8-equals를-재정의할-때는-일반-규약을-따르라)
+    * [`equals()`관련 토론 주제: 어디까지 비교할 것인가?](docs/chapter03.md#equals관련-토론-주제-어디까지-비교할-것인가)
   * [**규칙 9**: `equals`를 재정의할 때는 반드시 `hashCode`도 재정의하라](docs/chapter03.md#규칙-9-equals를-재정의할-때는-반드시-hashcode도-재정의하라)
+    * [**[추가]** `HashCodeBuilder` 유틸리티](docs/chapter03.md#추가-hashcodebuilder-유틸리티)
   * [**규칙 10**: `toString`은 항상 재정의하라](docs/chapter03.md#규칙-10-tostring은-항상-재정의하라)
   * [**규칙 11**: `clone`을 재정의할 때는 신중하라](docs/chapter03.md#규칙-11-clone을-재정의할-때는-신중하라)
+    * [**[추가]** 깊은 복사(deep copy)가 문제되는 경우](docs/chapter03.md#추가-깊은-복사deep-copy가-문제되는-경우)
   * [**규칙 12**: `Comparable` 구현을 고려하라](docs/chapter03.md#규칙-12-comparable-구현을-고려하라)
+    * [**[추가]** `CompareToBuilder` 유틸리티](docs/chapter03.md#추가-comparetobuilder-유틸리티)
   * [**[추가]** Pattern variable](docs/chapter03.md#추가-pattern-variable)
   * [**[추가]** Record Class](docs/chapter03.md#추가-record-class)
 * [4장 클래스와 인터페이스](docs/chapter04.md)

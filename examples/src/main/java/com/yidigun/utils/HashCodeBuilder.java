@@ -13,7 +13,7 @@ package com.yidigun.utils;
  * Features:
  * - Provides multiple `append` methods to add different types of values (e.g., primitives, Objects, arrays).
  * - Aggregates hash codes using a basic multiplier-and-add pattern with configurable base parameters.
- * - Can calculate a final hash code via the {@link #calculateHashCode()} method.
+ * - Can calculate a final hash code via the {@link #toHashCode()} method.
  */
 public class HashCodeBuilder {
 
@@ -43,11 +43,11 @@ public class HashCodeBuilder {
      *               Null values are handled by using a {@code 0} hash code for them.
      * @return the computed hash code as an integer based on the input values.
      */
-    public static int calculateHashCode(Object... values) {
+    public static int toHashCode(Object... values) {
         HashCodeBuilder builder = new HashCodeBuilder();
         for (Object value : values)
             builder.append(value);
-        return builder.calculateHashCode();
+        return builder.toHashCode();
     }
 
     /**
@@ -58,7 +58,7 @@ public class HashCodeBuilder {
      * @return the computed hash code as an integer.
      */
     @CheckHashCodeCalculated
-    public int calculateHashCode() {
+    public int toHashCode() {
         return hashCode;
     }
 

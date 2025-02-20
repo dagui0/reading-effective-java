@@ -9,6 +9,7 @@
 * [**규칙 5**: 불필요한 객체는 만들지 말라](#규칙-5-불필요한-객체는-만들지-말라)
 * [**규칙 6**: 유효기간이 지난 객체 참조는 폐기하라](#규칙-6-유효기간이-지난-객체-참조는-폐기하라)
 * [**규칙 7**: 종료자(finalizer) 사용을 피하라](#규칙-7-종료자finalizer-사용을-피하라)
+  * [**[추가]** Java 7 `try-with-resources` 문](#추가-java-7-try-with-resources-문)
 
 ## 규칙 1: 생성자 대신 정적 펙터리 메서드를 사용할 수 없는지 생각해 보라
 
@@ -28,15 +29,15 @@ public static Boolean valueOf(boolean b) {
 
 생성자는 이름이 없어서 기능을 설명할 수 없지만 이름이 있으면 설명이 가능함
 ```java
-new BigInteger(int, int, Random);  // 생성자의 기능을 파악하기 어려움
-BigInteger BigInteger.probablePrime(int, int, Random); // 생성자의 기능을 유추 가능
+bi = new BigInteger(int, int, Random);  // 생성자의 기능을 파악하기 어려움
+bi = BigInteger.probablePrime(int, int, Random); // 생성자의 기능을 유추 가능
 ```
 
 생성자는 같은 시그니처를 가지는 생성자를 여러개 만들 수 없다. 그렇게 하려면 인자의 순서를 바꿔야 하는데 아마도 이해할 수 없는 코드가 될것이다.
 ```java
-new BigInteger(int, int, Random);     // 쌍
-new BigInteger(int, Random, int);     // 욕
-new BigInteger(Random, int, int);     // 나옴
+bi = new BigInteger(int, int, Random);     // 쌍
+bi = new BigInteger(int, Random, int);     // 욕
+bi = new BigInteger(Random, int, int);     // 나옴
 ```
 
 #### 2. 생성자와 달리 새로운 객체를 만들 필요가 없다.
@@ -578,13 +579,15 @@ public Object pop() {
 `close()`, `release()`, `dispose()`, `flush()` 따위를 만들고  `try`-`finally`와 함께 사용하도록 한다.
 
 ```java
-Handle h = openHandle();
+public void bar() {
+    Handle h = new Handle();
 
-try {
-    h.doSomething();
-}
-finally {
-    h.close();
+    try {
+        h.doSomething();
+    }
+    finally {
+        h.close();
+    }
 }
 ```
 
@@ -642,9 +645,24 @@ public class Bar extends Foo {
 * 종료 메소드 없이 종료되는 경우에 대한 로그를 찍도록 하라
 * 굳이 `finalize()`를 사용해야 하는 경우라면 `super.finalize()`를 잊지 말자.
 
-### [추가] Java 7 `try-with-resources` 문 추가
+### [추가] Java 7 `try-with-resources` 문
 
 `AutoClosable` 인터페이스를 구현한 객체에 대해서 [`try-with-resources`](https://mangkyu.tistory.com/217) 문을 지원하게 되었다.
+
+```java
+public class Handle implements AutoCloseable {
+    @Override
+    public void close() {
+        // close Foo
+    }
+}
+
+public void bar() {
+    try (Handle h = new Handle()) {
+        h.doSomething();
+    }
+}
+```
 
 ```java
 public static void main(String args[]) throws IOException {
