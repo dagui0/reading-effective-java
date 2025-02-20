@@ -527,7 +527,10 @@ private <T extends Serializable> T deepCopyUsingSerialize(T o) {
       ([ComparableTest.java](../examples/src/test/java/effectivejava/chapter03/rule12/ComparableTest.java) testIntegerCompareToOverflow())
   * `float`, `double`은 `Float.compare()`, `Double.compare()`를 사용한다.
   * 객체형 필드는 `compareTo()`를 호출한다.
-* `compareTo()`는 `equals()`와 다르게 `null`을 받을 수 없다. `null`을 받을 수 있게 하려면 `Comparator`를 사용해야 한다.
+* `compareTo()`는 `equals()`와 다르게 `null`을 받을 수 없다. `null`이 전달되면 `NullPointerException`을 던져야 한다. 
+  ([`Comparable` 문서상 명시된 규정](https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html))
+  * 반면 `Comparator.compare()`는 **OPTIONALLY** `null`을 받도록 구현될 수 있다. 모든 `Comparator`가 그렇다는 것은 아님
+    ([`Comparator` 문서상 명시된 규정](https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html))
 
 ### [추가] `CompareToBuilder` 유틸리티
 
