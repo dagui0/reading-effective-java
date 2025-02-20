@@ -7,7 +7,8 @@
 * [**규칙 10**: `toString`은 항상 재정의하라](#규칙-10-tostring은-항상-재정의하라)
 * [**규칙 11**: `clone`을 재정의할 때는 신중하라](#규칙-11-clone을-재정의할-때는-신중하라)
 * [**규칙 12**: `Comparable` 구현을 고려하라](#규칙-12-comparable-구현을-고려하라)
-* [**[추가]** Record Class](#record-class)
+* [**[추가]** Pattern variable](#추가-pattern-variable)
+* [**[추가]** Record Class](#추가-record-class)
 
 ## 규칙 8: `equals`를 재정의할 때는 일반 규약을 따르라
 
@@ -179,8 +180,13 @@ public class ColorPoint {
 `instanceof`에서 첫번째 연산자가 `null`이면 무조건 `false`를 리턴하므로 타입 체크만 하면 쉽게 달성 가능하다. 
 
 ```java
-if (!(o instanceof ColorPoint))
-    return false;
+@Override
+public boolean equals(Object o) {
+    // ...
+    if (!(o instanceof ColorPoint))
+      return false;
+    // ...
+}
 ```
 
 ### 결론: 바람직한 `equals`
@@ -225,10 +231,10 @@ CREATE TABLE MEMBER (
 
 ```java
 public class Member {
-    private final int id;
-    private final String name;
-    private final Date regDate;
-    private final Date modDate;
+    private int id;
+    private String name;
+    private Date regDate;
+    private Date modDate;
 
     @Override
     public boolean equals(Object o) {
@@ -243,9 +249,99 @@ public class Member {
 }
 ```
 
+* DK: 비교하면 안된다. 관리상 기록을 위한 것이지 객체의 속성이라고 볼 수 없다.
+* JH:
+* SK:
+* YJ:
 
 ## 규칙 9: `equals`를 재정의할 때는 반드시 `hashCode`도 재정의하라
 
+값 객체(Value Object)를 만들 때는 `Hashtable`, `HashMap`, `HashSet` 등의
+해시 기반 컬렉션은 사용하게 되기 마련이므로 무조건 `hashCode()`를 재정의 해야 한다.
+
+### `hashCode()` 규약
+
+* `equals() == true` 면, 두 객체의 `hashCode()` 값은 같아야 한다.
+* `equals() == false` 면, 두 객체의 `hashCode()` 값은 달라야 한다. 하지만 알고리즘상 중복될 수 있으므로 반드시는 아니다.
+* 다만 프로그램이 종료되었다가 새로 시작되었을 때 까지 같을 필요는 없다.
+
+`Object.hashCode()`는 동일한 객체인 경우(`Object.equals()`의 결과로)만 같은 값을 가지게 구현되어있다.
+따라서 `equals()`를 재정의한 클래스는 `hashCode()`도 재정의 해야 한다.
+
+`hashCode()`를 재정의 하지 않은 경우:
+
+* 예제: [PhoneNumber1.java](../examples/src/main/java/effectivejava/chapter03/rule09/PhoneNumber1.java)
+* 예제: [PhoneNumberTest.java](../examples/src/test/java/effectivejava/chapter03/rule09/PhoneNumberTest.java)
+
+```java
+@Test
+public void testPhoneNumber1HashMapInsert() {
+    Map<PhoneNumber1, String> map = new HashMap<>();
+    PhoneNumber1 n1 = new PhoneNumber1(10, 123, 4567);
+    PhoneNumber1 n2 = new PhoneNumber1(10, 123, 4567);
+  
+    map.put(n1, "Jenny");
+  
+    assertNull(map.get(n2));
+    assertFalse(map.containsKey(n2));
+}
+```
+
+### `hashCode()` 작성 요령
+
+* `0`이 아닌 상수로 시작한다. (eg: 17)
+* 상수값은 소수(prime number)인 것이 좋다.
+* `equals()`에 사용된 각 필드의 `hashCode`를 더한다.
+  * 더할 때는 현재 해시값에 일정한 상수를 곱한 후 더한다. (eg: `result = 31 * result + field.hashCode();`)
+  * 곱셈을 하고 더하는 이유는 필드의 해시값이 0인 경우 해시값에 아무런 변화가 없기 때문(필드 값이 해시에 기여를 못함)
+  * 곱셈을 할 상수는 홀수여야 좋고, 보통은 소수를 선택한다. (`31 * result`는 `result << 5 - result`와 같다.)
+* 자료형 별 해시값 계산 방법
+  * **boolean**: `(field ? 1 : 0)`
+  * **byte, char, short, int**: `(int) field`
+  * **long**: `(int) (field ^ (field >>> 32))`
+  * **float**: `Float.floatToIntBits(field)`
+  * **double**: `Double.doubleToLongBits(field)` 후 `long` 해시값 계산
+  * **Object**: `field == null? 0: field.hashCode()`
+* 해시코드를 계산하는 비용이 높은 경우, 사전 계산을 하거나 결과를 캐싱하거나 할 수는 있지만 필드를 생략해서는 안된다.
+  * 사전 계산 대신 지연 초기화(lazy initialization)을 사용할 수 있지만 신중하게 ([규칙 71](chapter10.md#규칙-71-초기화-지연은-신중하게-하라))
+
+```java
+public class PhoneNumber {
+    private volatile int hashCode;  // volatile (규칙 71)
+    
+    @Override
+    public int hashCode() {
+        int r = hashCode;
+        if (r == 0) {
+            r = 17;
+            r = 31 * r + areaCode;
+            r = 31 * r + prefix;
+            r = 31 * r + lineNumber;
+            hashCode = r;
+        }
+        return r;
+    }
+}
+```
+
+위 방법을 적용한 `HashCodeBuilder` 유틸리티:
+
+* 예제: [HashCodeBuilder.java](../examples/src/main/java/com/yidigun/utils/HashCodeBuilder.java)
+* 예제: [HashCodeBuilderTest.java](../examples/src/test/java/com/yidigun/utils/HashCodeBuilderTest.java)
+
+```java
+class Test1 {
+    int a = 0, b = 0;
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(a)
+                .append(b)
+                .calculateHashCode();
+    }
+}
+```
 
 ## 규칙 10: `toString`은 항상 재정의하라
 
@@ -256,28 +352,35 @@ public class Member {
 ## 규칙 12: `Comparable` 구현을 고려하라
 
 
+## [추가] Pattern variable
 
-## Record Class
+[Pattern Matching for instanceof](https://velog.io/@gkskaks1004/Java-16%EC%97%90%EC%84%9C-instanceof-%EC%97%B0%EC%82%B0%EC%9E%90%EC%97%90-%EB%8C%80%ED%95%9C-pattern-matching) Java 16부터 추가
 
-[Record Class 소개](https://mr-popo.tistory.com/243)
-* 불변(immutable) 객체를 쉽게 생성할 수 있도록 하는 유형의 클래스입니다.
-* JDK14에서 preview로 등장하여 JDK16에서 정식 스펙으로 포함되었습니다.
-
-### 조건
-
-* 모든 필드 `private final`
-* 필드 값을 모두 포함한 생성자 존재
-* 접근자 메서드(getter)
-
-### 혜택
-
-컴파일 타임에 컴파일러가 코드를 추가해주기 때문입니다.
+`instanceof` 검사하고 나면 캐스팅(Type casting)이 따라오는게 인지상정!
 
 ```java
-public record Student(String name, int age) {
+@Override
+public boolean equals(Object o) {
+    // ...
+    if (!(o instanceof Point point))
+        return false;
+    return x == point.x && y == point.y; 
 }
 ```
+
+## [추가] Record Class
+
+불변(immutable) 객체를 쉽게 생성할 수 있도록 하는 [Record Class](https://mr-popo.tistory.com/243) Java 16부터 정식 추가.
+
+* 모든 필드 `private final` 선언
+* 필드 값을 모두 포함한 생성자 자동 생성
 * getters 메서드 자동 생성
 * `equals()` 자동 생성
 * `hashCode()` 자동 생성
 * `toString()` 자동 생성
+
+```java
+public record Student(String name, int age) {
+    // 내용은 알아서 생성해줌
+}
+```

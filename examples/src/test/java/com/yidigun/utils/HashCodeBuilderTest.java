@@ -11,7 +11,7 @@ public class HashCodeBuilderTest {
 
         Test1 t1 = new Test1(1, 2);
 
-        int actual = HashCodeBuilder.calculateHashCode(t1.a, t1.b);
+        int actual = t1.hashCode();
 
         int expected = 17;
         expected = 31 * expected + t1.a;
@@ -45,5 +45,23 @@ class Test1 {
 
     public void setB(int b) {
         this.b = b;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Test1))
+            return false;
+        Test1 t = (Test1)o;
+        return t.a == a && t.b == b;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(a)
+                .append(b)
+                .calculateHashCode();
     }
 }
