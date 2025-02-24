@@ -1,21 +1,23 @@
-# 이펙티브 자바 (2판) - 3장 모든 객체의 공통 메서드
+# 이펙티브 자바 (3판) - 3장 모든 객체의 공통 메서드
 
 ## 목차
 
-* [**규칙 8**: `equals`를 재정의할 때는 일반 규약을 따르라](#규칙-8-equals를-재정의할-때는-일반-규약을-따르라)
+* [**아이템 10**: `equals`는 일반 규약을 지켜 재정의하라](#아이템-10-equals는-일반-규약을-지켜-재정의하라)
   * [**[추가]** `equals()`관련 토론 주제: 어디까지 비교할 것인가?](#추가-equals관련-토론-주제-어디까지-비교할-것인가)
-* [**규칙 9**: `equals`를 재정의할 때는 반드시 `hashCode`도 재정의하라](#규칙-9-equals를-재정의할-때는-반드시-hashcode도-재정의하라)
+* [**아이템 11**: `equals`를 재정의하려거든 `hashCode`도 재정의하라](#아이템-11-equals를-재정의하려거든-hashcode도-재정의하라)
   * [**[추가]** `HashCodeBuilder` 유틸리티](#추가-hashcodebuilder-유틸리티)
-* [**규칙 10**: `toString`은 항상 재정의하라](#규칙-10-tostring은-항상-재정의하라)
-* [**규칙 11**: `clone`을 재정의할 때는 신중하라](#규칙-11-clone을-재정의할-때는-신중하라)
+* [**아이템 12**: `toString`을 항상 재정의하라](#아이템-12-tostring을-항상-재정의하라)
+* [**아이템 13**: `clone` 재정의는 주의해서 진행하라](#아이템-13-clone-재정의는-주의해서-진행하라)
   * [**[추가]** 깊은 복사(deep copy)가 문제되는 경우](#추가-깊은-복사deep-copy가-문제되는-경우)
   * [**[추가]** `clone()` 관련 토론 주제: Prototype 패턴이 의미가 있는가?](#추가-clone-관련-토론-주제-prototype-패턴이-의미가-있는가)
-* [**규칙 12**: `Comparable` 구현을 고려하라](#규칙-12-comparable-구현을-고려하라)
+* [**아이템 14**: `Comparable`을 구현할지 고려하라](#아이템-14-comparable을-구현할지-고려하라)
   * [**[추가]** `CompareToBuilder` 유틸리티](#추가-comparetobuilder-유틸리티)
 * [**[추가]** Pattern variable](#추가-pattern-variable)
 * [**[추가]** Record Class](#추가-record-class)
 
-## 규칙 8: `equals`를 재정의할 때는 일반 규약을 따르라
+## 아이템 10: `equals`는 일반 규약을 지켜 재정의하라
+
+**TODO: 3판 업그레이드 필요!**
 
 ### `equals()` 를 재정의 하지 않아도 되는 경우
 
@@ -262,7 +264,9 @@ public class Member {
 * Scully: 생성 수정 날짜는 비교에서 빼야함
 * Lucie: 오딧 날짜는 빼고 비교해야함
 
-## 규칙 9: `equals`를 재정의할 때는 반드시 `hashCode`도 재정의하라
+## 아이템 11: `equals`를 재정의하려거든 `hashCode`도 재정의하라
+
+**TODO: 3판 업그레이드 필요!**
 
 값 객체(Value Object)를 만들 때는 `Hashtable`, `HashMap`, `HashSet` 등의
 해시 기반 컬렉션은 사용하게 되기 마련이므로 무조건 `hashCode()`를 재정의 해야 한다.
@@ -311,7 +315,7 @@ public void testPhoneNumber1HashMapInsert() {
   * **double**: `Double.doubleToLongBits(field)` 후 `long` 해시값 계산
   * **Object**: `field == null? 0: field.hashCode()`
 * 해시코드를 계산하는 비용이 높은 경우, 사전 계산을 하거나 결과를 캐싱하거나 할 수는 있지만 필드를 생략해서는 안된다.
-  * 사전 계산 대신 지연 초기화(lazy initialization)을 사용할 수 있지만 신중하게 ([규칙 71](chapter10.md#규칙-71-초기화-지연은-신중하게-하라))
+  * 사전 계산 대신 지연 초기화(lazy initialization)을 사용할 수 있지만 신중하게 ([규칙 71](chapter11#규칙-71-초기화-지연은-신중하게-하라))
 
 ```java
 public class PhoneNumber {
@@ -353,7 +357,9 @@ class Test1 {
 }
 ```
 
-## 규칙 10: `toString`은 항상 재정의하라
+## 아이템 12: `toString`을 항상 재정의하라
+
+**TODO: 3판 업그레이드 필요!**
 
 * `toString()`을 잘 만들어 놓으면 클래스를 좀 더 쾌적하게 사용할 수 있다.
 * getter 메소드를 이용해서 얻을 수 없는 정보는 `toString()`에 포함 시켜서는 안된다.
@@ -363,7 +369,9 @@ class Test1 {
      * 해당 형식 문자열을 파싱하는 기능을 통해 완전히 문자열과 호환되게 하는 방법도 있을 수 있다.
   2. 문자열 형식은 큰 의미 없고 향후 변경될 수 있음을 명시적으로 경고
 
-## 규칙 11: `clone`을 재정의할 때는 신중하라
+## 아이템 13: `clone` 재정의는 주의해서 진행하라
+
+**TODO: 3판 업그레이드 필요!**
 
 ### 선 결론: `Cloneable` 인터페이스는 문제가 많으므로 지양하라
 
@@ -508,8 +516,9 @@ GoF의 [Prototype 패턴](https://tmd8633.tistory.com/26)은 복제(clone)를 �
 * Scully: 
 * Lucie: 
 
+## 아이템 14: `Comparable`을 구현할지 고려하라
 
-## 규칙 12: `Comparable` 구현을 고려하라
+**TODO: 3판 업그레이드 필요!**
 
 * `compareTo()` 메소드는 `equals()`와 비슷한 역할을 하지만, `Object`에 기본으로 존재하지 않는다.
 * 순서를 정할 수 있는 값 객체(value object)의 경우 `Comparable`과 `compareTo()`를 구현하는 것이 좋다.

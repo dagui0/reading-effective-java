@@ -1,17 +1,20 @@
-# 이펙티브 자바 (2판) - 2장 객체의 생성과 삭제
+# 이펙티브 자바 (3판) - 2장 객체의 생성과 삭제
 
 ## 목차
 
-* [**규칙 1**: 생성자 대신 정적 펙터리 메서드를 사용할 수 없는지 생각해 보라](#규칙-1-생성자-대신-정적-펙터리-메서드를-사용할-수-없는지-생각해-보라)
-* [**규칙 2**: 생성자 인자가 많을 때는 Builder 패턴 적용을 고려하라](#규칙-2-생성자-인자가-많을-때는-builder-패턴-적용을-고려하라)
-* [**규칙 3**: `private` 생성자나 `enum` 자료형은 싱글턴 패턴을 따르도록 설계하라](#규칙-3-private-생성자나-enum-자료형은-싱글턴-패턴을-따르도록-설계하라)
-* [**규칙 4**: 객체 생성을 막을 때는 `private` 생성자를 사용하라](#규칙-4-객체-생성을-막을-때는-private-생성자를-사용하라)
-* [**규칙 5**: 불필요한 객체는 만들지 말라](#규칙-5-불필요한-객체는-만들지-말라)
-* [**규칙 6**: 유효기간이 지난 객체 참조는 폐기하라](#규칙-6-유효기간이-지난-객체-참조는-폐기하라)
-* [**규칙 7**: 종료자(finalizer) 사용을 피하라](#규칙-7-종료자finalizer-사용을-피하라)
-  * [**[추가]** Java 7 `try-with-resources` 문](#추가-java-7-try-with-resources-문)
+* [**아이템 1**: 생성자 대신 정적 펙터리 메서드를 고려하라](#아이템-1-생성자-대신-정적-펙터리-메서드를-고려하라)
+* [**아이템 2**: 생성자에 매개변수가 많다면 빌더를 고려하라](#아이템-2-생성자에-매개변수가-많다면-빌더를-고려하라)
+* [**아이템 3**: `private` 생성자나 열거 타입으로 싱글턴임을 보증하라](#아이템-3-private-생성자나-열거-타입으로-싱글턴임을-보증하라)
+* [**아이템 4**: 인스턴스화를 막으려거든 `private` 생성자를 사용하라](#아이템-4-인스턴스화를-막으려거든-private-생성자를-사용하라)
+* [**아이템 5**: 자원을 직접 명시하지 말고 의존 객체 주입을 사용하라](#아이템-5-자원을-직접-명시하지-말고-의존-객체-주입을-사용하라)
+* [**아이템 6**: 불필요한 객체 생성을 피하라](#아이템-6-불필요한-객체-생성을-피하라)
+* [**아이템 7**: 다 쓴 객체 참조를 해제하라](#아이템-7-다-쓴-객체-참조를-해제하라)
+* [**아이템 8**: finalizer와 cleaner 사용을 피하라](#아이템-8-finalizer와-cleaner-사용을-피하라)
+* [**아이템 9**: try-finally보다는 try-with-resources를 사용하라](#아이템-9-try-finally-보다는-try-with-resources를-사용하라)
 
-## 규칙 1: 생성자 대신 정적 펙터리 메서드를 사용할 수 없는지 생각해 보라
+## 아이템 1: 생성자 대신 정적 펙터리 메서드를 고려하라
+
+**TODO: 3판 업그레이드 필요!**
 
 `java.lang.Boolean`의 정적 팩터리 메서드를 만드는 예시
 
@@ -116,7 +119,9 @@ Map<String, List<String>> m = new HashMap<>(); // java 1.7 이것도 충분히 �
 * 정적 팩터리 메서드와 `public`생성자는 용도가 서로 다름
 * 의외로 팩터리 메서드가 효과적일 때가 많음음
 
-## 규칙 2: 생성자 인자가 많을 때는 Builder 패턴 적용을 고려하라
+## 아이템 2: 생성자에 매개변수가 많다면 빌더를 고려하라
+
+**TODO: 3판 업그레이드 필요!**
 
 생성에 필요한 인자 중 선택적 인자가 많은 경우 생성자나 팩토리 메서드의 모두 문제가 있다.
 
@@ -245,9 +250,9 @@ NutritionFacts3 nf3 = new NutritionFacts3.Builder(240, 8)
   [Python](https://int-i.github.io/python/2020-06-04/python-keyword-args/#google_vignette)의
   경우 선택적 인자에 이름을 붙일 수 있든데 비슷한 코드를 만들 수 있다.
 * 생성자와 마찬가지로 [불변식(invariant)](https://banaba.tistory.com/34)을 적용할 수 있다.
-    * `build()` 또는 `private` 생성자에서 에서 불변식 검사를 할 경우 실제 객체의 값을 두고 검사할 수 있다.([규칙 39](chapter07.md#규칙-39-필요하다면-방어적-복사본을-만들라))
-        * 이 경우 오류 발생시 `IllegalStateException`을 던져야 한다.([규칙 60](chapter09.md#규칙-60-표준-예외를-사용하라))
-            * 이렇게 던져진 예외에는 어떤 불변식 위반이 문제인지 알 수 있도록 상세 정보가 포함되어야 한다.([규칙 63](chapter09.md#규칙-63-어떤-오류인지를-드러내는-정보를-상세한-메시지에-담으라))
+    * `build()` 또는 `private` 생성자에서 에서 불변식 검사를 할 경우 실제 객체의 값을 두고 검사할 수 있다.([규칙 39](chapter08#규칙-39-필요하다면-방어적-복사본을-만들라))
+        * 이 경우 오류 발생시 `IllegalStateException`을 던져야 한다.([규칙 60](chapter10#규칙-60-표준-예외를-사용하라))
+            * 이렇게 던져진 예외에는 어떤 불변식 위반이 문제인지 알 수 있도록 상세 정보가 포함되어야 한다.([규칙 63](chapter10#규칙-63-어떤-오류인지를-드러내는-정보를-상세한-메시지에-담으라))
     * 여러 인자에 걸쳐서 불변식을 검사하려면 여러 인자를 받는 setter 메소드에를 만들면 된다.
         * 이 경우 오류 발생시 `IllegalArgumentException`을 던져야 한다.
 * setter 메소드마다 따로따로 호출되므로, 여러개의 가변수 인자(varargs)를 받을수 있다.
@@ -273,7 +278,9 @@ NutritionFacts3 nf3 = new NutritionFacts3.Builder(240, 8)
 * 인자 수가 많은 생성자를 대체할 수 있다.
 * 대부분의 인자가 선택적인 경우 적용할 수 있다.
 
-## 규칙 3: `private` 생성자나 `enum` 자료형은 싱글턴 패턴을 따르도록 설계하라
+## 아이템 3: `private` 생성자나 열거 타입으로 싱글턴임을 보증하라
+
+**TODO: 3판 업그레이드 필요!**
 
 ### 싱글턴 패턴과 관련된 문제들
 
@@ -381,7 +388,9 @@ public enum Elvis4 {
 * 리플렉션 공격에도 안전하다.
 * 킹갓짱굳임
 
-## 규칙 4: 객체 생성을 막을 때는 `private` 생성자를 사용하라
+## 아이템 4: 인스턴스화를 막으려거든 `private` 생성자를 사용하라
+
+**TODO: 3판 업그레이드 필요!**
 
 * `java.util.Arrays`, `java.util.Collections` 같은 정적 메소드 모음집 클래스를 만들 때는 `private` 생성자를 만들자.
     * 생성자를 만들지 않으면 기본default 생성자가 자동으로 만들어지기 때문.
@@ -397,7 +406,14 @@ public class MyFunctions {
 }
 ```
 
-## 규칙 5: 불필요한 객체는 만들지 말라
+## 아이템 5: 자원을 직접 명시하지 말고 의존 객체 주입을 사용하라
+
+**TODO: 3판에서 추가됨!**
+
+
+## 아이템 6: 불필요한 객체 생성을 피하라
+
+**TODO: 3판 업그레이드 필요!**
 
 ```java
 String s = new Strign("stringette");    // 곤란하다
@@ -449,8 +465,8 @@ public class Person {
 ```
 
 `isBabyBoomer()`가 한번도 실행되지 않는 경우를 위해서
-초기화 지연lazy initialization 방법([규칙 71](chapter10.md#규칙-71-초기화-지연은-신중하게-하라))을 쓸 수 있으나 **추천하지 않는다**. \
-초기화를 지연시키면 구현이 복잡해지고 추가적인 성능 개선이 어렵기 때문이다.([규칙 55](chapter08.md#규칙-55-신중하게-최적화하라))
+초기화 지연lazy initialization 방법([규칙 71](chapter11#규칙-71-초기화-지연은-신중하게-하라))을 쓸 수 있으나 **추천하지 않는다**. \
+초기화를 지연시키면 구현이 복잡해지고 추가적인 성능 개선이 어렵기 때문이다.([규칙 55](chapter09#규칙-55-신중하게-최적화하라))
 
 ### 어댑터 패턴과 객체 생성
 
@@ -479,10 +495,12 @@ public static void main(String[] args) {
 * 객체 풀object pool의 경우도 극단적으로 객체 생성 비용이 높지 않다면 사용하지 않는 것이 좋다.
 * 객체 풀은 코드가 어려워지고, 메모리를 많이 쓰고, 성능도 떨어진다.
 * 최신 JVM은 고도로 최적화된 가비지 컬렉터를 사용하므로 가벼운 객체는 풀을 사용하는 것 보다 훨씬 성능이 좋다.
-* 방어적 카피([규칙 39](chapter07.md#규칙-39-필요하다면-방어적-복사본을-만들라))의 방어적 복사가 요구되는 상황에서는
+* 방어적 카피([규칙 39](chapter08#규칙-39-필요하다면-방어적-복사본을-만들라))의 방어적 복사가 요구되는 상황에서는
   재사용을 하려고 하는 것이 더 비용이 높다는 점 주의하라.
 
-## 규칙 6: 유효기간이 지난 객체 참조는 폐기하라
+## 아이템 7: 다 쓴 객체 참조를 해제하라
+
+**TODO: 3판 업그레이드 필요!**
 
 가비지컬렉터를 가지고 있는 Java 에서 메모리 누수가 발생한다고?
 
@@ -551,7 +569,7 @@ public Object pop() {
 * 메모리 누수는 보통 별 증상이 없기 때문에 테스트 과정에서 쉽게 발견되지 않고 수년간 시스템에 남아 있을 수 있다.
 * 이러한 문제가 발생할 수 있다는 것을 인지하고 미리 방지 대책을 세워야 한다.
 
-## 규칙 7: 종료자(finalizer) 사용을 피하라
+## 아이템 8: finalizer와 cleaner 사용을 피하라
 
 [추가] 수많은 문제를 가지고 있던 `finalize()`는 결국 Java 9부터 deprecated 되었다고 한다.
 [Java finalize() 은퇴식](https://jaeyeong951.medium.com/finalize-%EC%9D%80%ED%87%B4%EC%8B%9D-4a52fb855910)
@@ -645,6 +663,22 @@ public class Bar extends Foo {
 * 종료 메소드 없이 종료되는 경우에 대한 로그를 찍도록 하라
 * 굳이 `finalize()`를 사용해야 하는 경우라면 `super.finalize()`를 잊지 말자.
 
+```java
+public static void main(String args[]) throws IOException {
+    try (FileInputStream is = new FileInputStream("file.txt");
+         BufferedInputStream bis = new BufferedInputStream(is)) {
+        int data;
+        while ((data = bis.read()) != -1) {
+            System.out.print((char) data);
+        }
+    }
+}
+```
+
+## 아이템 9: try-finally 보다는 try-with-resources를 사용하라
+
+**TODO: 3판에서 추가됨!**
+
 ### [추가] Java 7 `try-with-resources` 문
 
 `AutoClosable` 인터페이스를 구현한 객체에 대해서 [`try-with-resources`](https://mangkyu.tistory.com/217) 문을 지원하게 되었다.
@@ -660,18 +694,6 @@ public class Handle implements AutoCloseable {
 public void bar() {
     try (Handle h = new Handle()) {
         h.doSomething();
-    }
-}
-```
-
-```java
-public static void main(String args[]) throws IOException {
-    try (FileInputStream is = new FileInputStream("file.txt");
-         BufferedInputStream bis = new BufferedInputStream(is)) {
-        int data;
-        while ((data = bis.read()) != -1) {
-            System.out.print((char) data);
-        }
     }
 }
 ```
