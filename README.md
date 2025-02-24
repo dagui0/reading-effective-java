@@ -2,12 +2,37 @@
 
 ## 1장 들어가기
 
-**TODO: 3판 업그레이드 필요!**
+> 자바는 아주 단순한 노동자용 언어
+> - James Gosling
+
+> 갓 탄생한 언어 대부분이 그렇듯, 자바가 상대적으로 간결해 보이는 이유는 어느 정도는 허상이고, 어느정도는 그 기능의 미숙함 때문이다.
+> 자바도 시간이 흐르면서 급격히 커지고 복잡해질 것이다. 결국 두세 배는 커지고 종속적인 확장과 라이브러리가 느러날 것이다.
+> - Bjarne Stroustrup
 
 * 이 책은 순서대로 읽는 것을 기준으로 만들어지지 않았으며 각 90개의 절은 독립적으로 읽을 수 있다.
 * 성능 문제는 다루지 않는다. 명료하고 정확하고 사용이 편리하고 안정적이고 유연하고 유지보수가 쉬운 프로그램을 만드는 방법을 알면 필요한 수준의 성능을 내는 것은 상대적으로 쉽다.
-* 접근 권한을 명시하지 않았을때 의미가 분명한 package-private라는 용어를 쓰지만 정확한 용어는 default access 이다.
+* 접근 권한을 명시하지 않았을때 의미가 분명한 package-private라는 용어를 쓰지만 정확한 용어는 pacakge access (default access 2판) 이다.
+
+* 버전별 추가된 기능
+
+| 기능                 | 아이템 번호   | 도입된 자바 버전 |
+|--------------------|----------|-----------|
+| 람다                 | 42 ~ 44  | 자바 8      |
+| 스트림                | 45 ~ 48  | 자바 8      |
+| 옵셔널                | 55       | 자바 8      |
+| 인터페이스의 디폴트 메소드     | 21       | 자바 8      |
+| try-with-resources | 9        | 자바 7      |
+| @SafeVarargs       | 32       | 자바 7      |
+| 모듈                 | 15       | 자바 9      |
+
+
 * "[추가]"라고 표시된 내용은 책에 없는 내용이다.
+
+### 참고 링크
+
+* [이펙티브 자바 3판 번역 용어 해설](https://docs.google.com/document/d/1Nw-_FJKre9x7Uy6DZ0NuAFyYUCjBPCpINxqrP0JFuXk/edit?tab=t.0)
+* [이펙티브 자바 3판 한국어판 예제 소스](https://github.com/WegraLee/effective-java-3e-source-code)
+* [백기선 - 이펙티브 자바 강의](https://www.youtube.com/watch?v=X7RXP6EI-5E&list=PLfI752FpVCS8e5ACdi5dpwLdlVkn0QgJJ)
 
 ## 목차
 
