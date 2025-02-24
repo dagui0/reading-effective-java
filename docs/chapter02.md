@@ -823,22 +823,3 @@ static void copy(String src, String dest) throws IOException {
     }
 }
 ```
-
-### [추가] Java 7 `try-with-resources` 문
-
-`AutoClosable` 인터페이스를 구현한 객체에 대해서 [`try-with-resources`](https://mangkyu.tistory.com/217) 문을 지원하게 되었다.
-
-```java
-public class Handle implements AutoCloseable {
-    @Override
-    public void close() {
-        // close Foo
-    }
-}
-
-public void bar() {
-    try (Handle h = new Handle()) {
-        h.doSomething();
-    }
-}
-```
