@@ -11,5 +11,5 @@ plugins {
 }
 
 rootProject.name = 'reading-effective-java'
-include('sources')
+// include('sources')
 // include('native')
