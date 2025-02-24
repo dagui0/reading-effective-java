@@ -22,7 +22,7 @@ public static Boolean valueOf(boolean b) {
 }
 ```
 
-이 방법은 GoF의 Factory Method Pattern과는 다르며 GoF의 다른 어떤 패턴과도 다르다.
+이 방법은 GoF의 [팩토리 메소드 패턴](https://inpa.tistory.com/entry/GOF-%F0%9F%92%A0-%ED%8C%A9%ED%86%A0%EB%A6%AC-%EB%A9%94%EC%84%9C%EB%93%9CFactory-Method-%ED%8C%A8%ED%84%B4-%EC%A0%9C%EB%8C%80%EB%A1%9C-%EB%B0%B0%EC%9B%8C%EB%B3%B4%EC%9E%90)과는 다르며 GoF의 다른 어떤 패턴과도 다르다.
 
 ### 정적 팩터리 메서드의 장점
 
