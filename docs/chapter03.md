@@ -17,8 +17,6 @@
 
 ## 아이템 10: `equals`는 일반 규약을 지켜 재정의하라
 
-**TODO: 3판 업그레이드 필요!**
-
 ### `equals()` 를 재정의 하지 않아도 되는 경우
 
 `java.lang.Object`의 `equals()` 메서드는 완전히 동일한 객체인지만을 비교한다.
@@ -27,18 +25,16 @@
 * 각각의 객체가 고유한 인스턴스인 경우
   * 활성 개체를 나타내는 클래스 (eg: `Thread`)
 * 클래스가 논리적 동일성(logical equality)을 확인할 필요가 없는 경우
-  * `java.util.Random` 클래스 등 `equals()`를 호출할것 같지 않은 클래스
+  * `java.util.Random`, `java.util.regex.Pattern` 클래스 등 `equals()`를 호출할것 같지 않은 클래스
 * 상위 클래스에서 재정의한 `equals()`가 하위 클래스에서 적절하게 동작하는 경우
-* 클래스가 private 또는 package-private 이고 `equals()`를 호출할 일이 없는 경우
-
-하지만 나는 이러한 경우라도 `equals()`를 재정의한다.
-
-```java
-@Override
-public boolean equals(Object o) {
-    throw new AssertionError(); // 호출 금지
-}
-```
+* 클래스가 private 또는 package-private 이고 `equals()`를 호출할 일이 없는 경우. \
+  하지만 나는 이러한 경우라도 `equals()`를 재정의한다.
+  ```java
+  @Override
+  public boolean equals(Object o) {
+      throw new AssertionError(); // 호출 금지
+  }
+  ```
 
 ### 남자의, 아니 `equals()`의 자격
 
@@ -48,7 +44,7 @@ public boolean equals(Object o) {
 * **대칭성(symmetric)**: null이 아닌 모든 참조 값 x, y에 대해, `x.equals(y)`가 true이면 `y.equals(x)`도 true이다.
 * **추이성(transitive)**: null이 아닌 모든 참조 값 x, y, z에 대해, `x.equals(y)`가 true이고 `y.equals(z)`가 true이면 `x.equals(z)`도 true이다.
 * **일관성(consistency)**: 객체의 필드값이 변경되지 않았다면 값 x, y에 대해, `x.equals(y)`를 반복해서 호출해도 항상 같은 값을 반환한다.
-* **`null`에 대한 비동치성**: `null`이 아닌 참조 값 x에 대해, `x.equals(null)`은 false이다.
+* **`null` 아님**: `null`이 아닌 참조 값 x에 대해, `x.equals(null)`은 false이다.
 
 #### 반사성(reflexive) - `x.equals(x)`는 true이다.
 
@@ -148,10 +144,10 @@ public void testColorPoint2EqualsWithPointTransitivity() {
 ```
 
 상속과 관련된 문제를 해결하기 위해 `instanceof` 대신에 `getClass() == o.getClass()`를 사용하는 것도 생각해 볼 수 있으나,
-또 다른 미묘한 문제를 발생시킬 수 있다.
+또 다른 미묘한 문제를 발생시킬 수 있다. ([리스코프 치환 원칙](https://inpa.tistory.com/entry/OOP-%F0%9F%92%A0-%EC%95%84%EC%A3%BC-%EC%89%BD%EA%B2%8C-%EC%9D%B4%ED%95%B4%ED%95%98%EB%8A%94-LSP-%EB%A6%AC%EC%8A%A4%EC%BD%94%ED%94%84-%EC%B9%98%ED%99%98-%EC%9B%90%EC%B9%99) 위반)
 
 이 경우 가장 바람직한 방법은 `Point` 상속을 포기하고 HAS-A 관계로 복합(composite) 객체를 만드는 것이다.
-([규칙 16](chapter04.md#규칙-16-계승하는-대신-구성하라))
+([아이템 18](chapter04.md#아이템-18-상속보다는-컴포지션을-사용하라))
 
 * 예제: [Point.java](../examples/src/main/java/effectivejava/chapter03/item10/Point.java)
 * 예제: [ColorPoint.java](../examples/src/main/java/effectivejava/chapter03/item10/ColorPoint.java)
@@ -179,7 +175,7 @@ public class ColorPoint {
 #### 일관성(consistency) - 객체의 필드값이 변경되지 않았다면 값 x, y에 대해, `x.equals(y)`를 반복해서 호출해도 항상 같은 값을 반환한다.
 
 * 변경 가능한 객체는 시간에 따라서 동치관계가 달라질 수 있다. 반면 불변객체(immutable)는 걱정할 필요가 없다.
-  ([규칙 15](chapter04.md#규칙-15-변경-가능성을-최소화하라))
+  ([아이템 17](chapter04.md#아이템-17-변경-가능성을-최소화하라))
 * 신뢰성이 보장되지 않는 자원에 대한 비교를 피해야 한다. (eg: `java.net.URL`은 IP 주소를 확인하기 위해 시스템 호출을 사용하므로 일관성에 문제가 생길 수 있다.)
 
 #### `null`에 대한 비동치성 - `null`이 아닌 참조 값 x에 대해, `x.equals(null)`은 false이다.
@@ -218,10 +214,17 @@ boolean equals(Object o) {
 
 `equals()`관련 추가적인 지침들
 
-* [추가] `null` 일 수 있는 필드를 비교할 때는 [`Objects.equals()`](https://docs.oracle.com/javase/8/docs/api/java/util/Objects.html)를 사용하라. (Java 7 부터 추가)
-* `equals`를 재정의할 때는 반드시 `hashCode`도 재정의하라. [규칙 9](#규칙-9-equals를-재정의할-때는-반드시-hashcode도-재정의하라)
+* `float`, `double`을 비교할 때는 == 대신에 `Float.compare()`, `Double.compare()`를 사용하라
+* `null` 일 수 있는 필드를 비교할 때는 [`Objects.equals()`](https://docs.oracle.com/javase/8/docs/api/java/util/Objects.html)를 사용하라. (Java 7 부터 추가)
+* `equals`를 재정의할 때는 반드시 `hashCode`도 재정의하라. [아이템 11](#아이템-11-equals를-재정의하려거든-hashcode도-재정의하라)
 * `@Override public boolean equals(Object o)` 시그니처를 변경하지 마라. 인자 자료형을 바꾸게 되면 재정의(override)가 안될 수 있다.
 * 과도한 동치성에 집착하지 마라. [토론 필요](#equals관련-토론-주제)
+
+### `equals()` 구현을 위한 보조적인 도구 (`hashCode()`도 같이 해결됨)
+
+* [구글 AutoValue](https://www.baeldung.com/introduction-to-autovalue)
+* [Lombok](https://projectlombok.org/features/)
+* [레코드 record class](#추가-record-class)
 
 ### [추가] `equals()`관련 토론 주제: 어디까지 비교할 것인가?
 
@@ -266,8 +269,6 @@ public class Member {
 
 ## 아이템 11: `equals`를 재정의하려거든 `hashCode`도 재정의하라
 
-**TODO: 3판 업그레이드 필요!**
-
 값 객체(Value Object)를 만들 때는 `Hashtable`, `HashMap`, `HashSet` 등의
 해시 기반 컬렉션은 사용하게 되기 마련이므로 무조건 `hashCode()`를 재정의 해야 한다.
 
@@ -301,7 +302,7 @@ public void testPhoneNumber1HashMapInsert() {
 
 ### `hashCode()` 작성 요령
 
-* `0`이 아닌 상수로 시작한다. (eg: 17)
+* `0`이 아닌 상수로 시작한다. (eg: 17) (이 항목은 2판에는 있었는데 3판에서 없어짐)
 * 상수값은 소수(prime number)인 것이 좋다.
 * `equals()`에 사용된 각 필드의 `hashCode`를 더한다.
   * 더할 때는 현재 해시값에 일정한 상수를 곱한 후 더한다. (eg: `result = 31 * result + field.hashCode();`)
@@ -315,7 +316,7 @@ public void testPhoneNumber1HashMapInsert() {
   * **double**: `Double.doubleToLongBits(field)` 후 `long` 해시값 계산
   * **Object**: `field == null? 0: field.hashCode()`
 * 해시코드를 계산하는 비용이 높은 경우, 사전 계산을 하거나 결과를 캐싱하거나 할 수는 있지만 필드를 생략해서는 안된다.
-  * 사전 계산 대신 지연 초기화(lazy initialization)을 사용할 수 있지만 신중하게 ([규칙 71](chapter11#규칙-71-초기화-지연은-신중하게-하라))
+  * 사전 계산 대신 지연 초기화(lazy initialization)을 사용할 수 있지만 신중하게 ([아이템 83](chapter11.md#아이템-83-지연-초기화는-신중히-사용하라))
 
 ```java
 public class PhoneNumber {
@@ -335,6 +336,17 @@ public class PhoneNumber {
     }
 }
 ```
+
+### 주의 사항
+
+* `hashCode()`의 성능을 높인다고 핵심 필드 계산을 생략해서는 안된다.
+* `hashCode()`의 계산공식을 문서에 설명하지마라. 클라이언트가 의존하게 되면 변경할 수 없다.
+
+### `hashCode()` 구현을 위한 보조적인 도구
+
+* [`Objects.hash()`](https://docs.oracle.com/javase/8/docs/api/java/util/Objects.html#hash-java.lang.Object...-) \
+  - `Object[]`로 전달해야 해서 박싱을 사용하게 되므로 느릴 수 있다.
+* 더 복잡한 해싱이 필요한 경우 [구아바(Guava)](https://github.com/google/guava)의 `com.google.common.hash.Hashing` 참조
 
 ### [추가] `HashCodeBuilder` 유틸리티
 
@@ -359,19 +371,19 @@ class Test1 {
 
 ## 아이템 12: `toString`을 항상 재정의하라
 
-**TODO: 3판 업그레이드 필요!**
-
 * `toString()`을 잘 만들어 놓으면 클래스를 좀 더 쾌적하게 사용할 수 있다.
+* 모든 주요 정보를 포함시키는 것이 좋다. 그래야 디버깅하기 편하다.
+  ```
+  Assertion failure: expected {abc, 123}, but was {abc, 123}.
+  ```
 * getter 메소드를 이용해서 얻을 수 없는 정보는 `toString()`에 포함 시켜서는 안된다.
-  * 그렇지 않다면 개발자들은 `toString()`의 결과를 파싱하려고 할 것이다.
+  * 그렇지 않다면 개발자들은 `toString()`의 결과를 파싱하려고 할 것이고, 문자혈 형식을 바꾸기 어려워질 것이다.
 * 어떤 방식으로 구현하건 간에 `toString()`의 출력에 대한 내용을 명확하게 문서화 해야 한다.
   1. 이러저러한 형식으로 문자열로 변환된다고 명시
      * 해당 형식 문자열을 파싱하는 기능을 통해 완전히 문자열과 호환되게 하는 방법도 있을 수 있다.
   2. 문자열 형식은 큰 의미 없고 향후 변경될 수 있음을 명시적으로 경고
 
 ## 아이템 13: `clone` 재정의는 주의해서 진행하라
-
-**TODO: 3판 업그레이드 필요!**
 
 ### 선 결론: `Cloneable` 인터페이스는 문제가 많으므로 지양하라
 
@@ -380,9 +392,10 @@ class Test1 {
 
 #### `Cloneable` 인터페이스와 `Object.clone()`의 문제점
 
-* `Cloneable` 인터페이스에는 `clone()` 메소드가 없다.
-  * `Comparable.compareTo()` 같은 다른 인터페이스와는 동작 방식이 매우 다르다.
-  * `Cloneable`을 구현하고나면 대부분 `Object`의 `private Object clone()`을 `public`으로 재정의할 필요가 있다.
+* `Cloneable`은 복제해도 되는 클래스임을 명시하는 믹스인 인터페이스(mixin interface, [아이템 20](chapter04.md#아이템-20-추상-클래스보다는-인터페이스를-우선하라))이지만 망했다.
+  * `Comparable.compareTo()` 같은 다른 인터페이스와 동작 방식이 매우 다르다.
+  * `Cloneable` 인터페이스에는 `clone()` 메소드가 없다.
+    * 그래서 `Cloneable`을 구현하고나면 `Object`의 `private Object clone()`을 `public`으로 재정의할 필요가 있다.
 * `Cloneable` 인터페이스는 `Object.clone()` 메서드가 호출되었을 때 복제를 할지 말지 결정하게 하는 마커(marker)임
   * `Object.clone()`(많은 경우 하위 클래스에 의해서 `super.clone()`)이 호출되면, \
     현재 클래스(`Object`가 아니고 호출된 하위 클래스)가 `Cloneable` 인터페이스를 구현한 경우 복제본을 리턴한다.
@@ -398,11 +411,16 @@ class Test1 {
   * 이것은 상속트리가 깊어서 복잡한 단계의 `super()`를 통해 초기화되는 경우 문제가 발생할 가능성이 높다.
   * 복제되더라도 다른 값을 가져야 하는 필드인데 `final`인 경우 등의 경우 변경할 방법이 없다. \
     `final`한 필드라도 `final`로 선언하면 안된다. (eg: 객체 생성 일련번호, 객체 생성 타임스탬프)
+* 만약 `clone()`을 재정의하여 생성자를 사용하도록 한다면, 하위클래스를 만들었을때 문제가 발생하게 된다.
+  * `Object.clone()`은 호출한 자식 클래스 인스턴스를 리턴하지만 생성자를 사용하면 사용된 생성자의 클래스가 리턴되기때문. 
+  * 결국에는 모든 하위 클래스도 자신의 생성자를 사용하여 재정의할 수 밖에 없다.
 * `clone()`을 재정의 하는 경우에 상속 트리상의 모든 클래스들이
   각자 자신에게 맞는 제대로된 `clone()`을 재정의 해야한다. 
 
 ### 그나마 올바른 `Cloneable` 사용법
 
+* 상속해서 사용하기 위한 클래스[(아이템 19)](chapter04.md#아이템-19-상속을-고려해-설계하고-문서화하라-그러지-않았다면-상속을-금지하라)의 경우 `Cloneable`을 구현하지 말아야 한다.
+  * 제대로된 `private T clone()`을 구현해 놓고 자식 클래스가 `Cloneable`을 구현할지 말지 선택할 수 있게 해야한다.
 * 반드시 `clone()`을 재정의한다. (아래 내용은 모두 상위 클래스의 메소드를 재정의할 때 변경 가능한 것들이다.)
   * 접근 제한자를 `public`으로 변경한다.
   * 리턴형을 클래스 타입으로 변경한다.
@@ -518,8 +536,6 @@ GoF의 [Prototype 패턴](https://tmd8633.tistory.com/26)은 복제(clone)를 �
 
 ## 아이템 14: `Comparable`을 구현할지 고려하라
 
-**TODO: 3판 업그레이드 필요!**
-
 * `compareTo()` 메소드는 `equals()`와 비슷한 역할을 하지만, `Object`에 기본으로 존재하지 않는다.
 * 순서를 정할 수 있는 값 객체(value object)의 경우 `Comparable`과 `compareTo()`를 구현하는 것이 좋다.
 * 정렬에 사용할 수 있을 뿐만 아니라 중복 제거에도 사용될 수 있다. (`Set.sort()`)
@@ -552,7 +568,9 @@ GoF의 [Prototype 패턴](https://tmd8633.tistory.com/26)은 복제(clone)를 �
 * `hashCode()` 가 제대로 구현되지 않으면 컬렉션 사용시 문제가 되는 것 처럼, `compareTo()` 마찬가지 문제가 될 수 있다.
 * `equals()` 사례 처럼 `Comparable` 구현한 클래스의 서브클래싱도 마찬가지로 문제가 된다.
   * 복합 객체(composite, HAS-A 관계)를 사용하여 확장할 것
-* 자료형 별 비교 방법
+* 자료형 별 비교 방법(3판)
+  * 기본 자료형 클래스의 `compare()`를 사용하라. (`Integer.compare()`, `Short.compare()`, `Double.compare()`등)
+* 자료형 별 비교 방법(2판)
   * 정수형 필드의 경우 `this.value - that.value` 연산을 통해서 효율적으로 계산할 수 있지만, overflow를 주의해야 한다.
     * 두 값의 차이가 `Integer.MAX_VALUE` 보다 작은 경우에만 사용 가능하다. \
       ([ComparableTest.java](../examples/src/test/java/effectivejava/chapter03/item14/ComparableTest.java) testIntegerCompareToOverflow())
@@ -562,6 +580,17 @@ GoF의 [Prototype 패턴](https://tmd8633.tistory.com/26)은 복제(clone)를 �
   ([`Comparable` 문서상 명시된 규정](https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html))
   * 반면 `Comparator.compare()`는 **OPTIONALLY** `null`을 받도록 구현될 수 있다. 모든 `Comparator`가 그렇다는 것은 아님
     ([`Comparator` 문서상 명시된 규정](https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html))
+
+### Java 8 `Comparator` 체인 방식
+
+깔끔하고 매력적인 방법이지만 약 10% 느리다ㅠ
+
+```java
+private static final Comparator<PhoneNumber> COMPARATOR =
+        comparingInt((PhoneNumber pn) -> pn.areaCode)
+                .thenComparingInt(pn -> pn.prefix)
+                .thenComparingInt(pn -> pn.lineNUm);
+```
 
 ### [추가] `CompareToBuilder` 유틸리티
 
