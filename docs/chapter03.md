@@ -60,7 +60,7 @@ public boolean equals(Object o) {
 
 다음 `CaseInsensitiveString` 예시는 `String`과 호환성을 가져가기 위해서 `equals()`에 `String`객체와 비교를 추가했지만
 이로 인해 대칭성을 위반하게 된다. 
-`CaseInsensitiveString.equals(String)`이 참일 경우에도 `String.equals(CaseInsensitiveString)`는 항상 거짓이 되기 때문이다. [CaseInsensitiveStringTest.java](../examples/src/test/java/effectivejava/chapter03/rule08/CaseInsensitiveStringTest.java)
+`CaseInsensitiveString.equals(String)`이 참일 경우에도 `String.equals(CaseInsensitiveString)`는 항상 거짓이 되기 때문이다. [CaseInsensitiveStringTest.java](../examples/src/test/java/effectivejava/chapter03/item10/CaseInsensitiveStringTest.java)
 
 ```java
 public class CaseInsensitiveString1 {
@@ -92,9 +92,9 @@ public class CaseInsensitiveString1 {
 
 `x`, `y` 필드를 가지는  `Point` 클래스와 이를 상속하여 필드를 추가하는 `ColorPoint`의 예시
 
-* 예제: [Pointy1.java](../examples/src/main/java/effectivejava/chapter03/rule08/Point1.java)
-* 예제: [ColorPoint1.java](../examples/src/main/java/effectivejava/chapter03/rule08/ColorPoint1.java)
-* 예제: [ColorPointTest.java](../examples/src/test/java/effectivejava/chapter03/rule08/ColorPointTest.java)
+* 예제: [Pointy1.java](../examples/src/main/java/effectivejava/chapter03/item10/Point1.java)
+* 예제: [ColorPoint1.java](../examples/src/main/java/effectivejava/chapter03/item10/ColorPoint1.java)
+* 예제: [ColorPointTest.java](../examples/src/test/java/effectivejava/chapter03/item10/ColorPointTest.java)
 
 ```java
 @Override
@@ -118,8 +118,8 @@ public void testColorPoint1EqualsWithPointSymmetry() {
 
 억지로 상위 클래스의 대칭성을 만족 시킬 경우 추이성을 만족시킬 수 없다.
 
-* 예제: [ColorPoint2.java](../examples/src/main/java/effectivejava/chapter03/rule08/ColorPoint2.java)
-* 예제: [ColorPointTest.java](../examples/src/test/java/effectivejava/chapter03/rule08/ColorPointTest.java)
+* 예제: [ColorPoint2.java](../examples/src/main/java/effectivejava/chapter03/item10/ColorPoint2.java)
+* 예제: [ColorPointTest.java](../examples/src/test/java/effectivejava/chapter03/item10/ColorPointTest.java)
 
 ```java
 @Override
@@ -153,8 +153,8 @@ public void testColorPoint2EqualsWithPointTransitivity() {
 이 경우 가장 바람직한 방법은 `Point` 상속을 포기하고 HAS-A 관계로 복합(composite) 객체를 만드는 것이다.
 ([규칙 16](chapter04.md#규칙-16-계승하는-대신-구성하라))
 
-* 예제: [Point.java](../examples/src/main/java/effectivejava/chapter03/rule08/Point.java)
-* 예제: [ColorPoint.java](../examples/src/main/java/effectivejava/chapter03/rule08/ColorPoint.java)
+* 예제: [Point.java](../examples/src/main/java/effectivejava/chapter03/item10/Point.java)
+* 예제: [ColorPoint.java](../examples/src/main/java/effectivejava/chapter03/item10/ColorPoint.java)
 
 ```java
 public class ColorPoint {
@@ -282,8 +282,8 @@ public class Member {
 
 `hashCode()`를 재정의 하지 않은 경우:
 
-* 예제: [PhoneNumber1.java](../examples/src/main/java/effectivejava/chapter03/rule09/PhoneNumber1.java)
-* 예제: [PhoneNumberTest.java](../examples/src/test/java/effectivejava/chapter03/rule09/PhoneNumberTest.java)
+* 예제: [PhoneNumber1.java](../examples/src/main/java/effectivejava/chapter03/item11/PhoneNumber1.java)
+* 예제: [PhoneNumberTest.java](../examples/src/test/java/effectivejava/chapter03/item11/PhoneNumberTest.java)
 
 ```java
 @Test
@@ -451,7 +451,7 @@ public class PhoneNumber {
 
 만약 같은 객체가 2번 추가되어있는 경우, 깊은 복사를 하는 과정에서 2번 복제되어서 원본과 다른 동작을 하게 될 수 있다.
 
-예제: [DeepCopyTest.java](../examples/src/test/java/effectivejava/chapter03/rule11/DeepCopyTest.java)
+예제: [DeepCopyTest.java](../examples/src/test/java/effectivejava/chapter03/item13/DeepCopyTest.java)
 
 ```java
 @Test
@@ -543,7 +543,7 @@ GoF의 [Prototype 패턴](https://tmd8633.tistory.com/26)은 복제(clone)를 �
   * `compareTo()`와 `equals()`의 결과가 동일하게 나오도록 구현하는 것이 좋다.(라고 쓰고 반드시라고 읽는다)
   * Collection API의 일부 클래스는 동일성 비교를 위해 `equals()` 대신 `compareTo() == 0`을 사용한다. (`TreeSet` 등)
   * 만약 다르게 구현되어야 한다면 반드시 문서화할것 (eg: `BigDecimal`) \
-    ([ComparableTest.java](../examples/src/test/java/effectivejava/chapter03/rule12/ComparableTest.java) testBigDecimalEquality())
+    ([ComparableTest.java](../examples/src/test/java/effectivejava/chapter03/item14/ComparableTest.java) testBigDecimalEquality())
 
 ### `compareTo()` 구현 방법
 
@@ -555,7 +555,7 @@ GoF의 [Prototype 패턴](https://tmd8633.tistory.com/26)은 복제(clone)를 �
 * 자료형 별 비교 방법
   * 정수형 필드의 경우 `this.value - that.value` 연산을 통해서 효율적으로 계산할 수 있지만, overflow를 주의해야 한다.
     * 두 값의 차이가 `Integer.MAX_VALUE` 보다 작은 경우에만 사용 가능하다. \
-      ([ComparableTest.java](../examples/src/test/java/effectivejava/chapter03/rule12/ComparableTest.java) testIntegerCompareToOverflow())
+      ([ComparableTest.java](../examples/src/test/java/effectivejava/chapter03/item14/ComparableTest.java) testIntegerCompareToOverflow())
   * `float`, `double`은 `Float.compare()`, `Double.compare()`를 사용한다.
   * 객체형 필드는 `compareTo()`를 호출한다.
 * `compareTo()`는 `equals()`와 다르게 `null`을 받을 수 없다. `null`이 전달되면 `NullPointerException`을 던져야 한다. 
