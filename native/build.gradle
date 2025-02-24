@@ -1,0 +1,9 @@
+plugins {
+    id 'cpp-library'
+}
+
+library {
+    source.from file('src')
+    privateHeaders.from file('src')
+    publicHeaders.from file('include')
+}
