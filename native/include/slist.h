@@ -2,15 +2,15 @@
 #define _SIMPLELINKEDLIST_H_
 
 #ifdef WINDOWS
-#ifdef SLIST_STATIC
-#  define SLISTAPI
-#else
-#  ifdef SLIST_EXPORTS
-#    define SLISTAPI __declspec(dllexport)
+#  ifdef SLIST_STATIC
+#    define SLISTAPI
 #  else
-#    define SLISTAPI __declspec(dllimport)
+#    ifdef SLIST_EXPORTS
+#      define SLISTAPI __declspec(dllexport)
+#    else
+#      define SLISTAPI __declspec(dllimport)
+#    endif
 #  endif
-#endif
 #else
 #  define SLISTAPI
 #endif
@@ -32,20 +32,20 @@ private:
 
 public:
     SimpleLinkedList();
-    ~SimpleLinkedList();
+    virtual ~SimpleLinkedList();
 
-    void add(const int value);
-    void addAll(const int *values, const int length);
-    void insertAt(const int index, const int value);
-    void removeAt(const int index);
-    void removeAll();
+    virtual void add(const int value);
+    virtual void addAll(const int *values, const int length);
+    virtual void insertAt(const int index, const int value);
+    virtual void removeAt(const int index);
+    virtual void removeAll();
 
-    int size();
-    int get(const int index);
-    bool contains(const int value);
+    virtual int size();
+    virtual int get(const int index);
+    virtual bool contains(const int value);
 
-    std::string dump();
-    void print_dump();
+    virtual std::string dump();
+    virtual void print_dump();
 
     enum ErrorCode {
         NO_ERROR,
@@ -56,14 +56,36 @@ public:
     class SLISTAPI Error {
     public:
         Error(ErrorCode code, int index, int data);
-        ErrorCode getCode();
-        int getIndex();
-        int getData();
+	//virtual ~Error();
+        virtual ErrorCode getCode();
+        virtual int getIndex();
+        virtual int getData();
     private:
         ErrorCode code;
         int index;
         int data;
     };
 };
+
+#ifdef __APPLE__ 
+
+extern "C" {
+
+    SimpleLinkedList *NewSimpleLinkedList(void);
+    typedef SimpleLinkedList *SimpleLinkedList_creator(void);
+
+    void DeleteSimpleLinkedList(SimpleLinkedList*);
+    typedef void SimpleLinkedList_disposer(SimpleLinkedList*);
+
+/*
+    SimpleLinkedList::Error *NewSimpleLinkedListError(SimpleLinkedList::ErrorCode,int,int);
+    typedef SimpleLinkedList::Error *SimpleLinkedListError_creator(SimpleLinkedList::ErrorCode,int,int);
+
+    void DeleteSimpleLinkedListError(SimpleLinkedList::Error*);
+    typedef void SimpleLinkedListError_disposer(SimpleLinkedList::Error*);
+*/
+}
+
+#endif
 
 #endif

@@ -24,7 +24,7 @@ int main(void) {
     list->print_dump();
 
     cout << "adding { " << 6 << ", " << 7 << ", " << 8  << ", " << 9 << ", " << 10 << " }" << endl;
-    int array[] { 6, 7, 8, 9, 10 };
+    int array[5] = { 6, 7, 8, 9, 10 };
     list->addAll(array, 5);
     list->print_dump();
 
@@ -70,7 +70,7 @@ int main(void) {
     list->print_dump();
 
     cout << "destructor test" << endl;
-    int final_array[] { 1, 4, 7, 8, 9, 6, 3, 2, 5 };
+    int final_array[9] = { 1, 4, 7, 8, 9, 6, 3, 2, 5 };
     list->addAll(final_array, 9);
     list->print_dump();
     delete list;

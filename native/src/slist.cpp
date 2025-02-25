@@ -1,6 +1,12 @@
 #include <iostream>
 #include <slist.h>
 
+#ifdef __APPLE___ 
+#  define DYLIB_EXPORT __attribute__((visibility("default")))
+#else
+#  define DYLIB_EXPORT
+#endif
+
 using namespace std;
 
 /*
@@ -25,9 +31,25 @@ void SimpleLinkedList::Node::setNext(SimpleLinkedList::Node *next) {
  * SimpleLinkedList::Error
  */
 
+// DYLIB_EXPORT
 SimpleLinkedList::Error::Error(SimpleLinkedList::ErrorCode code, int index, int data)
     : code(code), index(index), data(data) {
 }
+
+// SimpleLinkedList::Error::~Error() {
+//}
+
+#ifdef __NO_APPLE__
+DYLIB_EXPORT
+SimpleLinkedList::Error *NewSimpleLinkedListError(SimpleLinkedList::ErrorCode code, int index, int data) {
+    return new SimpleLinkedList::Error(code, index, data);
+}
+
+DYLIB_EXPORT
+void DeleteSimpleLinkedListError(SimpleLinkedList::Error *error) {
+    delete error;
+}
+#endif
 
 SimpleLinkedList::ErrorCode SimpleLinkedList::Error::getCode() {
     return code;
@@ -45,8 +67,21 @@ int SimpleLinkedList::Error::getData() {
  * SimpleLinkedList
  */
 
+DYLIB_EXPORT
 SimpleLinkedList::SimpleLinkedList() : head(NULL) {
 }
+
+#ifdef __APPLE__
+DYLIB_EXPORT
+SimpleLinkedList *NewSimpleLinkedList(void) {
+    return new SimpleLinkedList();
+}
+
+DYLIB_EXPORT
+void DeleteSimpleLinkedList(SimpleLinkedList *list) {
+    delete list;
+}
+#endif
 
 SimpleLinkedList::~SimpleLinkedList() {
     Node *temp = this->head;

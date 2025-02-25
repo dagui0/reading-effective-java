@@ -1,5 +1,5 @@
 CXXFLAGS	= -Wall -I../include
-LDFLAGS		= -lstdc++
+LDFLAGS		= 
 
 HEADERS		= ../include/slist.h
 SRCS		= slist.cpp
@@ -18,7 +18,7 @@ else
   ifeq ($(UNAME_S),Darwin)
     DLIBEXT	= dylib
     DL_CXXFLAGS	= -D SLIST_EXPORTS $(CXXFLAGS)
-    DL_LDFLAGS	= 
+    DL_LDFLAGS	= -dynamiclib -fvisibility=hidden
   else # liunx
     DLIBEXT	= so
     DL_CXXFLAGS	= -D SLIST_EXPORTS -fPIC $(CXXFLAGS)
@@ -30,6 +30,10 @@ endif
 
 OUTPUTS		= lib$(LIBNAME).$(DLIBEXT) lib$(LIBNAME).$(SLIBEXT)
 TESTS		= test_slistfunc$(EXE) test_dynamic$(EXE)
+
+ifeq ($(UNAME_S),Darwin)
+  TESTS		= test_slistfunc$(EXE) test_dylib$(EXE)
+endif
 
 all: $(OUTPUTS)
 test: $(TESTS)
@@ -57,6 +61,12 @@ test_dynamic$(EXE): test_dynamic.cpp lib$(LIBNAME).$(DLIBEXT)
 	$(CXX) -o $@ $< -D DEBUG $(CXXFLAGS) $(LDFLAGS) -L. lib$(LIBNAME).$(DLIBEXT) && \
 	ldd $@ && \
 	LD_LIBRARY_PATH=. ./$@
+
+# macos
+test_dylib$(EXE): test_dylib.cpp lib$(LIBNAME).$(DLIBEXT)
+	$(CXX) -o $@ $< -D DEBUG $(CXXFLAGS) $(LDFLAGS) && \
+	otool -L $@ && \
+	./$@
 
 clean:
 	rm -f *.o $(OUTPUTS) $(TESTS)
