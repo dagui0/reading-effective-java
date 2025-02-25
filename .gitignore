@@ -1,6 +1,7 @@
 # ide
 .idea
 .vscode
+.vs
 
 # for gradle
 .gradle
