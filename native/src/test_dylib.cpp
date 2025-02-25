@@ -43,7 +43,7 @@ int main(void) {
         list->insertAt(10000, 1000);
     }
     catch (SimpleLinkedList::Error *e) {
-        cout << "caught exception: code=" << e->getCode() << ", index=" << e->getIndex() << ", data=" << e->getData() << endl;
+        cout << "caught exception: code=" << e->code << ", index=" << e->index << ", data=" << e->data << endl;
         delete e;
     }
 
