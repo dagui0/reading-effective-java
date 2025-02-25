@@ -56,7 +56,7 @@ test_slistfunc$(EXE): test_slistfunc.cpp $(SRCS) $(HEADERS)
 test_dynamic$(EXE): test_dynamic.cpp lib$(LIBNAME).$(DLIBEXT)
 	$(CXX) -o $@ $< -D DEBUG $(CXXFLAGS) $(LDFLAGS) -L. lib$(LIBNAME).$(DLIBEXT) && \
 	ldd $@ && \
-	./$@
+	LD_LIBRARY_PATH=. ./$@
 
 clean:
 	rm -f *.o $(OUTPUTS) $(TESTS)
