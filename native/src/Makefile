@@ -1,31 +1,35 @@
 CXXFLAGS	= -Wall -I../include
 LDFLAGS		= -lstdc++
 
-HEADERS		= ../include/SimpleLinkedList.h
-SRCS		= SimpleLinkedList.cpp
-OBJECTS		= SimpleLinkedList.o
-LIBNAME		= libslist
-EXEEXT		= .exe
-LIBEXT		= .dll
+HEADERS		= ../include/slist.h
+SRCS		= slist.cpp
+OBJECTS		= slist.o
 
-.PHONY:		clean
+LIBNAME		= slist
+EXE			= .exe		# windows: .exe, linux: (empty), mac: (empty)
+DLIBEXT		= dll		# windows: dll, linux: so, mac: dylib
+SLIBEXT		= a
+
+.PHONY:		all test clean
+
+all: lib$(LIBNAME).$(DLIBEXT) lib$(LIBNAME).$(SLIBEXT)
+test: test_slistfunc$(EXE)
 
 .cpp.o:
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
-all: $(LIBNAME)$(LIBEXT)
+slist.o: slist.cpp
+	$(CXX) -c -o $@ $< -D SLIST_EXPORTS $(CXXFLAGS)
 
-$(LIBNAME).def: $(OBJECTS)
-	dlltool --output-def $@ --kill-at --dllname $(LIBNAME)$(LIBEXT) $(OBJECTS)
+lib$(LIBNAME).$(DLIBEXT): $(OBJECTS)
+	$(CXX) -o $@ $(OBJECTS) -shared -Wl,--subsystem,windows
 
-$(LIBNAME).la: $(LIBNAME).def $(OBJECTS)
-	dlltool --output-lib $@ --input-def $(LIBNAME).def --kill-at --dllname $(LIBNAME)$(LIBEXT) $(OBJECTS)
+lib$(LIBNAME).$(SLIBEXT): $(OBJECTS)
+	$(AR) cr $@ $(OBJECTS)
 
-$(LIBNAME)$(LIBEXT): $(LIBNAME).la $(LIBNAME).def $(OBJECTS)
-	$(LD) -o $@ -shared $(LIBNAME).la $(LDFLAGS)
-
-test1$(EXEEXT): test1.cpp $(SRCS) $(HEADERS)
-	$(CXX) -o $@ $< $(SRCS) -DDEBUG=1 $(CXXFLAGS) $(LDFLAGS)
+test_slistfunc$(EXE): test_slistfunc.cpp $(SRCS) $(HEADERS)
+	$(CXX) -o $@ $< $(SRCS) -D DEBUG -D SLIST_STATIC $(CXXFLAGS) $(LDFLAGS) && \
+	./test_slistfunc$(EXE)
 
 clean:
-	rm -f *.o *$(EXEEXT) *.a *.la *.def *$(LIBEXT)
+	rm -f *.o test_*$(EXE) *.$(SLIBEXT) *.$(DLIBEXT)

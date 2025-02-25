@@ -1,14 +1,24 @@
 #ifndef _SIMPLELINKEDLIST_H_
 #define _SIMPLELINKEDLIST_H_
 
-class SimpleLinkedList {
+#ifdef SLIST_STATIC
+#  define SLISTAPI
+#else
+#  ifdef SLIST_EXPORTS
+#    define SLISTAPI __declspec(dllexport)
+#  else
+#    define SLISTAPI __declspec(dllimport)
+#  endif
+#endif
+
+class SLISTAPI SimpleLinkedList {
 private:
     class Node {
     public:
-        Node(int data): data(data), next(NULL) {}
-        int getData() { return this->data; }
-        Node *getNext() { return this->next; }
-        void setNext(Node *next) { this->next = next; }
+        Node(int data);
+        int getData();
+        Node *getNext();
+        void setNext(Node *next);
     private:
         int data;
         Node* next;
@@ -17,7 +27,7 @@ private:
     Node *head;
 
 public:
-    SimpleLinkedList() : head(NULL) {}
+    SimpleLinkedList();
     ~SimpleLinkedList();
 
     void add(const int value);
@@ -39,12 +49,12 @@ public:
         MEMORY_ALLOCATION_FAILED
     };
 
-    class Error {
+    class SLISTAPI Error {
     public:
-        Error(ErrorCode code, int index, int data) : code(code), index(index), data(data) {}
-        ErrorCode getCode() { return code; }
-        int getIndex() { return index; }
-        int getData() { return data; }
+        Error(ErrorCode code, int index, int data);
+        ErrorCode getCode();
+        int getIndex();
+        int getData();
     private:
         ErrorCode code;
         int index;

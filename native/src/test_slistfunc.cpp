@@ -1,5 +1,5 @@
 #include <iostream>
-#include <SimpleLinkedList.h>
+#include <slist.h>
 
 using namespace std;
 

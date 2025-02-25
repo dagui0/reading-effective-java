@@ -1,7 +1,52 @@
 #include <iostream>
-#include <SimpleLinkedList.h>
+#include <slist.h>
 
 using namespace std;
+
+/*
+ * SimpleLinkedList::Node
+ */
+SimpleLinkedList::Node::Node(int data): data(data), next(NULL) {
+}
+
+int SimpleLinkedList::Node::getData() {
+    return this->data;
+}
+
+SimpleLinkedList::Node *SimpleLinkedList::Node::getNext() {
+    return this->next;
+}
+
+void SimpleLinkedList::Node::setNext(SimpleLinkedList::Node *next) {
+    this->next = next;
+}
+
+/*
+ * SimpleLinkedList::Error
+ */
+
+SimpleLinkedList::Error::Error(SimpleLinkedList::ErrorCode code, int index, int data)
+    : code(code), index(index), data(data) {
+}
+
+SimpleLinkedList::ErrorCode SimpleLinkedList::Error::getCode() {
+    return code;
+}
+
+int SimpleLinkedList::Error::getIndex() {
+    return index;
+}
+
+int SimpleLinkedList::Error::getData() {
+    return data;
+}
+
+/*
+ * SimpleLinkedList
+ */
+
+SimpleLinkedList::SimpleLinkedList() : head(NULL) {
+}
 
 SimpleLinkedList::~SimpleLinkedList() {
     Node *temp = this->head;
@@ -14,7 +59,7 @@ SimpleLinkedList::~SimpleLinkedList() {
         temp = next;
     }
 #ifdef DEBUG
-    cout << "all deleted.";
+    cout << "all deleted." << endl;
 #endif
 }
 
