@@ -1,6 +1,8 @@
 CLFAGS			= -Wall -I../include
 LDFLAGS			=
 
+LDD				= ldd
+
 HEADERS			= ../include/slist.h
 SRCS			= slist.c
 OBJECTS			= slist.o
@@ -19,6 +21,7 @@ else
     DLIB		= dylib
     DL_CLFAGS	= -D SLIST_EXPORTS $(CLFAGS)
     DL_LDFLAGS	= -dynamiclib -fvisibility=hidden
+    LDD			= otool -L
   else # liunx
     DLIB		= so
     DL_CLFAGS	= -D SLIST_EXPORTS -fPIC $(CLFAGS)
@@ -30,10 +33,6 @@ endif
 
 OUTPUTS			= lib$(LIBNAME).$(DLIB) lib$(LIBNAME).$(SLIB)
 TESTS			= test_func.$(EXE) test_dl.$(EXE)
-#ifeq ($(UNAME_S),Darwin)
-#  TESTS			= test_func.$(EXE) test_dylib.$(EXE)
-#else
-#endif
 
 all: $(OUTPUTS)
 test: $(TESTS)
@@ -59,14 +58,8 @@ test_func.$(EXE): test_func.c $(SRCS) $(HEADERS)
 
 test_dl.$(EXE): test_dl.c lib$(LIBNAME).$(DLIB)
 	$(CC) -o $@ $< -D DEBUG $(CLFAGS) $(LDFLAGS) -L. lib$(LIBNAME).$(DLIB) && \
-	LD_LIBRARY_PATH=. ldd $@ && \
+	LD_LIBRARY_PATH=. $(LDD) $@ && \
 	LD_LIBRARY_PATH=. ./$@
-
-# macos
-#test_dylib.$(EXE): test_dylib.c lib$(LIBNAME).$(DLIB)
-#	$(CC) -o $@ $< -D DEBUG $(CLFAGS) $(LDFLAGS) -L. lib$(LIBNAME).$(DLIB) && \
-#	LD_LIBRARY_PATH=. otool -L $@ && \
-#	LD_LIBRARY_PATH=. ./$@
 
 clean:
 	rm -f *.o $(OUTPUTS) $(TESTS)
