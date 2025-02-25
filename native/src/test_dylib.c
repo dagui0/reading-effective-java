@@ -1,8 +1,6 @@
-#include <iostream>
+#include <stdio.h>
 #include <dlfcn.h>
 #include <slist.h>
-
-using namespace std;
 
 int main(void) {
     void *lib_handle = dlopen("libslist.dylib", RTLD_LOCAL);
@@ -11,6 +9,7 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
+    SLIST *list = (SLIST*)dlsym(lib_handle, "slist_create");
     SimpleLinkedList_creator *NewSimpleLinkedList = (SimpleLinkedList_creator*)dlsym(lib_handle, "NewSimpleLinkedList");
     if (!NewSimpleLinkedList) {
         cerr << "[" << __FILE__ << "] main: Unable to find new function: " << dlerror() << endl;

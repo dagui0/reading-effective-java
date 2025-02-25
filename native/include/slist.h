@@ -38,12 +38,8 @@ enum __slist_code {
 };
 typedef enum __slist_code SLIST_CODE;
 
-
 SLIST_API
 SLIST *slist_create(void);
-
-SLIST_API
-void slist_destroy(SLIST *list);
 
 SLIST_API
 char *slist_msg(SLIST_CODE code);
