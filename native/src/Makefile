@@ -6,26 +6,45 @@ SRCS		= slist.cpp
 OBJECTS		= slist.o
 
 LIBNAME		= slist
-
-# windows: .exe, linux: (empty), mac: (empty)
-EXE			= .exe
-# windows: dll, linux: so, mac: dylib
-DLIBEXT		= dll
 SLIBEXT		= a
+ifeq ($(OS),Windows_NT)
+  EXE		= .exe
+  DLIBEXT	= dll
+  DL_CXXFLAGS	= -D SLIST_EXPORTS $(CXXFLAGS)
+  DL_LDFLAGS	= -shared -Wl,--subsystem,windows
+else
+  UNAME_S	= $(shell uname -s)
+  EXE		=
+  ifeq ($(UNAME_S),Darwin)
+    DLIBEXT	= dylib
+    DL_CXXFLAGS	= -D SLIST_EXPORTS $(CXXFLAGS)
+    DL_LDFLAGS	= 
+  else # liunx
+    DLIBEXT	= so
+    DL_CXXFLAGS	= -D SLIST_EXPORTS -fPIC $(CXXFLAGS)
+    DL_LDFLAGS	= -shared -Wl,-soname,lib$(LIBNAME).so
+  endif 
+endif
 
-.PHONY:		all test clean
+.PHONY:		all test clean checkos
 
-all: lib$(LIBNAME).$(DLIBEXT) lib$(LIBNAME).$(SLIBEXT)
-test: test_slistfunc$(EXE) test_dynamic$(EXE)
+OUTPUTS		= lib$(LIBNAME).$(DLIBEXT) lib$(LIBNAME).$(SLIBEXT)
+TESTS		= test_slistfunc$(EXE) test_dynamic$(EXE)
+
+all: $(OUTPUTS)
+test: $(TESTS)
+
+checkos:
+	@echo "\$$OS=$(OS) \$$(uname -s)=$(UNAME_S)"
 
 .cpp.o:
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
 slist.o: slist.cpp
-	$(CXX) -c -o $@ $< -D SLIST_EXPORTS $(CXXFLAGS)
+	$(CXX) -c -o $@ $< $(DL_CXXFLAGS)
 
 lib$(LIBNAME).$(DLIBEXT): $(OBJECTS)
-	$(CXX) -o $@ $(OBJECTS) -shared -Wl,--subsystem,windows
+	$(CXX) -o $@ $(OBJECTS) $(DL_LDFLAGS)
 
 lib$(LIBNAME).$(SLIBEXT): $(OBJECTS)
 	$(AR) cr $@ $(OBJECTS)
@@ -40,4 +59,4 @@ test_dynamic$(EXE): test_dynamic.cpp lib$(LIBNAME).$(DLIBEXT)
 	./$@
 
 clean:
-	rm -f *.o test_*$(EXE) *.$(SLIBEXT) *.$(DLIBEXT)
+	rm -f *.o $(OUTPUTS) $(TESTS)

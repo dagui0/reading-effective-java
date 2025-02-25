@@ -1,6 +1,7 @@
 #ifndef _SIMPLELINKEDLIST_H_
 #define _SIMPLELINKEDLIST_H_
 
+#ifdef WINDOWS
 #ifdef SLIST_STATIC
 #  define SLISTAPI
 #else
@@ -9,6 +10,9 @@
 #  else
 #    define SLISTAPI __declspec(dllimport)
 #  endif
+#endif
+#else
+#  define SLISTAPI
 #endif
 
 class SLISTAPI SimpleLinkedList {
