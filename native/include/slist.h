@@ -1,78 +1,82 @@
-#ifndef _SIMPLELINKEDLIST_H_
-#define _SIMPLELINKEDLIST_H_
-
-#ifdef DEBUG
-#  include <iostream>
+#ifndef __SLIST_H
+#define __SLIST_H
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 #if defined(WINDOWS) || defined(_WIN32)
 #  ifdef SLIST_STATIC
-#    define SLISTAPI
+#    define SLIST_API
 #  else
 #    ifdef SLIST_EXPORTS
-#      define SLISTAPI __declspec(dllexport)
+#      define SLIST_API __declspec(dllexport)
 #    else
-#      define SLISTAPI __declspec(dllimport)
+#      define SLIST_API __declspec(dllimport)
 #    endif
 #  endif
 #else
-#  define SLISTAPI
+#  define SLIST_API
 #endif
 
-class SLISTAPI SimpleLinkedList {
-private:
-    class Node {
-    public:
-        Node(int data);
-        int getData();
-        Node *getNext();
-        void setNext(Node *next);
-    private:
-        int data;
-        Node* next;
-    };
-
-    Node *head;
-
-public:
-    SimpleLinkedList();
-    virtual ~SimpleLinkedList();
-
-    virtual void add(const int value);
-    virtual void addAll(const int *values, const int length);
-    virtual void insertAt(const int index, const int value);
-    virtual void removeAt(const int index);
-    virtual void removeAll();
-
-    virtual int size();
-    virtual int get(const int index);
-    virtual bool contains(const int value);
-
-#ifdef DEBUG
-    virtual std::string dump();
-    virtual void print_dump();
-#endif
-
-    enum ErrorCode {
-        NO_ERROR,
-        INDEX_OUT_OF_RANGE,
-        MEMORY_ALLOCATION_FAILED
-    };
-
-    struct Error {
-        ErrorCode code;
-        int index;
-        int data;
-    };
+struct __slist_node {
+    int data;
+    struct __slist_node *next;
 };
+typedef struct __slist_node SLIST_NODE;
 
-#if defined(__APPLE__) || defined(__OSX___)
-extern "C" {
-    SimpleLinkedList *NewSimpleLinkedList(void);
-    typedef SimpleLinkedList *SimpleLinkedList_creator(void);
-    void DeleteSimpleLinkedList(SimpleLinkedList*);
-    typedef void SimpleLinkedList_disposer(SimpleLinkedList*);
+struct __slist {
+    struct __slist_node *head;
+};
+typedef struct __slist SLIST;
+
+enum __slist_code {
+    SLIST_NO_ERROR,
+    SLIST_NOT_FOUND,
+    SLIST_INDEX_OUT_OF_RANGE,
+    SLIST_LIST_EMPTY,
+    SLIST_MEMORY_ALLOCATION_FAILED
+};
+typedef enum __slist_code SLIST_CODE;
+
+
+SLIST_API
+SLIST *slist_create(void);
+
+SLIST_API
+void slist_destroy(SLIST *list);
+
+SLIST_API
+char *slist_msg(SLIST_CODE code);
+
+SLIST_API
+SLIST_CODE slist_add(SLIST *list, int data);
+
+SLIST_API
+SLIST_CODE slist_add_all(SLIST *list, const int *data, int length);
+
+SLIST_API
+SLIST_CODE slist_insert_at(SLIST *list, int index, int data);
+
+SLIST_API
+SLIST_CODE slist_remove_at(SLIST *list, int index);
+
+SLIST_API
+SLIST_CODE slist_remove_all(SLIST *list);
+
+SLIST_API
+int slist_size(SLIST *list);
+
+SLIST_API
+SLIST_CODE slist_get(SLIST *list, int index, int *data);
+
+SLIST_API
+int slist_contains(SLIST *list, int data);
+
+
+SLIST_API
+void slist_print_dump(SLIST *list);
+
+#ifdef __cplusplus
 }
 #endif
-
-#endif
+#endif  /* !__SLIST_H */
