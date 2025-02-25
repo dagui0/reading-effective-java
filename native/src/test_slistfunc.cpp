@@ -36,7 +36,7 @@ int main(void) {
         list->get(-1);
     }
     catch (SimpleLinkedList::Error *e) {
-        cout << "exception caught: code=" << e->getCode() << ", index=" << e->getIndex() << ", data=" << e->getData() << endl;
+        cout << "exception caught: code=" << e->code << ", index=" << e->index << ", data=" << e->data << endl;
         delete e;
     }
 
@@ -52,7 +52,7 @@ int main(void) {
         list->insertAt(1000, 0);
     }
     catch (SimpleLinkedList::Error *e) {
-        cout << "exception caught: code=" << e->getCode() << ", index=" << e->getIndex() << ", data=" << e->getData() << endl;
+        cout << "exception caught: code=" << e->code << ", index=" << e->index << ", data=" << e->data << endl;
         delete e;
     }
 
@@ -61,7 +61,7 @@ int main(void) {
         list->removeAt(-1);
     }
     catch (SimpleLinkedList::Error *e) {
-        cout << "exception caught: code=" << e->getCode() << ", index=" << e->getIndex() << ", data=" << e->getData() << endl;
+        cout << "exception caught: code=" << e->code << ", index=" << e->index << ", data=" << e->data << endl;
         delete e;
     }
 

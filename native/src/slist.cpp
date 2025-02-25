@@ -28,42 +28,6 @@ void SimpleLinkedList::Node::setNext(SimpleLinkedList::Node *next) {
 }
 
 /*
- * SimpleLinkedList::Error
- */
-
-// DYLIB_EXPORT
-SimpleLinkedList::Error::Error(SimpleLinkedList::ErrorCode code, int index, int data)
-    : code(code), index(index), data(data) {
-}
-
-// SimpleLinkedList::Error::~Error() {
-//}
-
-#ifdef __NO_APPLE__
-DYLIB_EXPORT
-SimpleLinkedList::Error *NewSimpleLinkedListError(SimpleLinkedList::ErrorCode code, int index, int data) {
-    return new SimpleLinkedList::Error(code, index, data);
-}
-
-DYLIB_EXPORT
-void DeleteSimpleLinkedListError(SimpleLinkedList::Error *error) {
-    delete error;
-}
-#endif
-
-SimpleLinkedList::ErrorCode SimpleLinkedList::Error::getCode() {
-    return code;
-}
-
-int SimpleLinkedList::Error::getIndex() {
-    return index;
-}
-
-int SimpleLinkedList::Error::getData() {
-    return data;
-}
-
-/*
  * SimpleLinkedList
  */
 
@@ -98,10 +62,19 @@ SimpleLinkedList::~SimpleLinkedList() {
 #endif
 }
 
+static SimpleLinkedList::Error *newError(SimpleLinkedList::ErrorCode code, int index, int data) {
+    SimpleLinkedList::Error *e = new SimpleLinkedList::Error;
+    e->code = code;
+    e->index = index;
+    e->data = data;
+    return e;
+}
+
 void SimpleLinkedList::add(const int value) {
     Node* newNode = new Node(value);
-    if (!newNode)
-        throw new Error(MEMORY_ALLOCATION_FAILED, -1, value);
+    if (!newNode) {
+        throw newError(MEMORY_ALLOCATION_FAILED, -1, value);
+    }
 
     if (!this->head)
         head = newNode;
@@ -120,11 +93,11 @@ void SimpleLinkedList::addAll(const int *values, const int length) {
 
 void SimpleLinkedList::insertAt(const int index, const int value) {
     if (index < 0)
-        throw new Error(INDEX_OUT_OF_RANGE, index, value);
+        throw newError(INDEX_OUT_OF_RANGE, index, value);
 
     Node *newNode = new Node(value);
     if (!newNode)
-        throw new Error(MEMORY_ALLOCATION_FAILED, -1, value);
+        throw newError(MEMORY_ALLOCATION_FAILED, -1, value);
 
     if (index == 0) {
         newNode->setNext(this->head);
@@ -135,13 +108,13 @@ void SimpleLinkedList::insertAt(const int index, const int value) {
         for (int i = 0; i < index - 1; i++) {
             if (!atIndex) {
                 delete newNode;
-                throw new Error(INDEX_OUT_OF_RANGE, index, value);
+                throw newError(INDEX_OUT_OF_RANGE, index, value);
             }
             atIndex = atIndex->getNext();
         }
         if (!atIndex) {
             delete newNode;
-            throw new Error(INDEX_OUT_OF_RANGE, index, value);
+            throw newError(INDEX_OUT_OF_RANGE, index, value);
         }
 
         newNode->setNext(atIndex->getNext());
@@ -151,7 +124,7 @@ void SimpleLinkedList::insertAt(const int index, const int value) {
 
 void SimpleLinkedList::removeAt(const int index) {
     if (index < 0)
-        throw new Error(INDEX_OUT_OF_RANGE, index, -1);
+        throw newError(INDEX_OUT_OF_RANGE, index, -1);
 
     if (index == 0) {
         Node *temp = this->head;
@@ -162,12 +135,12 @@ void SimpleLinkedList::removeAt(const int index) {
         Node *temp = this->head;
         for (int i = 0; i < index - 1; i++) {
             if (!temp) {
-                throw new Error(INDEX_OUT_OF_RANGE, index, -1);
+                throw newError(INDEX_OUT_OF_RANGE, index, -1);
             }
             temp = temp->getNext();
         }
         if (!temp) {
-            throw new Error(INDEX_OUT_OF_RANGE, index, -1);
+            throw newError(INDEX_OUT_OF_RANGE, index, -1);
         }
 
         Node *nodeToDelete = temp->getNext();
@@ -198,17 +171,17 @@ int SimpleLinkedList::size() {
 
 int SimpleLinkedList::get(const int index) {
     if (index < 0)
-        throw new Error(INDEX_OUT_OF_RANGE, index, -1);
+        throw newError(INDEX_OUT_OF_RANGE, index, -1);
 
     Node *temp = this->head;
     for (int i = 0; i < index; i++) {
         if (!temp) {
-            throw new Error(INDEX_OUT_OF_RANGE, index, -1);
+            throw newError(INDEX_OUT_OF_RANGE, index, -1);
         }
         temp = temp->getNext();
     }
     if (!temp) {
-        throw new Error(INDEX_OUT_OF_RANGE, index, -1);
+        throw newError(INDEX_OUT_OF_RANGE, index, -1);
     }
 
     return temp->getData();

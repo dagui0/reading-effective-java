@@ -53,14 +53,7 @@ public:
         MEMORY_ALLOCATION_FAILED
     };
 
-    class SLISTAPI Error {
-    public:
-        Error(ErrorCode code, int index, int data);
-	//virtual ~Error();
-        virtual ErrorCode getCode();
-        virtual int getIndex();
-        virtual int getData();
-    private:
+    struct Error {
         ErrorCode code;
         int index;
         int data;
@@ -68,24 +61,12 @@ public:
 };
 
 #ifdef __APPLE__ 
-
 extern "C" {
-
     SimpleLinkedList *NewSimpleLinkedList(void);
     typedef SimpleLinkedList *SimpleLinkedList_creator(void);
-
     void DeleteSimpleLinkedList(SimpleLinkedList*);
     typedef void SimpleLinkedList_disposer(SimpleLinkedList*);
-
-/*
-    SimpleLinkedList::Error *NewSimpleLinkedListError(SimpleLinkedList::ErrorCode,int,int);
-    typedef SimpleLinkedList::Error *SimpleLinkedListError_creator(SimpleLinkedList::ErrorCode,int,int);
-
-    void DeleteSimpleLinkedListError(SimpleLinkedList::Error*);
-    typedef void SimpleLinkedListError_disposer(SimpleLinkedList::Error*);
-*/
 }
-
 #endif
 
 #endif
