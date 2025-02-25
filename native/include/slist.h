@@ -1,7 +1,11 @@
 #ifndef _SIMPLELINKEDLIST_H_
 #define _SIMPLELINKEDLIST_H_
 
-#ifdef WINDOWS
+#ifdef DEBUG
+#  include <iostream>
+#endif
+
+#if defined(WINDOWS) || defined(_WIN32)
 #  ifdef SLIST_STATIC
 #    define SLISTAPI
 #  else
@@ -44,8 +48,10 @@ public:
     virtual int get(const int index);
     virtual bool contains(const int value);
 
+#ifdef DEBUG
     virtual std::string dump();
     virtual void print_dump();
+#endif
 
     enum ErrorCode {
         NO_ERROR,
@@ -60,7 +66,7 @@ public:
     };
 };
 
-#ifdef __APPLE__ 
+#if defined(__APPLE__) || defined(__OSX___)
 extern "C" {
     SimpleLinkedList *NewSimpleLinkedList(void);
     typedef SimpleLinkedList *SimpleLinkedList_creator(void);

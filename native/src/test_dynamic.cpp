@@ -11,7 +11,10 @@ int main(void) {
     list->add(3);
     list->add(4);
 
-    list->print_dump();
+    int size = list->size();
+    for (int i = 0; i < size; i++) {
+        cout << "list[" << i << "]=" << list->get(i) << endl;
+    }
 
     try {
         list->insertAt(10000, 1000);

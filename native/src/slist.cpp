@@ -1,13 +1,15 @@
-#include <iostream>
 #include <slist.h>
+#include <iostream>
 
-#ifdef __APPLE___ 
-#  define DYLIB_EXPORT __attribute__((visibility("default")))
+#if defined(__APPLE__) || defined(__OSX___)
+#  ifdef SLIST_EXPORTS
+#    define DYLIB_EXPORT __attribute__((visibility("default")))
+#  else
+#    define DYLIB_EXPORT
+#  endif
 #else
 #  define DYLIB_EXPORT
 #endif
-
-using namespace std;
 
 /*
  * SimpleLinkedList::Node
@@ -35,7 +37,7 @@ DYLIB_EXPORT
 SimpleLinkedList::SimpleLinkedList() : head(NULL) {
 }
 
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(__OSX___)
 DYLIB_EXPORT
 SimpleLinkedList *NewSimpleLinkedList(void) {
     return new SimpleLinkedList();
@@ -51,14 +53,14 @@ SimpleLinkedList::~SimpleLinkedList() {
     Node *temp = this->head;
     while (temp) {
 #ifdef DEBUG
-        cout << "deleting " << temp->getData() << " -> ";
+        std::cout << "deleting " << temp->getData() << " -> ";
 #endif
         Node *next = temp->getNext();
         delete temp;
         temp = next;
     }
 #ifdef DEBUG
-    cout << "all deleted." << endl;
+    std::cout << "all deleted." << std::endl;
 #endif
 }
 
@@ -197,8 +199,9 @@ bool SimpleLinkedList::contains(const int value) {
     return false;
 }
 
-string SimpleLinkedList::dump() {
-    string s;
+#ifdef DEBUG
+std::string SimpleLinkedList::dump() {
+    std::string s;
     s.reserve(8192);
 
     if (!this->head) {
@@ -208,7 +211,7 @@ string SimpleLinkedList::dump() {
 
     Node* temp = this->head;
     while (temp) {
-        s.append(to_string(temp->getData())).append(" -> ");
+        s.append(std::to_string(temp->getData())).append(" -> ");
         temp = temp->getNext();
     }
     s.append("NULL");
@@ -216,5 +219,6 @@ string SimpleLinkedList::dump() {
 }
 
 void SimpleLinkedList::print_dump() {
-    cout << "SimpleLinkedList(" << size() << "): " << dump() << endl;
+    std::cout << "SimpleLinkedList(" << size() << "): " << dump() << std::endl;
 }
+#endif
