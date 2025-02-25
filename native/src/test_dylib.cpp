@@ -23,14 +23,6 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-/*
-    SimpleLinkedListError_disposer *DeleteSimpleLinkedListError = (SimpleLinkedListError_disposer*)dlsym(lib_handle, "DeleteSimpleLinkedListError");
-    if (!DeleteSimpleLinkedListError) {
-        cerr << "[" << __FILE__ << "] main: Unable to find delete function: " << dlerror() << endl;
-        return EXIT_FAILURE;
-    }
-*/
-
     SimpleLinkedList *list = (SimpleLinkedList*)NewSimpleLinkedList();
     list->add(1);
     list->add(2);
