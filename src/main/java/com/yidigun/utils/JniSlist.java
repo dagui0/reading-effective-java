@@ -14,6 +14,10 @@ final class JniSlist implements SimpleLinkedList {
         }
     }
 
+    static {
+        System.loadLibrary("jni_slist");
+    }
+
     private long pointer;
 
     /*
