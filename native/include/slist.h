@@ -31,7 +31,6 @@ typedef struct __slist SLIST;
 
 enum __slist_code {
     SLIST_NO_ERROR,
-    SLIST_NOT_FOUND,
     SLIST_INDEX_OUT_OF_RANGE,
     SLIST_LIST_EMPTY,
     SLIST_MEMORY_ALLOCATION_FAILED

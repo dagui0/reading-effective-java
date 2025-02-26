@@ -1,6 +1,10 @@
 package com.yidigun.utils;
 
-public interface SimpleLinkedList {
+public interface SimpleLinkedList extends AutoCloseable {
+
+    public static SimpleLinkedList newInstance() {
+        return new JniSlist();
+    }
 
     public void add(int value);
     public void addAll(int... values);
@@ -12,7 +16,6 @@ public interface SimpleLinkedList {
     public int get(int index);
     public boolean contains(int value);
 
-    public void dispose();
-    public String dump();
-    public void printDump();
+    @Override
+    public void close();
 }

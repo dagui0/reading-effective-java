@@ -42,8 +42,6 @@ char *slist_msg(SLIST_CODE code) {
     switch (code) {
         case SLIST_NO_ERROR:
             return "OK";
-        case SLIST_NOT_FOUND:
-            return "Not found";
         case SLIST_INDEX_OUT_OF_RANGE:
             return "Index out of range";
         case SLIST_LIST_EMPTY:

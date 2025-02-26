@@ -47,4 +47,5 @@ java {
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+    systemProperty("java.library.path","${projectDir}/lib/windows/ucrt64") //Replace : with ; for windows
 }
