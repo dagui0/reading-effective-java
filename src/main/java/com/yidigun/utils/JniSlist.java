@@ -6,7 +6,7 @@ final class JniSlist implements SimpleLinkedList {
     private static final Cleaner cleaner = Cleaner.create();
     private final Cleaner.Cleanable cleanable;
 
-    private record NativeSlist(long pointer) implements Runnable {
+    private static record NativeSlist(long pointer) implements Runnable {
         @Override
         public void run() {
             if (pointer != 0L)

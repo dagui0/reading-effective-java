@@ -47,7 +47,16 @@ java {
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+
+    // windows
     environment("PATH", "${projectDir}\\native\\lib\\windows\\ucrt64")
-    // environment("LD_LIBRARY_PATH", "${projectDir}/native/lib/windows/ucrt64")
     systemProperty("java.library.path","${projectDir}/native/lib/windows/ucrt64") //Replace : with ; for windows
+
+    // linux
+    // environment("LD_LIBRARY_PATH", "${projectDir}/native/lib/linux/x86_64")
+    // systemProperty("java.library.path","${projectDir}/native/lib/linux/x86_64")
+
+    // macos
+    // environment("LD_LIBRARY_PATH", "${projectDir}/native/lib/darwin/x86_64")
+    // systemProperty("java.library.path","${projectDir}/native/lib/darwin/x86_64")
 }
