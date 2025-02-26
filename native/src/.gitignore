@@ -4,5 +4,4 @@
 *.so
 *.dylib
 *.exe
-!test_*.cpp
-test_*
+*.out

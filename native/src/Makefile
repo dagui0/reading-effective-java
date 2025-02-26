@@ -1,72 +1,83 @@
-CXXFLAGS	= -Wall -I../include
-LDFLAGS		= 
+LDD					= ldd
 
-HEADERS		= ../include/slist.h
-SRCS		= slist.cpp
-OBJECTS		= slist.o
+JNI_HEADER_DIR		= ../../build/generated/sources/headers/java/main
 
-LIBNAME		= slist
-SLIBEXT		= a
-ifeq ($(OS),Windows_NT)
-  EXE		= .exe
-  DLIBEXT	= dll
-  DL_CXXFLAGS	= -D SLIST_EXPORTS $(CXXFLAGS)
-  DL_LDFLAGS	= -shared -Wl,--subsystem,windows
+CFLAGS				= -Wall -I../include
+JNI_CFLAGS			= -I$(JNI_HEADER_DIR) -I"$(JAVA_HOME)/include"
+DL_CFLAGS			=
+LDFLAGS				=
+DL_LDFLAGS			=
+
+HEADERS				= ../include/slist.h
+SRCS				= slist.c
+OBJECTS				= slist.o
+
+LIBNAME				= slist
+SLIB				= a
+EXE					= out
+ifeq ($(OS),Windows_NT) # assume Msys2
+  EXE				= exe
+  DLIB				= dll
+  JNI_OS_CFLAGS		= -I"$(JAVA_HOME)/include/win32"
+  DL_LDFLAGS		= -shared -Wl,--subsystem,windows
+  INSTALL_DIR		= ../lib/windows/$(shell echo $$MSYSTEM | tr A-Z a-z)
 else
-  UNAME_S	= $(shell uname -s)
-  EXE		=
-  ifeq ($(UNAME_S),Darwin)
-    DLIBEXT	= dylib
-    DL_CXXFLAGS	= -D SLIST_EXPORTS $(CXXFLAGS)
-    DL_LDFLAGS	= -dynamiclib -fvisibility=hidden
+  UNAME_S			= $(shell uname -s | tr A-Z a-z)
+  UNAME_M			= $(shell uname -m | tr A-Z a-z)
+  INSTALL_DIR		= ../lib/$(UNAME_S)/$(UNAME_M)
+  ifeq ($(UNAME_S),darwin)
+    DLIB			= dylib
+    JNI_OS_CFLAGS	= -I"$(JAVA_HOME)/include/darwin"
+    DL_LDFLAGS		= -dynamiclib -fvisibility=hidden
+    LDD				= otool -L
   else # liunx
-    DLIBEXT	= so
-    DL_CXXFLAGS	= -D SLIST_EXPORTS -fPIC $(CXXFLAGS)
-    DL_LDFLAGS	= -shared -Wl,-soname,lib$(LIBNAME).so
-  endif 
+    DLIB			= so
+    JNI_OS_CFLAGS	= -I"$(JAVA_HOME)/include/linux"
+    DL_CFLAGS		= -fPIC
+    DL_LDFLAGS		= -shared -Wl,-soname,$@
+  endif
 endif
 
-.PHONY:		all test clean checkos
+.PHONY:		all test clean checkos install
 
-OUTPUTS		= lib$(LIBNAME).$(DLIBEXT) lib$(LIBNAME).$(SLIBEXT)
-TESTS		= test_slistfunc$(EXE) test_dynamic$(EXE)
-
-ifeq ($(UNAME_S),Darwin)
-  TESTS		= test_slistfunc$(EXE) test_dylib$(EXE)
-endif
+OUTPUTS			= lib$(LIBNAME).$(DLIB) lib$(LIBNAME).$(SLIB) jni_$(LIBNAME).$(DLIB)
+TESTS			= test_func.$(EXE) test_dl.$(EXE)
 
 all: $(OUTPUTS)
 test: $(TESTS)
 
 checkos:
-	@echo "\$$OS=$(OS) \$$(uname -s)=$(UNAME_S)"
+	@echo "\$$OS=$(OS) \$$(uname -s)=$(UNAME_S) \$$(INSTALL_DIR)=$(INSTALL_DIR)"
 
-.cpp.o:
-	$(CXX) -c -o $@ $< $(CXXFLAGS)
+install: $(OUTPUTS)
+	mkdir -p $(INSTALL_DIR) && \
+	cp -f $(OUTPUTS) $(INSTALL_DIR)
 
-slist.o: slist.cpp
-	$(CXX) -c -o $@ $< $(DL_CXXFLAGS)
+slist.o: slist.c $(HEADERS)
+	$(CC) -c -o $@ $< -D SLIST_EXPORTS $(CFLAGS) $(DL_CFLAGS)
 
-lib$(LIBNAME).$(DLIBEXT): $(OBJECTS)
-	$(CXX) -o $@ $(OBJECTS) $(DL_LDFLAGS)
+jni_slist.o: jni_slist.c $(JNI_HEADER_DIR)/com_yidigun_utils_JniSlist.h
+	$(CC) -c -o $@ $< $(CFLAGS) $(DL_CFLAGS) $(JNI_CFLAGS) $(JNI_OS_CFLAGS)
 
-lib$(LIBNAME).$(SLIBEXT): $(OBJECTS)
+lib$(LIBNAME).$(DLIB): $(OBJECTS)
+	$(CC) -o $@ $(OBJECTS) $(LDFLAGS) $(DL_LDFLAGS) && \
+	LD_LIBRARY_PATH=. $(LDD) $@
+
+jni_$(LIBNAME).$(DLIB): jni_slist.o lib$(LIBNAME).$(DLIB)
+	$(CC) -o $@ $< $(LDFLAGS) $(DL_LDFLAGS) -L. lib$(LIBNAME).$(DLIB) && \
+	LD_LIBRARY_PATH=. $(LDD) $@
+
+lib$(LIBNAME).$(SLIB): $(OBJECTS)
 	$(AR) cr $@ $(OBJECTS)
 
-test_slistfunc$(EXE): test_slistfunc.cpp $(SRCS) $(HEADERS)
-	$(CXX) -o $@ $< $(SRCS) -D DEBUG -D SLIST_STATIC $(CXXFLAGS) $(LDFLAGS) && \
+test_func.$(EXE): test_func.c $(SRCS) $(HEADERS)
+	$(CC) -o $@ $< $(SRCS) -D DEBUG -D SLIST_STATIC $(CFLAGS) $(LDFLAGS) && \
 	./$@
 
-test_dynamic$(EXE): test_dynamic.cpp lib$(LIBNAME).$(DLIBEXT)
-	$(CXX) -o $@ $< -D DEBUG $(CXXFLAGS) $(LDFLAGS) -L. lib$(LIBNAME).$(DLIBEXT) && \
-	LD_LIBRARY_PATH=. ldd $@ && \
+test_dl.$(EXE): test_dl.c lib$(LIBNAME).$(DLIB)
+	$(CC) -o $@ $< -D DEBUG $(CFLAGS) $(LDFLAGS) -L. lib$(LIBNAME).$(DLIB) && \
+	LD_LIBRARY_PATH=. $(LDD) $@ && \
 	LD_LIBRARY_PATH=. ./$@
-
-# macos
-test_dylib$(EXE): test_dylib.cpp lib$(LIBNAME).$(DLIBEXT)
-	$(CXX) -o $@ $< -D DEBUG $(CXXFLAGS) $(LDFLAGS) && \
-	otool -L $@ && \
-	./$@
 
 clean:
 	rm -f *.o $(OUTPUTS) $(TESTS)
