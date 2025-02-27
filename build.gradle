@@ -44,9 +44,10 @@ java {
     }
 }
 
-apply from: "$project.rootDir/native.gradle"
 tasks.named('test') {
     // Use JUnit Platform for unit tests.0
     useJUnitPlatform()
 }
+
+apply from: "$project.rootDir/native.gradle"
 tasks.named('test', setNativeLibPath)
