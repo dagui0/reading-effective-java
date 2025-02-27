@@ -44,19 +44,9 @@ java {
     }
 }
 
+apply from: "$project.rootDir/native.gradle"
 tasks.named('test') {
-    // Use JUnit Platform for unit tests.
+    // Use JUnit Platform for unit tests.0
     useJUnitPlatform()
-
-    // windows  (replace : with ; for windows)
-    environment("PATH", "${projectDir}\\native\\lib\\windows\\ucrt64")
-    systemProperty("java.library.path","${projectDir}\\native\\lib\\windows\\ucrt64")
-
-    // linux
-    // environment("LD_LIBRARY_PATH", "${projectDir}/native/lib/linux/x86_64")
-    // systemProperty("java.library.path","${projectDir}/native/lib/linux/x86_64")
-
-    // macos
-    // environment("LD_LIBRARY_PATH", "${projectDir}/native/lib/darwin/x86_64")
-    // systemProperty("java.library.path","${projectDir}/native/lib/darwin/x86_64")
 }
+tasks.named('test', setNativeLibPath)

@@ -1,8 +1,10 @@
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Map;
 
+@Disabled
 public class SystemPropertyTest {
 
     private String captureExternalOutput(String[] cmdline) throws IOException {

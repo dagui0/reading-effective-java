@@ -1,0 +1,33 @@
+ext.setNativeLibPath = {
+    def osName = System.getProperty("os.name")
+    def osArch = System.getProperty("os.arch")
+    def javaLibPath = System.getProperty("java.library.path")
+    def env = System.getenv()
+    def libPath
+    if (osName.startsWith("Windows")) {
+        libPath = "${projectDir}\\native\\lib\\windows\\ucrt64"
+        if (libPath) {
+            systemProperty("java.library.path", "${libPath};${javaLibPath}")
+            environment("PATH", "${libPath};${env['PATH']}")
+        }
+    }
+    else {
+        if (osName.contains("Linux")) {
+            if (osArch.contains("x86_64"))
+                libPath = "${projectDir}/native/lib/linux/x86_64"
+            else if (osArch.contains("aarch64"))
+                libPath = "${projectDir}/native/lib/linux/arm64"
+        }
+        else if (osName.contains("Mac")) {
+            if (osArch.contains("x86_64"))
+                libPath = "${projectDir}/native/lib/darwin/x86_64"
+            else if (osArch.contains("aarch64"))
+                libPath = "${projectDir}/native/lib/darwin/arm64"
+        }
+
+        if (libPath) {
+            systemProperty("java.library.path", "${libPath}:${javaLibPath}")
+            environment("LD_LIBRARY_PATH", "${libPath}:${env['LD_LIBRARY_PATH']}")
+        }
+    }
+}
