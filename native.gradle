@@ -12,6 +12,7 @@ ext.setNativeLibPath = {
         }
     }
     else {
+        def ldPathName = "LD_LIBRARY_PATH"
         if (osName.contains("Linux")) {
             if (osArch.contains("x86_64"))
                 libPath = "${projectDir}/native/lib/linux/x86_64"
@@ -23,11 +24,12 @@ ext.setNativeLibPath = {
                 libPath = "${projectDir}/native/lib/darwin/x86_64"
             else if (osArch.contains("aarch64"))
                 libPath = "${projectDir}/native/lib/darwin/arm64"
+            ldPathName = "DYLD_LIBRARY_PATH"
         }
 
         if (libPath) {
             systemProperty("java.library.path", "${libPath}:${javaLibPath}")
-            environment("LD_LIBRARY_PATH", "${libPath}:${env['LD_LIBRARY_PATH']}")
+            environment(ldPathName, "${libPath}:${env['LD_LIBRARY_PATH']}")
         }
     }
 }
