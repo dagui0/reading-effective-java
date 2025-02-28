@@ -13,6 +13,7 @@ SRCS				= slist.c
 OBJECTS				= slist.o
 
 LIBNAME				= slist
+JNI_LIBNAME			= jni_$(LIBNAME)
 SLIB				= a
 EXE					= out
 ifeq ($(OS),Windows_NT) # assume Msys2
@@ -32,6 +33,7 @@ else
     LDD				= otool -L
   else # liunx
     DLIB			= so
+    JNI_LIBNAME		= libjni_$(LIBNAME)
     JNI_OS_CFLAGS	= -I"$(JAVA_HOME)/include/linux"
     DL_CFLAGS		= -fPIC
     DL_LDFLAGS		= -shared -Wl,-soname,$@
@@ -40,7 +42,7 @@ endif
 
 .PHONY:		all test clean checkos install
 
-OUTPUTS			= lib$(LIBNAME).$(DLIB) lib$(LIBNAME).$(SLIB) jni_$(LIBNAME).$(DLIB)
+OUTPUTS			= lib$(LIBNAME).$(DLIB) lib$(LIBNAME).$(SLIB) $(JNI_LIBNAME).$(DLIB)
 TESTS			= test_func.$(EXE) test_dl.$(EXE)
 
 all: $(OUTPUTS)
@@ -63,7 +65,7 @@ lib$(LIBNAME).$(DLIB): $(OBJECTS)
 	$(CC) -o $@ $(OBJECTS) $(LDFLAGS) $(DL_LDFLAGS) && \
 	LD_LIBRARY_PATH=. $(LDD) $@
 
-jni_$(LIBNAME).$(DLIB): jni_slist.o lib$(LIBNAME).$(DLIB)
+$(JNI_LIBNAME).$(DLIB): jni_slist.o lib$(LIBNAME).$(DLIB)
 	$(CC) -o $@ $< $(LDFLAGS) $(DL_LDFLAGS) -L. lib$(LIBNAME).$(DLIB) && \
 	LD_LIBRARY_PATH=. $(LDD) $@
 
