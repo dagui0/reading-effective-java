@@ -17,7 +17,7 @@ ext.setNativeLibPath = {
             if (osArch.contains("amd64"))
                 libPath = "${projectDir}/native/lib/linux/x86_64"
             else if (osArch.contains("aarch64"))
-                libPath = "${projectDir}/native/lib/linux/arm64"
+                libPath = "${projectDir}/native/lib/linux/aarch64"
         }
         else if (osName.contains("Mac")) {
             if (osArch.contains("x86_64"))
