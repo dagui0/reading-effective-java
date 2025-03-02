@@ -6,3 +6,6 @@
 # for gradle
 .gradle
 build
+
+# error logs
+hs_err_*.log

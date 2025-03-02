@@ -6,10 +6,19 @@ final class JniSlist implements SimpleLinkedList {
     private static final Cleaner cleaner = Cleaner.create();
     private final Cleaner.Cleanable cleanable;
 
-    private static record NativeSlist(long pointer) implements Runnable {
+    private static class NativeObjCleanable implements Runnable {
+        private final long pointer;
+        private boolean cleaned = false;
+
+        public NativeObjCleanable(long pointer) {
+            this.pointer = pointer;
+        }
+
+        public void setCleaned() { this.cleaned = true; }
+
         @Override
         public void run() {
-            if (pointer != 0L)
+            if (pointer != 0L && !cleaned)
                 destroy(pointer);
         }
     }
@@ -19,6 +28,7 @@ final class JniSlist implements SimpleLinkedList {
     }
 
     private long pointer;
+    private final NativeObjCleanable nativeObj;
 
     /*
      * JNI methods
@@ -39,7 +49,8 @@ final class JniSlist implements SimpleLinkedList {
         pointer = create();
         if (pointer == 0L)
             throw new IllegalStateException();
-        cleanable = cleaner.register(this, new NativeSlist(pointer));
+        nativeObj = new NativeObjCleanable(pointer);
+        cleanable = cleaner.register(this, nativeObj);
     }
 
     /**
@@ -51,9 +62,11 @@ final class JniSlist implements SimpleLinkedList {
      */
     @Override
     public void close() {
-        if (pointer != 0L)
+        if (pointer != 0L) {
             destroy(pointer);
-        pointer = 0L;
+            nativeObj.setCleaned();
+            pointer = 0L;
+        }
     }
 
     @Override
