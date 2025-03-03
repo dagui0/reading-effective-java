@@ -395,7 +395,7 @@ class Test1 {
 * `Cloneable`은 복제해도 되는 클래스임을 명시하는 믹스인 인터페이스(mixin interface, [아이템 20](chapter04.md#아이템-20-추상-클래스보다는-인터페이스를-우선하라))이지만 망했다.
   * `Comparable.compareTo()` 같은 다른 인터페이스와 동작 방식이 매우 다르다.
   * `Cloneable` 인터페이스에는 `clone()` 메소드가 없다.
-    * 그래서 `Cloneable`을 구현하고나면 `Object`의 `private Object clone()`을 `public`으로 재정의할 필요가 있다.
+    * 그래서 `Cloneable`을 구현하고나면 `Object`의 `protected Object clone()`을 `public`으로 재정의할 필요가 있다.
 * `Cloneable` 인터페이스는 `Object.clone()` 메서드가 호출되었을 때 복제를 할지 말지 결정하게 하는 마커(marker)임
   * `Object.clone()`(많은 경우 하위 클래스에 의해서 `super.clone()`)이 호출되면, \
     현재 클래스(`Object`가 아니고 호출된 하위 클래스)가 `Cloneable` 인터페이스를 구현한 경우 복제본을 리턴한다.
