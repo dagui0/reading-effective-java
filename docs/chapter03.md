@@ -56,7 +56,7 @@
 
 다음 `CaseInsensitiveString` 예시는 `String`과 호환성을 가져가기 위해서 `equals()`에 `String`객체와 비교를 추가했지만
 이로 인해 대칭성을 위반하게 된다. 
-`CaseInsensitiveString.equals(String)`이 참일 경우에도 `String.equals(CaseInsensitiveString)`는 항상 거짓이 되기 때문이다. [CaseInsensitiveStringTest.java](../sources/src/test/java/effectivejava/chapter03/item10/CaseInsensitiveStringTest.java)
+`CaseInsensitiveString.equals(String)`이 참일 경우에도 `String.equals(CaseInsensitiveString)`는 항상 거짓이 되기 때문이다. [CaseInsensitiveStringTest.java](../src/test/java/effectivejava/chapter03/item10/CaseInsensitiveStringTest.java)
 
 ```java
 public class CaseInsensitiveString1 {
@@ -88,9 +88,9 @@ public class CaseInsensitiveString1 {
 
 `x`, `y` 필드를 가지는  `Point` 클래스와 이를 상속하여 필드를 추가하는 `ColorPoint`의 예시
 
-* 예제: [Pointy1.java](../sources/src/main/java/effectivejava/chapter03/item10/Point1.java)
-* 예제: [ColorPoint1.java](../sources/src/main/java/effectivejava/chapter03/item10/ColorPoint1.java)
-* 예제: [ColorPointTest.java](../sources/src/test/java/effectivejava/chapter03/item10/ColorPointTest.java)
+* 예제: [Pointy1.java](../src/main/java/effectivejava/chapter03/item10/Point1.java)
+* 예제: [ColorPoint1.java](../src/main/java/effectivejava/chapter03/item10/ColorPoint1.java)
+* 예제: [ColorPointTest.java](../src/test/java/effectivejava/chapter03/item10/ColorPointTest.java)
 
 ```java
 @Override
@@ -114,8 +114,8 @@ public void testColorPoint1EqualsWithPointSymmetry() {
 
 억지로 상위 클래스의 대칭성을 만족 시킬 경우 추이성을 만족시킬 수 없다.
 
-* 예제: [ColorPoint2.java](../sources/src/main/java/effectivejava/chapter03/item10/ColorPoint2.java)
-* 예제: [ColorPointTest.java](../sources/src/test/java/effectivejava/chapter03/item10/ColorPointTest.java)
+* 예제: [ColorPoint2.java](../src/main/java/effectivejava/chapter03/item10/ColorPoint2.java)
+* 예제: [ColorPointTest.java](../src/test/java/effectivejava/chapter03/item10/ColorPointTest.java)
 
 ```java
 @Override
@@ -149,8 +149,8 @@ public void testColorPoint2EqualsWithPointTransitivity() {
 이 경우 가장 바람직한 방법은 `Point` 상속을 포기하고 HAS-A 관계로 복합(composite) 객체를 만드는 것이다.
 ([아이템 18](chapter04.md#아이템-18-상속보다는-컴포지션을-사용하라))
 
-* 예제: [Point.java](../sources/src/main/java/effectivejava/chapter03/item10/Point.java)
-* 예제: [ColorPoint.java](../sources/src/main/java/effectivejava/chapter03/item10/ColorPoint.java)
+* 예제: [Point.java](../src/main/java/effectivejava/chapter03/item10/Point.java)
+* 예제: [ColorPoint.java](../src/main/java/effectivejava/chapter03/item10/ColorPoint.java)
 
 ```java
 public class ColorPoint {
@@ -283,8 +283,8 @@ public class Member {
 
 `hashCode()`를 재정의 하지 않은 경우:
 
-* 예제: [PhoneNumber1.java](../sources/src/main/java/effectivejava/chapter03/item11/PhoneNumber1.java)
-* 예제: [PhoneNumberTest.java](../sources/src/test/java/effectivejava/chapter03/item11/PhoneNumberTest.java)
+* 예제: [PhoneNumber1.java](../src/main/java/effectivejava/chapter03/item11/PhoneNumber1.java)
+* 예제: [PhoneNumberTest.java](../src/test/java/effectivejava/chapter03/item11/PhoneNumberTest.java)
 
 ```java
 @Test
@@ -352,8 +352,8 @@ public class PhoneNumber {
 
 위 방법을 적용한 `HashCodeBuilder` 유틸리티
 
-* 예제: [HashCodeBuilder.java](../sources/src/main/java/com/yidigun/utils/HashCodeBuilder.java)
-* 예제: [HashCodeBuilderTest.java](../sources/src/test/java/com/yidigun/utils/HashCodeBuilderTest.java)
+* 예제: [HashCodeBuilder.java](../src/main/java/com/yidigun/utils/HashCodeBuilder.java)
+* 예제: [HashCodeBuilderTest.java](../src/test/java/com/yidigun/utils/HashCodeBuilderTest.java)
 
 ```java
 class Test1 {
@@ -431,8 +431,9 @@ class Test1 {
     * 불변 객체에 대해서는 복사하지 않을 수 있다. (eg: String)
     * 멤버 객체: `clone()`을 하여 재설정해줘야 한다. (`Cloneable`한 객체의 멤버들도 `Cloneable`해야 함)
     * 멤버 객체가 또 복합 객체인 경우 재귀적으로 깊은 복사가 필요하다.
-      * 배열: 배열의 `clone()`은 얕은 복사(shallow copy)이므로 `Arrays.copyOf()` 사용.
-      * Collection API: 모두 `Cloneable`을 구현하고 있으므로 `ArrayList.clone()`, `HashMap.clone()` 등 사용 가능 하지만 역시 얕은 복사이므로 `new`+`addAll()`이나 루프를 사용해야 한다.
+      * 배열: 배열 객체는 기본적으로 `Cloneable`하지만 `clone()`과 `Arrays.copyOf()`은 얕은 복사(shallow copy)이므로 루프를 돌면서 각 원소에 `clone()`을 사용해야 한다.
+        * 그러려면 배열의 원소도 `Cloneable`을 구현해야 한다.
+      * Collection API: 모두 `Cloneable`을 구현하고 있으므로 `ArrayList.clone()`, `HashMap.clone()` 등 사용 가능 하지만 역시 얕은 복사이므로 루프를 사용해야 한다.
 
 ### `clone()`같은 것이 필요할때 가장 좋은 방법
 
@@ -469,7 +470,7 @@ public class PhoneNumber {
 
 만약 같은 객체가 2번 추가되어있는 경우, 깊은 복사를 하는 과정에서 2번 복제되어서 원본과 다른 동작을 하게 될 수 있다.
 
-예제: [DeepCopyTest.java](../sources/src/test/java/effectivejava/chapter03/item13/DeepCopyTest.java)
+예제: [DeepCopyTest.java](../src/test/java/effectivejava/chapter03/item13/DeepCopyTest.java)
 
 ```java
 @Test
@@ -559,7 +560,7 @@ GoF의 [Prototype 패턴](https://tmd8633.tistory.com/26)은 복제(clone)를 �
   * `compareTo()`와 `equals()`의 결과가 동일하게 나오도록 구현하는 것이 좋다.(라고 쓰고 반드시라고 읽는다)
   * Collection API의 일부 클래스는 동일성 비교를 위해 `equals()` 대신 `compareTo() == 0`을 사용한다. (`TreeSet` 등)
   * 만약 다르게 구현되어야 한다면 반드시 문서화할것 (eg: `BigDecimal`) \
-    ([ComparableTest.java](../sources/src/test/java/effectivejava/chapter03/item14/ComparableTest.java) testBigDecimalEquality())
+    ([ComparableTest.java](../src/test/java/effectivejava/chapter03/item14/ComparableTest.java) testBigDecimalEquality())
 
 ### `compareTo()` 구현 방법
 
@@ -573,7 +574,7 @@ GoF의 [Prototype 패턴](https://tmd8633.tistory.com/26)은 복제(clone)를 �
 * 자료형 별 비교 방법(2판)
   * 정수형 필드의 경우 `this.value - that.value` 연산을 통해서 효율적으로 계산할 수 있지만, overflow를 주의해야 한다.
     * 두 값의 차이가 `Integer.MAX_VALUE` 보다 작은 경우에만 사용 가능하다. \
-      ([ComparableTest.java](../sources/src/test/java/effectivejava/chapter03/item14/ComparableTest.java) testIntegerCompareToOverflow())
+      ([ComparableTest.java](../src/test/java/effectivejava/chapter03/item14/ComparableTest.java) testIntegerCompareToOverflow())
   * `float`, `double`은 `Float.compare()`, `Double.compare()`를 사용한다.
   * 객체형 필드는 `compareTo()`를 호출한다.
 * `compareTo()`는 `equals()`와 다르게 `null`을 받을 수 없다. `null`이 전달되면 `NullPointerException`을 던져야 한다. 
@@ -596,8 +597,8 @@ private static final Comparator<PhoneNumber> COMPARATOR =
 
 위 방법을 적용한 `CompareToBuilder` 유틸리티
 
-* 예제: [CompareToBuilder.java](../sources/src/main/java/com/yidigun/utils/CompareToBuilder.java)
-* 예제: [CompareToBuilderTest.java](../sources/src/test/java/com/yidigun/utils/CompareToBuilderTest.java)
+* 예제: [CompareToBuilder.java](../src/main/java/com/yidigun/utils/CompareToBuilder.java)
+* 예제: [CompareToBuilderTest.java](../src/test/java/com/yidigun/utils/CompareToBuilderTest.java)
 
 ```java
 class Member implements Comparable<Member> {
