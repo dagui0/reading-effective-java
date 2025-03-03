@@ -6,6 +6,13 @@ final class JniSlist implements SimpleLinkedList {
     private static final Cleaner cleaner = Cleaner.create();
     private final Cleaner.Cleanable cleanable;
 
+    /**
+     * finalizer is deprecated from java 9.
+     *
+     * protected void finalize() {
+     *     close();
+     * }
+     */
     private static class NativeObjCleanable implements Runnable {
         private final long pointer;
         private boolean cleaned = false;
@@ -53,13 +60,6 @@ final class JniSlist implements SimpleLinkedList {
         cleanable = cleaner.register(this, nativeObj);
     }
 
-    /**
-     * finalizer is deprecated from java 9.
-     *
-     * protected void finalize() {
-     *     dispose();
-     * }
-     */
     @Override
     public void close() {
         if (pointer != 0L) {
