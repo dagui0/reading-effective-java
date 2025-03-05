@@ -1,22 +1,28 @@
 # 번개 스터디 (3/5)
 
+## 목차
+
+* [1. 가상화 솔루현 한방 정리](#1-가상화-솔루현-한방-정리)
+* [2. IP 주소 서브넷 마스크 계산법](#2-ip-주소-서브넷-마스크-계산법)
+* [3. 타임존의 비밀 GMT냐 UTC냐](#3-타임존의-비밀-gmt냐-utc냐)
+
 ## 1. 가상화 솔루현 한방 정리
 
 ### 주요 가상화 솔루션 제품 목록
 
 | Vendor       | Hypervisor                       | Type | VDisk Formats    | Supported Host            | Dev Supporter     |
 |--------------|----------------------------------|------|------------------|---------------------------|-------------------|
-| Broadcom     | VMware vSphere Hypervisor (ESXi) | 1    | VMDK             | (server)                  |                   |
-|              | VMware ESX                       | 2    |                  | (server)                  |                   |
+| Broadcom     | VMware vSphere Hypervisor (ESXi) | 1    | VMDK             |                           |                   |
+|              | VMware ESX (deprecated)          | 2    |                  |                           |                   |
 |              | VMware Workstation/Fusion/Player | 2    |                  | Windows/Mac/Linux         |                   |
-| Microsoft    | Hyper-V Server                   | 1    | VHD, VHDX, VHDS  | (server)                  |                   |
+| Microsoft    | Hyper-V Server                   | 1    | VHD, VHDX, VHDS  |                           |                   |
 |              | Hyper-V Service (vmms)           | 2    |                  | Windows Pro/Server        |                   |
 |              | VirtualPC (deprecated)           | 2    | VHD              | Windows (old)             |                   |
 | Oracle       | VirtualBox                       | 2    | VDI              | Windows/Mac/Linux/Solaris |                   |
 | (opensource) | KVM (with QEMU)                  | 1.5? | QCOW2, RAW ...   | Linux                     | RedHat ...        |
-| Proxmox      | Proxmox VE (KVM vm server)       | 1.5? |                  | (server)                  |                   |
+| Proxmox      | Proxmox VE (KVM vm server)       | 1.5? |                  |                           |                   |
 | Xen Project  | Xen Hypervisor                   | P    |                  | Linux                     | Intel, Citrix ... | 
-|              | XCP-ng (Xen one-stop solution)   | P    |                  | (server)                  |                   |
+|              | XCP-ng (Xen one-stop solution)   | P    |                  |                           |                   |
 | Pararells    | Parallels Desktop for Mac        | 2    | HDD              | Mac                       |                   |
 
 ### Hypervisor 타입
@@ -68,10 +74,10 @@
 
 IP 주소가 부족해지자 사용하지 않는 IP를 회수하여 클래스와 무관하게 막 할당함. (누가? NIC가)
 
-```sh
-dagui@yidigun:~]$ curl ipconfig.io
+```
+$ curl ipconfig.io
 175.124.56.73
-dagui@yidigun:~]$ whois 175.124.56.73
+$ whois 175.124.56.73
 % IANA WHOIS server
 % for more information on IANA, visit http://www.iana.org
 % This query returned 1 object
@@ -153,7 +159,8 @@ source:         APNIC
 
 <details>
 <summary>스포일러 주의</summary>
-2진수 변환
+
+#### 해설: 2진수 변환 테이블
 
 |     | bits     | division | quotient | remainder |
 |-----|----------|----------|----------|-----------|
@@ -183,10 +190,12 @@ source:         APNIC
 <details>
 <summary>스포일러 주의</summary>
 
-> * netmask prefix: 172.16.0.0/23
-> * 가능한 호스트 172.16.0.1 ~ 172.16.1.254 까지 가능하다 => 510개 인듯 한데
-> * 스위치 설정에 따라서는 172.16.0.0/23 또는 172.16.0.0/24를 사용 못할 수 있음 (subnet-zero issue)
-> 
+#### 해설
+
+* netmask prefix: 172.16.0.0/23
+* 가능한 호스트 172.16.0.1 ~ 172.16.1.254 까지 가능하다 => 510개 인듯 한데
+* 스위치 설정에 따라서는 172.16.0.0/23 또는 172.16.0.0/24를 사용 못할 수 있음 (subnet-zero issue)
+
 > **정답: 2 || 4**
 
 </details>
@@ -200,9 +209,6 @@ source:         APNIC
 ## 3. 타임존의 비밀 GMT냐 UTC냐
 
 > 정답: UTC가 맞음
-
-<details>
-<summary>스포일러 주의</summary>
 
 ### GMT
 
@@ -265,7 +271,7 @@ source:         APNIC
 * `TZ` 환경변수: 프로그램에 적용될 타임존을 지정함
 * [`/etc/localtime`](https://man7.org/linux/man-pages/man5/localtime.5.html): 시스템의 타임존 설정
 
-```sh
+```
 $ ls -l /etc/localtime
 lrwxrwxrwx 1 root root 30 Mar  5 17:06 /etc/localtime -> /usr/share/zoneinfo/Asia/Seoul
 $ file /usr/share/zoneinfo/Asia/Seoul
@@ -284,8 +290,6 @@ System clock synchronized: yes
           RTC in local TZ: no
 $
 ```
-
-</details>
 
 ### 참고문헌
 
