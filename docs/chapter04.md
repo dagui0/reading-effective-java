@@ -32,7 +32,7 @@ Java 9 부터 `Collections.unmodifiableList()`를 대체할 수 있는 `List.of(
 당연한 이야기지만 `Set.of()` 등도 있음.
 
 * `<E> List<E> of(E e1, E e2)` - 최소 0 ~ 최대 10개까지 메소드가 준비되어 있음
-* `<E> List<E> of(E.. elements)`
+* `<E> List<E> of(E... elements)`
 * `<E> List<E> copyOf(Collection<? extends E> coll)`
 * `<K,V> Map<K,V> of(K k1, V v1, K k2, V v2)` - 최소 0 ~ 최대 10쌍까지 메소드가 준비되어 있음
 * `<K,V> Map<K,V> ofEntries(Map.Entry<? extends K,? extends V>... entries)`
