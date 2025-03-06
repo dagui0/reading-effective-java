@@ -28,6 +28,7 @@ else
   INSTALL_DIR		= ../lib/$(UNAME_S)/$(UNAME_M)
   ifeq ($(UNAME_S),darwin)
     DLIB			= dylib
+    JNI_LIBNAME		= libjni_$(LIBNAME)
     JNI_OS_CFLAGS	= -I"$(JAVA_HOME)/include/darwin"
     DL_LDFLAGS		= -dynamiclib -fvisibility=hidden
     LDD				= otool -L
