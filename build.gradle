@@ -44,6 +44,23 @@ java {
     }
 }
 
+javadoc {
+    destinationDir = file("${projectDir}/docs/api")
+}
+
+tasks.javadoc {
+    options {
+        // Set the encoding for the generated Javadoc
+        encoding = 'UTF-8'
+        // Set the character set for the generated Javadoc
+        charSet = 'UTF-8'
+        // Set the title for the generated Javadoc
+        title = "${project.name} ${project.version}"
+        // Set the version for the generated Javadoc
+        version = true
+    }
+}
+
 tasks.named('test') {
     // Use JUnit Platform for unit tests.0
     useJUnitPlatform()

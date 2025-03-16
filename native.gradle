@@ -29,7 +29,7 @@ ext.setNativeLibPath = {
 
         if (libPath) {
             systemProperty("java.library.path", "${libPath}:${javaLibPath}")
-            environment(ldPathName, "${libPath}:${env['LD_LIBRARY_PATH']}")
+            environment(ldPathName, "${libPath}:${env[ldPathName]}")
         }
     }
 }

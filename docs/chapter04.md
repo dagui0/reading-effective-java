@@ -19,6 +19,35 @@
 
 ## 아이템 15: 클래스와 멤버의 접근 권한을 최소화하라
 
+> > 높은 응집도와 낮은 결합도 High Cohesion and Loose Coupling \
+> > -- Larry Constantine
+> 
+> 구조적 프로그래밍 이론이 정립된 1970년대부터 높은 응집도와 낮는 결합도는 프로그램 설계의 가장 기본적인 원칙이다. \
+> -- 조성조
+
+* [Larry Constantine (1943 ~ )](https://en.wikipedia.org/wiki/Larry_Constantine) - 구조적 프로그래밍 이론을 만든 분들
+
+### 캡슐화(Encapsulation), 정보 은닉(Information Hiding)
+
+* 빠르다 - 병렬 개발이 가능함
+* 쉽다 - 모듈별로 독립적이기 때문에 디버깅, 수정, 최적화, 교체등이 쉽다
+* 재사용성이 높아진다.
+* 큰 시스템을 설계하는데 난이도를 낮춰준다.
+
+정보 은닉을 위한 방법은 접근 제한을 가능한 높게 만들어 접근 가능한 코드를 최소한으로 줄여야 한다는 것
+
+* 클래스
+  * `public` - API의 일부가 됨. 영원히 하위 호환을 신경써야 한다.
+  * package-private - 모듈 내부용으로만 사용할 클래스들로 언제든 변경하거나 교체해도 된다.
+  * `private` 내부 클래스 - 부모 클래스 내부에서만 사용할 클래스.
+* 멤버, 메소드, 중첩 클래스, 중첩 인터페이스
+ * `private` - 클래스 내부에서만 사용
+ * package-private - 같은 패키지에서만 사용
+ * `protected` - 같은 패키지와 하위 클래스에서 사용 (package-private을 포함한다.)
+ * `public` - 어디서든 사용 가능
+
+package-private에서 `protected` 단계로 가면 접근 허용 범위가 엄청나게 넓어지는 것이다. `protected`는 공개 API의 일부분이다.
+
 
 ## 아이템 16: `public` 클래스에서는 `public` 필드가 아닌 접근자 메서드를 사용하라
 
