@@ -321,8 +321,8 @@ public class InstrumentedSet<E> extends ForwardingSet<E> {
 * 다른 사람이 상속하는 꼴은 못보지만, 나는 상속을 사용하고 싶으면 생성자를 `private`나 package-private로 한다.
   ([아이템 17](#아이템-17-변경-가능성을-최소화하라))
 * 상속할 수 없도록 하는 대신에 주요 기능을 모두 담은 인터페이스(`List` 등)를 제공하고 사용하도록 한다.
-* 그래도 상속 가능성을 조금은 남겨두고 싶으면, 클래스의 기능에서 재정의 가능한 메소드에 대한 의존성을 제거한다.
-  * 재정의 가능하도록 허용할 메소드의 기능을 `private` 메소드로 옮기고, 다른 코드는 `private`메소드에 의존하도록 한다.
+  * 그래도 상속 가능성을 조금은 남겨두고 싶으면, 클래스의 기능에서 재정의 가능한 메소드에 대한 의존성을 제거한다.
+    * 재정의 가능하도록 허용할 메소드의 기능을 `private` 메소드로 옮기고, 다른 코드는 `private`메소드에 의존하도록 한다.
 
 ### **[추가]** 상속관련 토론 주제: 어노테이션 드리븐 개발과 관련 문제
 
@@ -331,26 +331,311 @@ public class InstrumentedSet<E> extends ForwardingSet<E> {
 
 이런 경우에는 상속을 피하라는 규칙에 위배된다고 볼 수 있을까?
 
-멤버 의견:
-* Alejandro: 
-* Leeturn:
-* Scully:
-* Lucie:
-
 ## 아이템 20: 추상 클래스보다는 인터페이스를 우선하라
 
+### 추상 클래스 vs 인터페이스
+
+* 추상 클래스 (Abstract Class)
+  * 클래스를 만들기 쉽도록 반쯤 만들어 놓은 클래스
+  * 필드를 가지므로 상태를 가질 수 있다. 인스턴스화(new 하여 메모리 공간을 할당)할 수 있다.
+  * 메소드를 작성하여 동작을 구현 할 수 있다.
+  * 메소드를 정의만 할 수 있다. (`abstract` 메소드)
+* 인터페이스 (Interface)
+  * 라이브리가 클라이언트(개발자)과 한 약속(조약, 규약, API)
+  * 필드를 가질 수 없으므로 상태를 가질 수 없다. 인스턴스화 할 수 없다.
+  * 메소드를 정의만 할 수 있을 뿐 구현할 수 없(었)다. (Java 8부터 `default` 메소드 구현 가능)
+
+### 추상 클래스와 인터페이스의 차이점
+
+* 추상 클래스를 규약으로 사용할 수도 있지만 규약을 구현하려면 상속해서 하위클래스가 되어야만 한다.
+* Java는 다중 상속을 허용하지 않으므로 추상클래스로 제공된 규약은 유연성이 떨어진다.
+  * Servlet API는 [`HttpServlet`을 상속받아야만](https://docs.oracle.com/javaee/7/api/javax/servlet/http/HttpServlet.html) 하므로 불편한 점이 많았다.
+  * Struts는 [`Action`도 클래스](https://svn.apache.org/repos/asf/struts/archive/trunk/struts-doc-1.1/api/org/apache/struts/action/Action.html)이므로 유연성이 떨어졌다.
+  * String MVC는 [`Controller`는 인터페이스](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/mvc/Controller.html)이므로 유연성이 올라갔다.
+  * 요즘 Spring은 `@Controller`를 사용하므로 `Controller` 인터페이스를 구현할 필요조차 없다.
+
+### 인터페이스의 장점
+
+* 인터페이스는 믹스인(mixin)타입 정의에 안성맞춤이다.
+  * `Comparable` 처럼 주된 기능 외에 지원하는 부가 기능을 정의
+* 인터페이스를 이용하면 계층 구조가 없는 타입 프레임워크를 만들 수 있다.
+  * 상속관계는 엄격한 트리구조가 강제되지만 인터페이스를 이용하면 다양한 형태의 타입간 관계를 설정할 수 있다. 
+* 래퍼클래스([아이템 18](#아이템-18-상속보다는-컴포지션을-사용하라))와 함께라면 안전하고 강력한 수단이 된다.
+
+### `default` 메소드
+
+* `default` 메소드를 이용해서 개발자들의 일을 덜어줄 수 있다.
+  * 단 `equals()`, `hashCode()`, `toString()` 등을 구현해서는 안된다.
+* 인터페이스와 추상 골격 구현(skeletal implemetaion)을 이용하면 [템플릿 메소드 패턴(Template Method Pattern)](https://inpa.tistory.com/entry/GOF-%F0%9F%92%A0-%ED%85%9C%ED%94%8C%EB%A6%BF-%EB%A9%94%EC%86%8C%EB%93%9CTemplate-Method-%ED%8C%A8%ED%84%B4-%EC%A0%9C%EB%8C%80%EB%A1%9C-%EB%B0%B0%EC%9B%8C%EB%B3%B4%EC%9E%90)을 구현할 수 있다.
+  * 인터페이스에서 `default`로 주요 메소드를 구현한다.
+  * 추상 골격 구현에서 나머지 메소드들에 대한 기본 구현을 제공한다.
+  * 개발자는 추상 골격을 재정의 하는 것으로 기능 구현을 쉽게 할 수 있다.
 
 ## 아이템 21: 인터페이스는 구현하는 쪽을 생각해 설계하라
 
+* `default` 메소드는 컴파일에는 문제가 없었다고해도 기존 상속 트리에 적용되면 문제가 될 수 있고
+  런타임 오류를 발생시킬 수 있다.
+  * Java 8에서 `default` 메소드가 도입되면서 기존 인터페이스에 많은 디폴트 메소드가 추가되었고 이로 인해 혼란이 있었다고 한다.
+* `default` 메소드를 기존 인터페이스에 추가하는 것은 매우 신중해야 한다. 반면 새로운 인터페이스를 만드는 경우라면 적극 활용하자 ([아이템 20](#아이템-20-추상-클래스보다는-인터페이스를-우선하라))
+* 새로운 인터페이스를 릴리즈 하기 전에 반드시 테스트로 구현체들을 3개는 만들어 봐야 한다.
+
+### `removeIf()` 사례
+
+* `SynchronizedCollection`: commons-collection 라이브러리에 포함되어있다.
+  * `List.removeIf()`는 java 8(2014년 3월 18일)에서 추가되었는데, 이 책이 나오기 전까지 아직 `removeIf()`를 구현하지 않고 있다.(2017년 12월 27일)
+  * 클라이언트가 `SynchronizedCollection.removeIf()`를 호출하면 `List`의 디폴트 구현이 사용되게 되고 lock이 제대로 처리되지 않을 것이다.
+    * `SynchronizedCollection.removeIf()`는 Java 8 릴리즈 4년 후 4.4(2018년 6월 27일) 부터 추가되었다.
+
+### **[추가]** 인터페이스 설계와 TDD
+
+* [TDD(Test Driven Development)](https://etst.tistory.com/388)는 테스트 코드를 먼저 작성하는 것을 원칙으로 하는 개발 방법이다.
+* 이는 내가 작성할 코드를 사용하는 사람의 입장이 먼저 되도록 해서 인터페이스를 잘 설계할 수 있도록 도와준다고 생각한다.
+* 인터페이스를 만들어야 한다면 TDD를 고려하면 좋을듯 하다.
 
 ## 아이템 22: 인터페이스는 타입을 정의하는 용도로만 사용하라
 
+```java
+public interface Constants {
+    static final String URL_PREFIX = "https://www.interpark.com";
+    static final String IMG_PREFIX = "https://img.interpark.com";
+}
+```
+
+* 인터페이스를 상수 정의 모음집 용도로 사용하지 마라
+  * 상수 정의는 구현의 내용이고 내부 구현 상세사항을 외부로 노출하는 것은 바람직하지 않다.
+  * `final`이 아닌 클래스가 상수를 정의한다면, 하위 클래스들이 상수를 사용하게 되고 돌이킬 수 없게 된다.
+* 공개가 필요한 API로서의 상수는 관련성이 높은 객체에 정의하는 것이 낫다. (`Integer.MAX_VALUE` 처럼)
+* 유형을 정의하는 상수라면 열거타입(enum)을 사용하라.
+* 이도 저도 아니라면 상수 정의용 클래스를 만들어라.
+
+```java
+public final class PhysicalConstants {
+
+  PhysicalConstants() {
+    throw new AssertionError("Cannot instantiate " + getClass());
+  }
+
+  public static final double AVOGADRO_NUMBER = 6.022_140_76e23; // mol^-1
+  public static final double BOLTZMANN_CONST = 1.380_649e-23; // J/K
+  public static final double ELECTRON_MAS = 1.602_176_634e-19; // J
+}
+```
+
+* 정적 임포트 기능을 이용하면 상수만 사용할 수도 있다.
+
+```java
+import static effectivejava.chapter04.item22.PhysicalConstants.*;
+```
 
 ## 아이템 23: 태그 달린 클래스보다는 클래스 계층구조를 활용하라
 
+```java
+class Figure {
+    enum Shape { CIRCLE, RECTANGLE };
+    
+    final Shape shape;
+    double length, width;   // RACTANGLE
+    double radius;          // CIRCLE
+    Figure(double radius) {
+        this.shape = Shape.CIRCLE;
+        this.radius = radius;
+    }
+    Figure(double length, double width) {
+        this.shape = Shape.RECTANGLE;
+        this.length = length;
+        this.width = width;
+    }
+    
+    double area() {
+        switch (shape) {
+            case CIRCLE:
+                return Math.PI * radius * radius;
+            case RECTANGLE:
+                return length * width;
+            default:
+                throw new AssertionError("Unknown shape: " + shape);
+        }
+    }
+}
+```
+
+위와 같은 클래스를 만들 사람은 없을 것이라고 생각된다. Java 개발자라면 아래 처럼 만들겠죠.
+
+```java
+abstract class Shape {
+    public abstract area();
+}
+
+class Circle extends Shape {
+    private double radius;
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+    @Override
+    public double area() {
+        return Math.PI * radius * radius;
+    }
+}
+
+class Rectangle extends Shape {
+    private double length;
+    private double width;
+
+    public Rectangle(double length, double width) {
+        this.length = length;
+        this.width = width;
+    }
+    @Override
+    public double area() {
+        return length * width;
+    }
+}
+
+class Square extends Rectangle {
+    public Square(double length) {
+        super(length, length);
+    }
+}
+```
 
 ## 아이템 24: 멤버 클래스는 되도록 `static`으로 만들라
 
+* Inner 클래스의 종류
+  * `static` 멤버 클래스
+  * 그냥 멤버 클래스(인스턴스 멤버 클래스)
+  * 익명 클래스
+  * 지역 클래스
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+### `static` 멤버 클래스
+
+* 정적 멤버 클래스는 외부 클래스의 `private` 접근 제한을 통과할 수 있다는 점을 제외하면 별도 클래스와 같다.
+  * 독립적으로 사용 가능한 부분 구성요소나, 도우미 클래스 등에 사용된다.
+
+```java
+public class Map<K, V> {
+    public static class Entry<K, V> {
+        private K key;
+        private V value;
+        public Entry(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+        public K getKey() { return key; }
+        public V getValue() { return value; }
+    }
+}
+```
+
+### 인스턴스 멤버 클래스
+
+* 그냥 멤버 클래스는 외부 클래스의 참조를 내부적으로 가지고 있으며, 외부 클래스의 인스턴스 변수에 접근 가능하다.
+  * 내부 구조를 다른 방식으로 사용하도록 해주는 View 객체로 주로 사용된다.
+* 바깥 클래스에 대한 참조를 가지고 있으므로,
+  바깥 인스턴스가 내부 클래스에 대한 참조를 가지면 상호참조가 되어 가비지컬렉션에 문제가 생길수 있다.
+
+```java
+public class List<E> {
+    public int size() { return 0;}
+    public E get(int index) { return null;}
+
+    private class MyIterator implements java.util.Iterator<E> {
+        private int index = 0;
+        public boolean hasNext() { return index < size(); }
+        public E next() {
+            return get(index++);
+        }
+    }
+
+    public Iterator<E> iterator() {
+        return new MyIterator();
+    }
+}
+```
+
+### 익명 클래스
+
+* 인라인 클래스 정의를 위한 문법인데 람다 구문이 나온 이후에 밀렸다.
+* 익명 클래스의 제약 사항
+  * 다중 상속 즉, 추가적인 인터페이스 구현이 불가능하다. 인터페이스 하나만을 구현하는 것은 가능하다.
+  * `static` 코드에서 생성되면 `static` 멤버 클래스이고, 인스턴스 코드에서 생성되면 인스턴스 멤버 클래스이다.
+  * `final`이 아닌 `static` 필드를 가질 수 없다고 책에 나오는데... (되더라)
+  * 이름이 없으므로 `instanceof`에 사용될 수 없다.
+
+```java
+public static <K,V> Entry<K,V> readonlyEntry(Entry<K,V> entry) {
+    return new Entry<>(entry) {
+        @Override
+        public void setKey(K key) {
+            throw new UnsupportedOperationException("setKey");
+        }
+        @Override
+        public void setValue(V value) {
+            throw new UnsupportedOperationException("setValue");
+        }
+    };
+}
+```
+
+### 지역 클래스
+
+* 메소드 내에서 정의하는 클래스이며, 메소드 내의 지역 변수와 같은 스코프를 가진다.
+* 지역 클래스의 제약 사항
+  * `static` 코드에서 생성되면 `static` 멤버 클래스이고, 인스턴스 코드에서 생성되면 인스턴스 멤버 클래스이다.
 
 ## 아이템 25: 톱레벨 클래스는 한 파일에 하나만 담으라
 
+역시 이렇게 작성할 Java 개발자는 없을 것으로 생각된다.
+
+## **[추가]** `@NonNull`, `@Nonnull`, `@NotNull`, `@Nullable`, `@NotBlank`, `@NotEmpty` 등
+
+편집기에서 @NonNull로 지정되면 뭔가륵 막 검사해주는 듯.
+[@Nonnull vs @NonNull](https://velog.io/@gongmeda/Nonnull-vs-NonNull)
+
+* **[OK]** `@javax.annotation.Nonnull` - JSR 305
+  * [javax.annotation:javax.annotation-api:1.3.2](https://javadoc.io/doc/javax.annotation/javax.annotation-api/latest/index.html) - 이 아티펙트와는 관련이 없다.
+  * [com.google.code.findbugs:jsr305:3.0.2](https://javadoc.io/doc/com.google.code.findbugs/jsr305/latest/index.html) - 이 패키지에 들어있으며 guava에 포함되어있음
+* **[OK]** `@lombok.NonNull`
+  * [org.projectlombok:lombok:1.18.36](https://projectlombok.org/api/lombok/package-summary)
+* **[OK]** `@org.jetbrains.annotations.NotNull` - JetBrains
+  * [org.jetbrains:annotations:26.0.2](https://javadoc.io/doc/org.jetbrains/annotations/latest/index.html) 에 포함되어있음
+* **[OK]** `@org.eclipse.jdt.annotation.NonNull` - Eclipse JDT
+  * [org.eclipse.jdt:org.eclipse.jdt.annotation:2.0.0](https://javadoc.io/doc/org.eclipse.jdt/org.eclipse.jdt.annotation/2.0.0/index.html)
+* **[OK]** `@org.springframework.lang.NonNull` - Spring Framework
+  * [org.springframework:spring-core:6.2.5](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/lang/package-summary.html)
+  * 자매품 `@org.springframework.lang.Nullable`, `@org.springframework.lang.NonNullApi`, `@org.springframework.lang.NonNullFields`
+* **[OK]**`@org.checkerframework.checker.nullness.qual.NonNull` - Checker Framework
+  * [org.checkerframework:checker-qual:3.49.1](https://javadoc.io/doc/org.checkerframework/checker/latest/org/checkerframework/checker/nullness/qual/NonNull.html)
+
+
+* **[다른 거임]** `@javax.validation.constraints.NotNull`
+  * [javax.validation:validation-api:2.0.0](https://javaee.github.io/javaee-spec/javadocs/javax/validation/constraints/package-summary.html)
+  * 자매품 `@NotEmpty`, `@NotBlank`
+  * [[Spring Boot] @NotNull, @NotEmpty, @NotBlank 의 차이점 및 사용법](https://sanghye.tistory.com/36)
+* **[N/A]** `org.apache.commons.lang3` - Apache Commons Lang 어노테이션은 아니고 메소드
+  * [org.apache.commons:commons-lang3:3.0](https://commons.apache.org/proper/commons-lang/apidocs/index.html)
