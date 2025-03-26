@@ -15,4 +15,9 @@ public class Point1 {
         Point1 p = (Point1)o;
         return x == p.x && y == p.y;
     }
+
+    @Override
+    public int hashCode() {
+        return 31 * x + y; // 31은 소수
+    }
 }

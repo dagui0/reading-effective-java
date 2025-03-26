@@ -3,6 +3,7 @@ package effectivejava.chapter02.item03;
 import java.io.Serializable;
 
 public class Elvis3 implements Serializable {
+    private static final long serialVersionUID = -5889135599661573739L;
     private static final Elvis3 INSTANCE = new Elvis3();
     private Elvis3() { }
     public static Elvis3 getInstance() { return INSTANCE; }

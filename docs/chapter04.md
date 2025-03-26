@@ -148,7 +148,7 @@ Immutable 패턴이라고 알려진 불변 객체는 대표적으로 `String`, `
 
 ### 복소수 예제
 
-[`Complex.java`](../src/main/java/com/effectivejava/chapter02/Complex.java) 참조
+[`Complex.java`](../src/main/java/effectivejava/chapter04/item17/Complex.java) 참조
 
 * 사칙 연산 메서드(`plus`, `minus`, `times`, `dividedBy`)는 새로운 객체를 반환한다.
 * `add`, `subtract`, `multiply`, `divide` 대신 `plus`, `minus`, `times`, `dividedBy` 이름을 사용하여 새로운 객체를 리턴한다는 느낌적인 느낌을 주었다.
@@ -311,7 +311,7 @@ public class InstrumentedSet<E> extends ForwardingSet<E> {
 * API를 공개하기 전에 직접 하위클래스를 설계해보라.
 * 생성자는  직접적이건 간접적이건 재정의 가능한 메소드를 호출해서는 안된다.
   * 하위 클래스의 코드가 상위 클래스의 코드보다 먼저 실행될 수 있다.
-  * 하위클래스의 코드가 하위클래스에서 추가한 속성에 의존적이라면 의도하지 않은 결과를 만들어 낸다. ([OverrideTest.java](../src/test/java/com/effectivejava/chapter02/OverrideTest.java))
+  * 하위클래스의 코드가 하위클래스에서 추가한 속성에 의존적이라면 의도하지 않은 결과를 만들어 낸다. ([OverrideTest.java](../src/test/java/effectivejava/chapter04/item19/OverrideTest.java))
 * `Cloneable`, `Serializable`을 구현하지 마라. 확장하는 개발자에게 너무 무거운 짐을 지우는 것이다.
   ([아이템 13](chapter03.md#아이템-13-clone-재정의는-주의해서-진행하라), [아이템 86](chapter12.md#아이템-86-serializable을-구현할지는-신중히-결정하라))
   * `clone()`, `readObject()`는 재정의 가능한 메소드를 호출해서는 안된다.
@@ -616,7 +616,7 @@ public static <K,V> Entry<K,V> readonlyEntry(Entry<K,V> entry) {
 
 ## **[추가]** `@NonNull`, `@Nonnull`, `@NotNull`, `@Nullable`, `@NotBlank`, `@NotEmpty` 등
 
-편집기에서 @NonNull로 지정되면 뭔가륵 막 검사해주는 듯.
+편집기에서 @NonNull로 지정되면 뭔가를 막 검사해주는 듯.
 [@Nonnull vs @NonNull](https://velog.io/@gongmeda/Nonnull-vs-NonNull)
 
 * **[OK]** `@javax.annotation.Nonnull` - JSR 305

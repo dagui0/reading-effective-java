@@ -17,4 +17,9 @@ public class ColorPoint1 extends Point1 {
         ColorPoint1 p = (ColorPoint1)o;
         return super.equals(o) && color.equals(p.color);
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() ^ color.hashCode(); // XOR 연산
+    }
 }

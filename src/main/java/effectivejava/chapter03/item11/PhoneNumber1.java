@@ -1,5 +1,6 @@
 package effectivejava.chapter03.item11;
 
+@SuppressWarnings("overrides")
 public class PhoneNumber1 {
     private final short areaCode, prefix, lineNumber;
 

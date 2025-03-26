@@ -17,4 +17,9 @@ public class CaseInsensitiveString1 {
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        return s.toLowerCase().hashCode();
+    }
 }

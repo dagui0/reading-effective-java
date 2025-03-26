@@ -53,7 +53,7 @@ public class PublicInnerClassList<E> implements Iterable<E> {
     }
 
     @Override
-    @javax.annotation.Nonnull
+//    @javax.annotation.Nonnull
 //    @lombok.NonNull
 //    @org.jetbrains.annotations.NotNull
 //    @org.eclipse.jdt.annotation.NonNull
