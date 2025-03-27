@@ -9,6 +9,7 @@ import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 import java.util.Set;
 
+@SuppressWarnings("all")
 @SupportedAnnotationTypes("com.yidigun.utils.CheckHashCodeCalculated")
 public class CheckHashCodeCalculatedProcessor extends AbstractProcessor {
 

@@ -12,8 +12,7 @@ public class RawTypeTest {
     @Test
     public void testRawTypeConverting() {
 
-        @SuppressWarnings("rawtypes")
-        List rawList = new ArrayList();
+        @SuppressWarnings("rawtypes") List rawList = new ArrayList();
         //noinspection unchecked
         rawList.add("Hello");
         //noinspection unchecked

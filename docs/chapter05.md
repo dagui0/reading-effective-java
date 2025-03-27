@@ -112,24 +112,184 @@ public void testRawTypeConverting() {
   어노테이션을 붙일 수 없는 구분에서도 경고를 중지시킬 수 있다.
 * 이 기능은 인텔리제이에서만 적용되는 것으로 사용하지 않는 것이 바람직하다고 생각되는데 토론에 붙여보자.
 
-* 제네릭 관련 경고
-  * 비검사 형 변환 경고
-  * 비검사 메서드 호출 경고
-  * 비검사 매개변수화 가변인수 타입 경고
-  * 비검사 변환 경고
+### 제네릭 관련 경고
 
-
-
+* `rawtypes`: 매개변수화된 클래스 'List'의 원시 사용
+  ```java
+  @SuppressWarnings("rawtypes")
+  List rawList = new ArrayList();
+  ```
+* `unchecked`
+  * **비검사 메서드 호출 경고**: 원시 타입 'java.util.List'의 멤버로서 'add(E)'에 대한 확인되지 않은 호출
+    ```java
+    //noinspection unchecked
+    rawList.add("Hello");
+    ```
+  * **비검사 매개변수화 가변인수 타입 경고**: 확인되지 않은 대입: 'java.util.List'을(를) 'java.util.List<java.lang.String>'에
+    ```java
+    //noinspection unchecked
+    getSizeOfStringList(rawList);
+    ```
+  * **비검사 형 변환 경고**: 확인되지 않은 형 변환: 'java.util.List<capture<?>>'에서 'java.util.List<java.lang.String>'(으)로
+    ```java
+    @SuppressWarnings("unchecked")
+    List<String> stringList = (List<String>) list;
+    ```
 
 ## 아이템 28: 배열보다는 리스트를 사용하라
 
+### 배열과 제네릭 타입의 차이
 
+* 공변(covariant)
+  * `class Sub extends Super`일 때
+  * `Sub[]`는 `Super[]`의 하위 타입이다. (공변)
+    ```java
+    Super[] arr = new Sub[10]; // 가능함
+    ```
+  * `List<Sub>`는 `List<Super>`의 하위 타입이 아니다. (비공변)
+    ```java
+    List<Super> list = new ArrayList<Sub>(); // 컴파일 에러
+    ```
+* 실체화(reify) 여부
+  * 배열은 실체화 된다. 배열은 런타임에 자신이 담기로 한 원소의 타입을 인지하고 확인한다.
+  * 제네릭은 컴파일 시점에만 검사를 하고 런타임 시에는 소거(erasure)된다.
+    * 즉 제네릭 타입(`List<String>`)은 런타임에는 로 타입(`List`)과,
+      파라메터 타입(`String`)은 `Object`와 동일하다.
+
+### 배열과 제네릭을 같이 쓸 수 없는 이유
+
+```java
+List<String>[] stringLists = new List<String>[10];  // (1) 컴파일 에러지만 된다 가정하면
+List<Integer> intList = List.of(42);                // (2)
+Object[] objects = stringLists;                     // (3)
+objects[0] = intList;                               // (4)
+String s = stringLists[0].get(0);                   // (5) ClassCastException
+```
+
+* 런타임시 발생하는 `ClassCastException`을 방지하고자 하는 제네릭의 근본 의도와 배치되는 결과 발생 가능하다.
+* 실체화 불가 타입(non-reifiable type)
+  * `List<?>`와 같이 비한정적 와일드카드 타입만 실체화가 가능하다.
+
+```java
+List<E> a                       // 됨 (제네릭 타입 안에서는)
+    = new List<E>();            // 됨 (제네릭 타입 안에서는)
+List<String>[] a                // 안됨
+    = new ArrayList<String>[1]; // 안됨
+E[] a                           // 됨 (제네릭 타입 안에서는)
+    = new E[1];                 // 안됨
+List<?> a                       // 됨
+    = new ArrayList<?>();       // 안됨
+    = new ArrayList<>();        // 됨
+```
+
+### 제네릭 타입 배열을 만들 수 없을때
+
+* 제네릭 배열을 만들 수 없을때 해결 방법은 [아이템 33](#아이템-33-타입-안전-이종-컨테이너를-고려하라)에서 나온다고 하는데...
+
+<details>
+  <summary>스포일러 주의</summary>
+
+```java
+import java.lang.reflect.Array;
+
+@SuppressWarnings("unchecked")
+    private static <T> T[] createGenericArray(Class<T> clazz, int size) {
+    return (T[])Array.newInstance(clazz, size);
+}
+```
+</details>
+
+### 제네릭 타입과 가변 인수 메서드(varargs method)
+
+* 제네릭 타입과 가변인수 메서드를 섞어서 사용할 경우 해석하기 어려운 경고 메시지를 받게 된다.
+  * 가변 인수 메소드는 실제로는 배열을 전달하는 메서드이기 때문이다.
+  * `@SafeVarargs` 어노테이션을 사용하면 경고를 없앨 수 있다.
+
+> 매개변수화된 vararg 타입의 잠재적 힙 오염
+
+```java
+@SafeVarargs
+private <T> int getVarargsCount(T... args) {
+    return args.length;
+}
+```
+
+### 결론
+
+* 배열을 사용하면 여러모로 성가시므로, 코드가 복잡해지고 성능이 조금 낮아지더라도 `List<E>`를 사용하자.
 
 ## 아이템 29: 이왕이면 제네릭 타입으로 만들라
 
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+* 예제 참조
+  * [Stack1.java](../src/main/java/effectivejava/chapter05/item29/Stack1.java)
+  * [Stack2.java](../src/main/java/effectivejava/chapter05/item29/Stack2.java)
+  * [Stack3.java](../src/main/java/effectivejava/chapter05/item29/Stack3.java)
+
+<img src="https://i.namu.wiki/i/ZWG3Rg2RsWe5BTyxjNVVtVhBH7pjO5DPW2sk4KLJ-tXDNoNTPQkcHyn5N49x3jgymM3BeMtqrcFJpE8Ga8QWag.webp" style="width:200px" alt="자세한 설명은 생략한다"/>
 
 ## 아이템 30: 이왕이면 제네릭 메서드로 만들라
 
+### 제네릭 메소드
+
+* 예제 참조
+  * [GenericUtils.java](../src/main/java/effectivejava/chapter05/item30/GenericUtils.java)
+
+<img src="https://i.namu.wiki/i/ZWG3Rg2RsWe5BTyxjNVVtVhBH7pjO5DPW2sk4KLJ-tXDNoNTPQkcHyn5N49x3jgymM3BeMtqrcFJpE8Ga8QWag.webp" style="width:200px" alt="자세한 설명은 생략한다"/>
+
+### 제네릭 싱글턴 패턴
+
+* 타입별로 따로 작성할 필요가 없는 상수 객체에 대해서 제네릭 변환을 통해서 한개의 카피만 유지하도록 한다.
+
+```java
+private static final UnaryOperator<Object> IDENTITY = (t) -> t;
+
+@SuppressWarnings("unchecked")
+public static <T> UnaryOperator<T> identity() {
+    return (UnaryOperator<T>) IDENTITY;
+}
+```
 
 ## 아이템 31: 한정적 와일드카드를 사용해 API 유연성을 높이라
 

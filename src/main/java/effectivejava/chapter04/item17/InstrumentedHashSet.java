@@ -1,9 +1,14 @@
 package effectivejava.chapter04.item17;
 
+import java.io.Serial;
 import java.util.Collection;
 import java.util.HashSet;
 
 public class InstrumentedHashSet<E> extends HashSet<E> {
+
+    @Serial
+    private static final long serialVersionUID = 6315764044396280345L;
+
     private int addCount = 0;
     public InstrumentedHashSet(int capacity) {
         super(capacity);
