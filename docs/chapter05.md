@@ -27,8 +27,8 @@
 * 로 타입 `List`는 실제로 `List<Object>`와 같지만, `List<Object>`는 써도 된다.
   * `List`는 제네릭 메카니즘을 무시하지만, `List<Object>`는 명시적으로 모든 종류의 객체(`Object`)를 허용하겠다는 의사 표시인 것이다.
   * 로 타입은 매개변수화 타입의 상위 클래스 처럼 동작한다.
-    * (개념적으로) `List instanceof List<String>` == true
-    * (개념적으로) `List<Object> instanceof List<String>` == false
+    * (개념적으로) `List<String> instanceof List` == true
+    * (개념적으로) `List<String> instanceof List<Object>` == false
     * 따라서 `List<String>`을 받는 메소드에 `List`를 넘길 수는 있지만, `List<Object>`를 넘길 수는 없다. [RawTypeTest.java](../src/test/java/effectivejava/chapter05/item26/RawTypeTest.java)
 
 ### 비한정적 와일드카드 타입(unbounded wildcard type)
@@ -84,7 +84,7 @@ private static List<String> checkTypeAndCast(Object o) {
 ### `@SuppressWarnings` 어노테이션
 
 ```java
-@Target(value={TYPE,FIELD,METHOD,PARAMETER,CONSTRUCTOR,LOCAL_VARIABLE})
+@Target(value={TYPE,FIELD,METHOD,CONSTRUCTOR,PARAMETER,LOCAL_VARIABLE})
 @Retention(value=SOURCE)
 public @interface SuppressWarnings {}
 ```
@@ -108,8 +108,8 @@ public void testRawTypeConverting() {
 }
 ```
 
-* [Intelij IDEA]()에서는 `noinspection` 으로 시작하는 주석을 이용해서
-  어노테이션을 붙일 수 없는 구분에서도 경고를 중지시킬 수 있다.
+* Intelij IDEA에서는 `noinspection` 으로 시작하는 주석을 이용해서
+  어노테이션을 붙일 수 없는 구문에서도 경고를 중지시킬 수 있다.
 * 이 기능은 인텔리제이에서만 적용되는 것으로 사용하지 않는 것이 바람직하다고 생각되는데 토론에 붙여보자.
 
 ### 제네릭 관련 경고
