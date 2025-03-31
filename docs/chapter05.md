@@ -41,7 +41,7 @@
 
 * 제너릭 타입은 컴파일 시점의 검사로만 적용되는 것으로 실제 컴파일된 결과는 로 타입으로 저장된다.
   * 클래스 객체를 사용해야 할 경우. `List<String>.class` 같은거는 없다.
-  * `instanceof` 와 사용할 경우 `instanceof String<List>` 같은 거는 안된다.
+  * `instanceof` 와 사용할 경우 `instanceof List<String>` 같은 거는 안된다.
 
 ```java
 private static List<String> checkTypeAndCast(Object o) {
@@ -193,7 +193,7 @@ List<?> a                       // 됨
 import java.lang.reflect.Array;
 
 @SuppressWarnings("unchecked")
-    private static <T> T[] createGenericArray(Class<T> clazz, int size) {
+private static <T> T[] createGenericArray(Class<T> clazz, int size) {
     return (T[])Array.newInstance(clazz, size);
 }
 ```
