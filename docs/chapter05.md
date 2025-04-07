@@ -11,6 +11,7 @@
 * [**아이템 31**: 한정적 와일드카드를 사용해 API 유연성을 높이라](#아이템-31-한정적-와일드카드를-사용해-api-유연성을-높이라)
 * [**아이템 32**: 제네릭과 가변인수를 함께 쓸 때는 신중하라](#아이템-32-제네릭과-가변인수를-함께-쓸-때는-신중하라)
 * [**아이템 33**: 타입 안전 이종 컨테이너를 고려하라](#아이템-33-타입-안전-이종-컨테이너를-고려하라)
+* [**[추가]** Switch expression](#추가-switch-expression)
 
 ## 아이템 26: Raw 타입은 사용하지 말라
 
@@ -485,8 +486,112 @@ private static <T> void swapHelper(List<T> list, int i, int j) {
 
 ## 아이템 33: 타입 안전 이종 컨테이너를 고려하라
 
+* 타입 안전 이종 컨테이너 패턴(THC pattern, Type-safe Heterogeneous Container Pattern)
+  * 서로 다른 타입의 객체를 담을 수 있는 컨테이너를 만들고, 각 타입에 맞는 메소드를 제공하여 안전하게 사용할 수 있도록 하는 패턴
+  * 타입(class)를 키로 사용하는 `Map` 같은 개념
 
-## [추가] Switch expression
+```java
+public interface TypeSafeHeterogeneousContainer {
+    <T> T get(Class<T> type);
+    <T> void put(Class<T> type, T value);
+}
+```
+
+* 이때 `Class` 객체가 타입을 구분하는데 사용되는데 이를 타입 토큰(type token)이라고 한다.
+  * Java 5에 제네릭이 추가되면서 `Class` 클래스가 `Class<T>`로 제네릭화 된 이유는 바로 타입 토큰으로 사용할 수 있도록 하기 위해서이다.
+
+```java
+@Test
+public void testFavoriteClass() {
+  Favorites f = new Favorites();
+
+  f.put(String.class, "Java");
+  f.put(Integer.class, 0xcafebabe);
+  f.put(Class.class, Favorites.class);
+
+  String favoriteString = f.get(String.class);
+  int favoriteInt = f.get(Integer.class);
+  Class<?> favoriteClass = f.get(Class.class);
+
+  assertEquals("Java cafebabe Favorites",
+          "%s %x %s".formatted(favoriteString, favoriteInt, favoriteClass.getSimpleName()));
+}
+```
+
+* `Favorites` 클래스의 구현은 매우 쉽다.
+  ```java
+  public class Favorites implements TypeSafeHeterogeneousContainer {
+  
+      private final Map<Class<?>, Object> favorites = new HashMap<>();
+  
+      @Override
+      public <T> void put(Class<T> type, T value) {
+          favorites.put(type, value);
+      }
+      @Override
+      public <T> T get(Class<T> type) {
+          return type.cast(favorites.get(type));
+      }
+  }
+  ```
+* `get()`의 코드를 보면 `Class<T>`의 `T cast(Object)` 메소드를 사용하여 간단하게 타입을 변환하는데
+  `cast()`의 코드는 다음과 같다.
+  ```java
+  @SuppressWarnings("unchecked")
+  @IntrinsicCandidate
+  public T cast(Object obj) {
+      if (obj != null && !isInstance(obj))
+          throw new ClassCastException(cannotCastMsg(obj));
+      return (T) obj;
+  }
+  ```
+* 의도적인 캐스팅으로 부터도 안정성을 지키려면 `put`에서도 타입을 검사할 수 있다.
+  * `Collections.checkedList()` 같은 메서드들의 구현 방법도 이런 방식을 따르고 있다.
+  ```java
+  public <T> void put(Class<T> type, T value) {
+      favorites.put(Objects.requireNonNull(type), type.cast(value));
+  }
+  ```
+
+### 슈퍼 타입 토큰
+
+* 타입 안전 이종 컨테이너를 구현하기 위해서 `Class<T>`를 키로 사용했지만
+  `Class` 객체는 타입 매개변수화된 타입을 표현할 수 없다.
+  * `List<String>.class` 같은 것은 불가능하기 때문이다.
+* 이 부분에 대해서 저자는 "만족할 만한 우회로는 없다"고 말하고 있는데,
+  번역자님께서 어린백셩을 위해 슈퍼타입 토큰에 대해서 소개해 주셨다.
+  > * 슈퍼타입토큰(super type token)은 닐 개프터(Neal Gafter)가 제안한 개념으로,
+  >  타입 매개변수화된 타입을 표현하기 위해서 `Class<T>` 대신에 별도의 타입 토큰용 클래스를 만들어서 사용한다.
+  > * 스프링프레임워크에서는 `ParameterizedTypeReference`라는 클래스로 미리 구현해 놓았다.
+
+### 타입 토큰의 한정화
+
+* `Favorites`클래스는 `Class<T>`를 사용하기 때문에 `T`는 어떤 클래스도 될 수 있다.
+  * `Class<T extends Annotation>` 같은 식으로 한정적인 타입 토큰을 사용할 수도 있다.
+
+```java
+public <T extends Annotation> T getAnnotation(Class<T> annotationType);
+```
+
+* 현재 타입 토큰의 상위 타입의 토큰으로 캐스팅이 필요한 경우 `asSuperClass()` 메소드를 사용해서 변환할 수 있다.
+  * 인스턴스에 대해서 `Number n = new Integer(1)` 하는 것 처럼
+    `Class<? extends Number> clazz = Integer.class.asSubclass(Number.class)` 가 가능하다는 말
+
+```java
+static Annotation getAnnotation(AnnotatedElement element, String annotationTypeName) {
+    Class<?> annotationType = null;
+    
+    try {
+        annotationType = Class.forName(annotationTypeName);
+    } catch (Exception e) {
+        throw new IllegalArgumentException("Unknown annotation type: " + annotationTypeName, e);
+    }
+
+    return element.getAnnotation(annotationType.asSubclass(Annotation.class));
+}
+```
+
+## **[추가]** Switch expression
 
 [`switch` 표현식](https://velog.io/@nunddu/Java-Switch-Expression-in-Java-14)은
 Java 12에서 처음 소개 되었고, Java 13, 14 버전을 거치면서 사소한 변경이 몇 차례 있었다.
