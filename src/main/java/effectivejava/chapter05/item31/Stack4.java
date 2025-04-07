@@ -1,19 +1,21 @@
-package effectivejava.chapter05.item29;
+package effectivejava.chapter05.item31;
+
+import effectivejava.chapter05.item29.StackOverflowException;
 
 import java.util.Collection;
 
-public class Stack3<T> {
+public class Stack4<T> {
 
     private final Object[] elements;
     private int size;
 
     private static final int DEFAULT_CAPACITY = 16;
 
-    public Stack3(int capacity) {
+    public Stack4(int capacity) {
         elements = new Object[capacity];
         size = 0;
     }
-    public Stack3() {
+    public Stack4() {
         this(DEFAULT_CAPACITY);
     }
 
@@ -37,19 +39,16 @@ public class Stack3<T> {
         return size == 0;
     }
 
-    /*
-     * add methods for item 31
-     */
 
-    public void pushAll(Iterable<T> src) {
+    public void pushAll(Iterable<? extends T> src) {
         for (T e : src) {
             push(e);
         }
     }
 
-    public void popAll(Collection<T> dest) {
+    public void popAll(Collection<? super T> dst) {
         while (!isEmpty()) {
-            dest.add(pop());
+            dst.add(pop());
         }
     }
 }
