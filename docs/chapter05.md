@@ -480,7 +480,7 @@ private static <T> void swapHelper(List<T> list, int i, int j) {
 * 가변 인수로 넘어온 배열의 값을 수정하지 않는다.
 * 배열을 리턴해서 외부로 노출시키지 않는다.
 
-[pickTwo() 예제](../src/test/java/effectivejava/chapter05/item32/GenericVarargsTest.java3#testPickTwo) 참조
+[pickTwo() 예제](../src/test/java/effectivejava/chapter05/item32/GenericVarargsTest.java) 참조
 
 
 ## 아이템 33: 타입 안전 이종 컨테이너를 고려하라
