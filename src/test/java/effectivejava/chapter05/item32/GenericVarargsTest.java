@@ -66,7 +66,7 @@ public class GenericVarargsTest {
 
         assertThrows(ClassCastException.class, () -> {
             String[] attributes = pickTwo("예쁜", "귀여운", "아름다운");
-            System.out.println(String.join(", ", attributes) + " 스컬리님");
+            System.out.println(String.join(" ", attributes) + " 스컬리님");
         });
     }
 
@@ -91,9 +91,9 @@ public class GenericVarargsTest {
 
         List<String> attributes = pickTwoSafe("예쁜", "귀여운", "아름다운");
 
-        String s = String.join(", ", attributes) + " 스컬리님";
+        String s = String.join(" ", attributes) + " 스컬리님";
 
-        assertTrue(s.matches("^(:?예쁜|귀여운|아름다운), (:?예쁜|귀여운|아름다운) 스컬리님$"));
+        assertTrue(s.matches("^(:?예쁜 귀여운|귀여운 아름다운|아름다운 예쁜) 스컬리님$"));
     }
 
     private static <T> List<T> pickTwoSafe(T a, T b, T c) {
