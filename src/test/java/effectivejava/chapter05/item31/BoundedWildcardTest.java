@@ -14,6 +14,7 @@ public class BoundedWildcardTest {
     public void testBoundedWildcard() {
 
         List<ScheduledFuture<?>> list1 = new ArrayList<>();
+        list1.add(new MyScheduledFuture<>());
 
         // ScheduledFuture<?> maxValue = GenericUtils.max(list1); // compile error
         ScheduledFuture<?> maxValue = GenericUtils2.max(list1);

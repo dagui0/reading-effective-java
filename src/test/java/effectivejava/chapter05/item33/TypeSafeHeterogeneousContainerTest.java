@@ -1,8 +1,12 @@
 package effectivejava.chapter05.item33;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.core.ParameterizedTypeReference;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TypeSafeHeterogeneousContainerTest {
 

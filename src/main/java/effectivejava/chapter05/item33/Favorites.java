@@ -12,6 +12,7 @@ public class Favorites implements TypeSafeHeterogeneousContainer {
     public <T> void put(Class<T> type, T value) {
         favorites.put(Objects.requireNonNull(type), type.cast(value));
     }
+
     @Override
     public <T> T get(Class<T> type) {
         return type.cast(favorites.get(type));

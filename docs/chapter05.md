@@ -562,7 +562,14 @@ public void testFavoriteClass() {
   번역자님께서 어린백셩을 위해 슈퍼타입 토큰에 대해서 소개해 주셨다.
   > * 슈퍼타입토큰(super type token)은 닐 개프터(Neal Gafter)가 제안한 개념으로,
   >  타입 매개변수화된 타입을 표현하기 위해서 `Class<T>` 대신에 별도의 타입 토큰용 클래스를 만들어서 사용한다.
+  >   * [Super Type Tokens (Neal Gafter)](https://gafter.blogspot.com/2006/12/super-type-tokens.html)
   > * 스프링프레임워크에서는 `ParameterizedTypeReference`라는 클래스로 미리 구현해 놓았다.
+  >   * [org.springframework.core.ParameterizedTypeReference&lt;T&gt;](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/ParameterizedTypeReference.html)
+  > * 책의 저자 조슈아 블로크와 닐 개프터는 서로 잘 아는 사이인데도 슈퍼 타입 토큰에 대해서 언급하지 않은 이유는 완벽하지 않기 때문으로 생각된다.
+  >   * [A Limitation of Super Type Tokens (Neal Gafter)](https://gafter.blogspot.com/2007/05/limitation-of-super-type-tokens.html)
+* 자세한 사항은 예제 참조
+  * [TypeReference.java](../src/main/java/effectivejava/chapter05/item33/TypeReference.java)
+  * [TypeSafeHeterogeneousContainerTest.java](../src/test/java/effectivejava/chapter05/item33/TypeSafeHeterogeneousContainerTest.java)
 
 ### 타입 토큰의 한정화
 
