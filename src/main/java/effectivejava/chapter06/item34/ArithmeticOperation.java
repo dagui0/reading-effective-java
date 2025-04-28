@@ -2,7 +2,7 @@ package effectivejava.chapter06.item34;
 
 public enum ArithmeticOperation {
 
-    PLUS, MINUS, TIMES, DIVIDE;
+    PLUS, MINUS, TIMES, DIVIDE, MODULO;
 
     public double apply(double x, double y) {
         return switch (this) {
@@ -10,6 +10,7 @@ public enum ArithmeticOperation {
             case MINUS -> x - y;
             case TIMES -> x * y;
             case DIVIDE -> x / y;
+            case MODULO -> x % y;
         };
     }
 }
