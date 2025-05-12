@@ -182,7 +182,7 @@ public enum ArithmeticOperation3 {
 * `enum` 생성자가 실행되는 시점에는 `static` 필드가 초기화되지 않은 상태이다.
   1. `enum` 클래스가 초기화된다.
   2. 각각의 상수가 초기화된다.
-  3. `static` 필드`가 초기화된다.
+  3. `static` 필드가 초기화된다.
   4. `static` 블럭이 실행된다.
 
 ```java
@@ -398,7 +398,7 @@ public enum ExtendedOperation implements Operation {
 
 ```java
 package java.nio.file;
-public enum LinkOption implements OpenOption, CopyOption, Serializable, Comparable<LinkOption> {
+public enum LinkOption implements OpenOption, CopyOption {
     NOFOLLOW_LINKS;
 }
 ```
