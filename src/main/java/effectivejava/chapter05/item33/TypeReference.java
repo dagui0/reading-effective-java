@@ -14,9 +14,16 @@ public abstract class TypeReference<T> {
         else
             throw new AssertionError("What the hell is this?");
     }
+    protected TypeReference(Type type) {
+        this.type = type;
+    }
 
-    static <T> TypeReference<T> of() {
+    public static <T> TypeReference<T> of() {
         return new TypeReference<>() {};
+    }
+
+    public static <T> TypeReference<T> forType(Type type) {
+        return new TypeReference<>(type) {};
     }
 
     @Override

@@ -15,16 +15,11 @@ public class ParameterizedTypeReferenceTest {
 
     @Test
     public void testParameterizedTypeReference() {
-        // Create a ParameterizedTypeReference for List<String>
         ParameterizedTypeReference<List<String>> stringListType = new ParameterizedTypeReference<>() {};
-        // Create another ParameterizedTypeReference for List<String>
         ParameterizedTypeReference<List<String>> stringListType2 = new ParameterizedTypeReference<>() {};
-        // Create a ParameterizedTypeReference for List<Integer>
         ParameterizedTypeReference<List<Integer>> integerListType = new ParameterizedTypeReference<>() {};
 
-        // Check if the two string list types are equal
         assertEquals(stringListType, stringListType2);
-        // Check if the string list type is not equal to the integer list type
         assertNotEquals(stringListType, integerListType);
     }
 
@@ -70,8 +65,7 @@ public class ParameterizedTypeReferenceTest {
                 }
             }
 
-            Constructor<? extends T> constructor = clazz.getDeclaredConstructor();
-            // constructor.setAccessible(true);
+            Constructor<? extends T> constructor = clazz.getConstructor();
             return constructor.newInstance();
         }
         catch (Exception e) {

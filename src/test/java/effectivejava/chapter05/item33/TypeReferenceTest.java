@@ -1,8 +1,11 @@
 package effectivejava.chapter05.item33;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.ParameterizedTypeReference;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,6 +21,36 @@ public class TypeReferenceTest {
 
         assertEquals(stringListType, stringListType2);
         assertNotEquals(stringListType, integerListType);
+    }
+
+    static class StringListType implements ParameterizedType {
+        @Override
+        public String toString() {
+            return "StringListType";
+        }
+
+        @Override
+        public @NotNull Type[] getActualTypeArguments() {
+            return new Type[] { String.class };
+        }
+
+        @Override
+        public @NotNull Type getRawType() {
+            return List.class;
+        }
+
+        @Override
+        public Type getOwnerType() {
+            return null;
+        }
+    }
+
+    @Test
+    public void testTypeReferenceForType() {
+        TypeReference<List<String>> stringListType = new TypeReference<>() {};
+        TypeReference<List<String>> stringListType2 = TypeReference.forType(new StringListType());
+
+        assertEquals(stringListType, stringListType2);
     }
 
     @Test

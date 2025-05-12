@@ -1,6 +1,5 @@
 package effectivejava.chapter06.item34;
 
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
