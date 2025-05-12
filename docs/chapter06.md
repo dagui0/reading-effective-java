@@ -370,6 +370,38 @@ public void testPlant3() {
 
 ## 아이템 38: 확장할 수 있는 열거 타입이 필요하면 인터페이스를 사용하라
 
+* 초판에서 소개한 타입 안전 열거형 패턴(Type-safe enum pattern)
+  * 모든 상황에서 `enum` 타입이 좋지만, 상수를 추가할 수 없다는 점은 열거 패턴이 낫다.
+  * 초판의 타입 안전 열거 패턴이란 `enum`이 Java 1.5에서 추가되기 전에 사용하던 방법으로, `enum` 클래스를 수동으로 만드는 것과 같다.
+    ([Color.java](../src/main/java/effectivejava/chapter06/item38/Color.java))
+* 어떻게 상수를 추가할 수 있는가?
+  * `enum` 클래스는 상속도 할 수 없으므로 이미 정의된 열거 타입을 확장할 방법이 없음
+  * `enum` 클래스를 인터페이스를 상속하도록 해서 같은 인터페이스를 구현하는 추가 `enum`을 만들 수 있다.
+
+```java
+public interface Operation {
+    double apply(double x, double y);
+}
+public enum BasicOperation implements Operation {
+    PLUS("+") { @Override public double apply(double x, double y) { return x + y; } },
+    MINUS("-") { @Override public double apply(double x, double y) { return x - y; } },
+    TIMES("*") { @Override public double apply(double x, double y) { return x * y; } },
+    DIVIDE("/") { @Override public double apply(double x, double y) { return x / y; } };
+}
+public enum ExtendedOperation implements Operation {
+    EXP("^") { @Override public double apply(double x, double y) { return Math.pow(x, y); } },
+    REMAINDER("%") { @Override public double apply(double x, double y) { return x % y; } };
+}
+```
+
+* Java API에도 이 패턴을 사용하는 사례가 있다.
+
+```java
+package java.nio.file;
+public enum LinkOption implements OpenOption, CopyOption, Serializable, Comparable<LinkOption> {
+    NOFOLLOW_LINKS;
+}
+```
 
 ## 아이템 39: 명명 패턴보다 애너테이션을 사용하라
 
