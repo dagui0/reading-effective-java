@@ -2,6 +2,7 @@
 .idea
 .vscode
 .vs
+.kotlin
 
 # for gradle
 .gradle
