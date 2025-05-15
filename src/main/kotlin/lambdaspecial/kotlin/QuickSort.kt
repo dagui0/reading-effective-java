@@ -1,4 +1,4 @@
-package lambdaspecial
+package lambdaspecial.kotlin
 
 class QuickSort<T : Comparable<T>> : Sort<T> {
     override fun sort(list: List<T>): List<T> {
