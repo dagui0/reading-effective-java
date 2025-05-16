@@ -8,5 +8,14 @@
 .gradle
 build
 
+
+# Node.js specific
+/js/node_modules/
+/js/npm-debug.log*
+/js/yarn-debug.log*
+/js/yarn-error.log*
+/js/.pnp/
+/js/.pnp.js
+
 # error logs
 hs_err_*.log
