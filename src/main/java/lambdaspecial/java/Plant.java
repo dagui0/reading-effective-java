@@ -6,8 +6,8 @@ public class Plant implements Comparable<Plant> {
 
     public enum LifeCycle {
         ANNUAL("한해살이"),
-        PERENNIAL("여러해살이"),
-        BIENNIAL("두해살이");
+        BIENNIAL("두해살이"),
+        PERENNIAL("여러해살이");
 
         private final String koName;
 
@@ -39,7 +39,7 @@ public class Plant implements Comparable<Plant> {
         return name;
     }
 
-    public String enName() {
+    public String koName() {
         return koName;
     }
 

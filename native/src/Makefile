@@ -3,6 +3,7 @@ LDD					= ldd
 JNI_HEADER_DIR		= ../../build/generated/sources/headers/java/main
 
 CFLAGS				= -Wall -I../include
+CXXFLAGS			= -Wall -I../include
 JNI_CFLAGS			= -I$(JNI_HEADER_DIR) -I"$(JAVA_HOME)/include"
 DL_CFLAGS			=
 LDFLAGS				=
@@ -44,7 +45,7 @@ endif
 .PHONY:		all test clean checkos install
 
 OUTPUTS			= lib$(LIBNAME).$(DLIB) lib$(LIBNAME).$(SLIB) $(JNI_LIBNAME).$(DLIB)
-TESTS			= test_func.$(EXE) test_dl.$(EXE)
+TESTS			= test_func.$(EXE) test_dl.$(EXE) test_fptr.$(EXE) test_lambda.$(EXE)
 
 all: $(OUTPUTS)
 test: $(TESTS)
@@ -81,6 +82,13 @@ test_dl.$(EXE): test_dl.c lib$(LIBNAME).$(DLIB)
 	$(CC) -o $@ $< -D DEBUG $(CFLAGS) $(LDFLAGS) -L. lib$(LIBNAME).$(DLIB) && \
 	LD_LIBRARY_PATH=. $(LDD) $@ && \
 	LD_LIBRARY_PATH=. ./$@
+
+test_fptr.$(EXE): test_fptr.c lib$(LIBNAME).$(DLIB)
+	$(CC) -o $@ $< -D DEBUG $(CFLAGS) $(LDFLAGS)
+
+test_lambda.$(EXE): test_lambda.cpp lib$(LIBNAME).$(DLIB)
+	$(CXX) -o $@ $< -D DEBUG $(CXXFLAGS) $(LDFLAGS)
+
 
 clean:
 	rm -f *.o $(OUTPUTS) $(TESTS)
