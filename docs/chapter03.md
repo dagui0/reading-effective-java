@@ -477,18 +477,18 @@ public class PhoneNumber {
 public void testDeepCopyArrayListHavingDuplicatedElements() {
 
     // 원본 리스트는 같은 객체가 2번 추가 되어 있음
-    ArrayList<Member> members = new ArrayList<>();
-    members.add(new Member("Alejandro"));
-    members.add(members.get(0));
+    ArrayList<Member> memberExamples = new ArrayList<>();
+    memberExamples.add(new Member("Alejandro"));
+    memberExamples.add(memberExamples.get(0));
 
     // 복제된 리스트는 복제되면서 다른 객체가 2번 추가됨
     ArrayList<Member> newList = new ArrayList<>();
-    for (Member member : members) {
+    for (Member member : memberExamples) {
         newList.add(member.clone());
     }
 
     // 원본: 같은 객체
-    assertSame(members.get(0).getName(), members.get(1).getName());
+    assertSame(memberExamples.get(0).getName(), memberExamples.get(1).getName());
 
     // 카피본: 다른 객체
     assertNotSame(newList.get(0).getName(), newList.get(1).getName());

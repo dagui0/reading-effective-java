@@ -156,3 +156,6 @@
   * [**아이템 90**: 직렬화된 인스턴스 대신 직렬화 프록시 사용을 검토하라](docs/chapter12.md#아이템-90-직렬화된-인스턴스-대신-직렬화-프록시-사용을-검토하라)
 * 번개 스터디
   * [2025/3/5](docs/lightning_250305.md)
+* [Somewhat Effective Java](docs/somewhat.md)
+  * [**아이템 0.01**: Primary Key는 별도 타입을 만들라](docs/somewhat.md#아이템-001-primary-key는-별도-타입을-만들라)
+

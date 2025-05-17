@@ -13,8 +13,8 @@ public class CompareToBuilderTest {
 
     @Test
     public void testCompareToBuilder() {
-        Member m1 = new Member("Alejandro", 20, "무직");
-        Member m3 = new Member("Scully", 20, "프로그래머");
+        MemberExample m1 = new MemberExample("Alejandro", 20, "무직");
+        MemberExample m3 = new MemberExample("Scully", 20, "프로그래머");
 
         int result = 0;
 
@@ -42,24 +42,24 @@ public class CompareToBuilderTest {
 
     @Test
     public void testSorting() {
-        Member[] members = new Member[] {
-                new Member("Alejandro", 20, "무직"),
-                new Member("Leeturn", 30, "프로그래머"),
-                new Member("Scully", 20, "프로그래머"),
-                new Member("Lucie", 30, "프로그래머")
+        MemberExample[] memberExamples = new MemberExample[] {
+                new MemberExample("Alejandro", 20, "무직"),
+                new MemberExample("Leeturn", 30, "프로그래머"),
+                new MemberExample("Scully", 20, "프로그래머"),
+                new MemberExample("Lucie", 30, "프로그래머")
         };
 
-        Arrays.sort(members);
+        Arrays.sort(memberExamples);
 
-        assertEquals("Alejandro", members[0].getName());
-        assertEquals("Leeturn", members[1].getName());
-        assertEquals("Lucie", members[2].getName());
-        assertEquals("Scully", members[3].getName());
+        assertEquals("Alejandro", memberExamples[0].getName());
+        assertEquals("Leeturn", memberExamples[1].getName());
+        assertEquals("Lucie", memberExamples[2].getName());
+        assertEquals("Scully", memberExamples[3].getName());
 
 
-        Arrays.sort(members, new Comparator<Member>() {
+        Arrays.sort(memberExamples, new Comparator<MemberExample>() {
             @Override
-            public int compare(Member o1, Member o2) {
+            public int compare(MemberExample o1, MemberExample o2) {
                 return new CompareToBuilder()
                         .compare(o1.getAge(), o2.getAge())
                         .compare(o1.getName(), o2.getName())
@@ -67,20 +67,21 @@ public class CompareToBuilderTest {
             }
         });
 
-        assertEquals("Alejandro", members[0].getName());
-        assertEquals("Scully", members[1].getName());
-        assertEquals("Leeturn", members[2].getName());
-        assertEquals("Lucie", members[3].getName());
+        assertEquals("Alejandro", memberExamples[0].getName());
+        assertEquals("Scully", memberExamples[1].getName());
+        assertEquals("Leeturn", memberExamples[2].getName());
+        assertEquals("Lucie", memberExamples[3].getName());
     }
 }
 
 
-class Member implements Cloneable, Serializable, Comparable<Member> {
+class MemberExample implements Cloneable, Serializable, Comparable<MemberExample> {
     private String name;
     private int age;
     private String job;
 
-    public Member(String name, int age, String job) { this.name = name; this.age = age; this.job = job; }
+    public MemberExample(String name, int age, String job) { this.name = name; this.age = age; this.job = job; }
+
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public int getAge() { return age; }
@@ -92,7 +93,7 @@ class Member implements Cloneable, Serializable, Comparable<Member> {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof Member t))
+        if (!(o instanceof MemberExample t))
             return false;
         return (Objects.equals(name, t.name)) &&
                 age == t.age &&
@@ -114,7 +115,7 @@ class Member implements Cloneable, Serializable, Comparable<Member> {
     }
 
     @Override
-    public int compareTo(Member o) {
+    public int compareTo(MemberExample o) {
         return new CompareToBuilder()
                 .compare(name, o.name)
                 .compare(age, o.age)

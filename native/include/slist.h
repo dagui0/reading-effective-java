@@ -18,6 +18,16 @@ extern "C" {
 #  define SLIST_API
 #endif
 
+#if defined(__APPLE__) || defined(__OSX___)
+#  ifdef SLIST_EXPORTS
+#    define SLIST_API_IMPL __attribute__((visibility("default")))
+#  else
+#    define SLIST_API_IMPL
+#  endif
+#else
+#  define SLIST_API_IMPL
+#endif
+
 struct __slist_node {
     int data;
     struct __slist_node *next;

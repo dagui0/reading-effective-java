@@ -2,20 +2,11 @@
 #include <stdlib.h>
 #include <slist.h>
 
-#if defined(__APPLE__) || defined(__OSX___)
-#  ifdef SLIST_EXPORTS
-#    define OSX_EXPORT __attribute__((visibility("default")))
-#  else
-#    define OSX_EXPORT
-#  endif
-#else
-#  define OSX_EXPORT
-#endif
 
 #define TRUE    (1)
 #define FALSE   (0)
 
-OSX_EXPORT
+SLIST_API_IMPL
 SLIST *slist_create(void) {
     SLIST *list = (SLIST *)malloc(sizeof(SLIST));
     if (!list) {
@@ -26,7 +17,7 @@ SLIST *slist_create(void) {
     return list;
 }
 
-OSX_EXPORT
+SLIST_API_IMPL
 void slist_destroy(SLIST *list) {
     SLIST_NODE *temp = list->head;
     while (temp) {
@@ -37,7 +28,7 @@ void slist_destroy(SLIST *list) {
     free(list);
 }
 
-OSX_EXPORT
+SLIST_API_IMPL
 char *slist_msg(SLIST_CODE code) {
     switch (code) {
         case SLIST_NO_ERROR:
@@ -76,7 +67,7 @@ static SLIST_NODE *__create_node(int data, SLIST_NODE *next) {
     return node;
 }
 
-OSX_EXPORT
+SLIST_API_IMPL
 SLIST_CODE slist_add(SLIST *list, int data) {
     SLIST_NODE *last = __find_last_node(list);
 
@@ -94,7 +85,7 @@ SLIST_CODE slist_add(SLIST *list, int data) {
     }
 }
 
-OSX_EXPORT
+SLIST_API_IMPL
 SLIST_CODE slist_add_all(SLIST *list, const int *data, int length) {
     SLIST_NODE *last = __find_last_node(list);
 
@@ -112,7 +103,7 @@ SLIST_CODE slist_add_all(SLIST *list, const int *data, int length) {
     return SLIST_NO_ERROR;
 }
 
-OSX_EXPORT
+SLIST_API_IMPL
 SLIST_CODE slist_insert_at(SLIST *list, int index, int data) {
     if (index < 0)
         return SLIST_INDEX_OUT_OF_RANGE;
@@ -142,13 +133,15 @@ SLIST_CODE slist_insert_at(SLIST *list, int index, int data) {
     }
 }
 
-OSX_EXPORT
+SLIST_API_IMPL
 SLIST_CODE slist_remove_at(SLIST *list, int index) {
     if (index < 0)
         return SLIST_INDEX_OUT_OF_RANGE;
 
     if (index == 0) {
         SLIST_NODE *temp = list->head;
+        if (list->head == NULL)
+            return SLIST_LIST_EMPTY;
         list->head = list->head->next;
         free(temp);
     }
@@ -169,7 +162,7 @@ SLIST_CODE slist_remove_at(SLIST *list, int index) {
     return SLIST_NO_ERROR;
 }
 
-OSX_EXPORT
+SLIST_API_IMPL
 SLIST_CODE slist_remove_all(SLIST *list) {
     SLIST_NODE *temp = list->head;
     while (temp) {
@@ -181,7 +174,7 @@ SLIST_CODE slist_remove_all(SLIST *list) {
     return SLIST_NO_ERROR;
 }
 
-OSX_EXPORT
+SLIST_API_IMPL
 int slist_size(SLIST *list) {
     int size = 0;
     SLIST_NODE *last = list->head;
@@ -192,7 +185,7 @@ int slist_size(SLIST *list) {
     return size;
 }
 
-OSX_EXPORT
+SLIST_API_IMPL
 SLIST_CODE slist_get(SLIST *list, int index, int *data) {
     if (index < 0) {
         *data = 0;
@@ -220,7 +213,7 @@ SLIST_CODE slist_get(SLIST *list, int index, int *data) {
     return SLIST_NO_ERROR;
 }
 
-OSX_EXPORT
+SLIST_API_IMPL
 int slist_contains(SLIST *list, int data) {
     SLIST_NODE *temp = list->head;
     while (temp) {
@@ -231,7 +224,7 @@ int slist_contains(SLIST *list, int data) {
     return FALSE;
 }
 
-OSX_EXPORT
+SLIST_API_IMPL
 void slist_print_dump(SLIST *list) {
     SLIST_NODE *temp = list->head;
     int size = slist_size(list);
