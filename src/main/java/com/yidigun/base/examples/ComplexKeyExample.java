@@ -3,7 +3,6 @@ package com.yidigun.base.examples;
 import com.yidigun.base.DomainObject;
 import com.yidigun.base.PrimaryKey;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,19 +10,10 @@ import java.time.Instant;
 import java.util.Comparator;
 import java.util.Objects;
 
-/**
- * 복합 키를 가진 도메인 객체 예시.
- * <p>
- * 이 예시는 복합 키를 가진 도메인 객체의 구조를 보여줍니다.
- * <p>
- * 이 객체는 기본 키로 두 개의 필드를 사용하며, 추가적인 필드로 이름과 생성일을 포함합니다.
- * <p>
- * 이 객체는 {@link DomainObject} 인터페이스를 구현하고 있으며,
- * 중첩 레코드로 {@link PrimaryKey} 인터페이스를 사용하여
- * 기본 키를 정의합니다.
- * <p>
- * {@link Key} 레코드는 {@link Comparable} 인터페이스를구현하여 정렬에 사용할 수 있다.
- */
+/// 복합 키를 가진 도메인 객체 예시.
+/// 
+/// [Key] 레코드는 [Comparable] 인터페이스를구현하여 정렬에 사용할 수 있다.
+/// 
 @Getter
 @Builder(toBuilder = true)
 public final class ComplexKeyExample implements DomainObject<ComplexKeyExample.Key> {

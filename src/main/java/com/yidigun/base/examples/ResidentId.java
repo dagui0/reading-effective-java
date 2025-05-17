@@ -1,17 +1,16 @@
 package com.yidigun.base.examples;
 
 import com.yidigun.base.PrimaryKey;
-import lombok.EqualsAndHashCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
-/**
- * 주민등록번호 {@link PrimaryKey}의 구현 예시.
- * "1111111111118" 형식으로 저장된다.
- * {@link #of(String)}로 생성시에는 "111111-1111118" 형식을 지원한다.
- * @param residentId 주민등록번호
- */
+/// Structured & Semantic [PrimaryKey](주민등록번호)의 구현 예시.
+///
+/// `1111111111118` 형식으로 저장된다.
+/// [#of(String)]로 생성시에는 `111111-1111118` 형식을 지원한다.
+///
+/// @param residentId 주민등록번호
 public record ResidentId(String residentId) implements PrimaryKey, CharSequence {
 
     public static final Pattern PATTERN = Pattern.compile("^[0-9]{13}$");

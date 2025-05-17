@@ -8,10 +8,9 @@ import lombok.Getter;
 
 import java.time.Instant;
 
-/**
- * {@link MemberKey} 를 PK/FK로 사용하는 테이블용 도메인 클래스.
- * {@link Member}와 1:N의 식별 관계(Identifying Relationship)를 가진다.
- */
+/// [MemberKey] 를 PK/FK로 사용하는 테이블용 도메인 클래스.
+/// [Member]와 1:N의 식별 관계(Identifying Relationship)를 가진다.
+/// 
 @Getter
 @Builder(toBuilder = true)
 @EqualsAndHashCode
@@ -33,7 +32,7 @@ public class Address implements DomainObject<Address.Key>, MemberKey.Aware {
     public static record Key(long memberNo, long addressNo) implements PrimaryKey, MemberKey.Aware {
 
         public static Key of(MemberKey memberKey, long addressNo) {
-            return new Key(memberKey.longValue(), 0);
+            return new Key(memberKey.longValue(), addressNo);
         }
 
         @Override

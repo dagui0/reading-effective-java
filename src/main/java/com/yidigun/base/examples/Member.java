@@ -7,9 +7,8 @@ import lombok.Getter;
 
 import java.time.Instant;
 
-/**
- * {@link MemberKey} 를 PK로 사용하는 마스터 테이블용 도메인 클래스.
- */
+/// [MemberKey] 를 PK로 사용하는 마스터 테이블용 도메인 클래스.
+///
 @Getter
 @Builder(toBuilder = true)
 @EqualsAndHashCode

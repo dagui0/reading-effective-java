@@ -8,10 +8,9 @@ import lombok.Getter;
 
 import java.time.Instant;
 
-/**
- * {@link MemberKey} 를 non-PK/FK로 사용하는 테이블용 도메인 클래스.
- * {@link Member}와 1:N의 비식별 관계(Non-identifying Relationship)를 가진다.
- */
+/// [MemberKey] 를 non-PK/FK로 사용하는 테이블용 도메인 클래스.
+/// [Member]와 1:N의 비식별 관계(Non-identifying Relationship)를 가진다.
+///
 @Getter
 @Builder(toBuilder = true)
 @EqualsAndHashCode

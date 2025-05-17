@@ -1,3 +1,5 @@
+com.yidigun.base
+com.yidigun.base.examples
 com.yidigun.utils
 effectivejava.chapter02.item01
 effectivejava.chapter02.item02
@@ -9,3 +11,20 @@ effectivejava.chapter03.item12
 effectivejava.chapter03.item13
 effectivejava.chapter04.item15
 effectivejava.chapter04.item17
+effectivejava.chapter04.item21
+effectivejava.chapter04.item22
+effectivejava.chapter04.item24
+effectivejava.chapter05.item28
+effectivejava.chapter05.item29
+effectivejava.chapter05.item30
+effectivejava.chapter05.item31
+effectivejava.chapter05.item33
+effectivejava.chapter06.item34
+effectivejava.chapter06.item35
+effectivejava.chapter06.item36
+effectivejava.chapter06.item37
+effectivejava.chapter06.item38
+effectivejava.chapter06.item39
+lambdaspecial.java
+lambdaspecial.java.enroll.domain
+lambdaspecial.java.enroll.dto
