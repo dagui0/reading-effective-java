@@ -173,12 +173,17 @@ public class Address implements DomainObject&lt;Address.Key&gt;, MemberKey.Aware
     public Address.Key getPrimaryKey() { return new Address.Key(memberNo, addressNo); }
     ...
     // Address.Key 역시 MemberKey.Aware임
+    // 단, record 클래스에는 @Getter를 붙일 수 없다.
     public static record Key(long memberNo, long addressNo) implements PrimaryKey, MemberKey.Aware {
-        @Override public MemberKey getMemberKey() { return MemberKey.of(memberNo); }
         @Override public long getMemberNo() { return memberNo; }
     }
     ...
-    public static class AddressBuilder implements MemberKey.Aware.Builder&lt;AddressBuilder&gt; {}
+    public static class AddressBuilder implements MemberKey.Aware.Builder&lt;AddressBuilder&gt; {
+        AddressBuilder addressKey(Address.Key key) {
+            return memberNo(key.memberNo())
+                  .addressNo(key.addressNo());
+        }
+    }
     ...
 }
 
@@ -200,9 +205,10 @@ public class Post implements DomainObject&lt;Post.Key&gt;, MemberKey.Aware {
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
-<ul class="tag-list">
+<ul class="tag-list-long">
 <li><a href="DomainObject.html" title="interface in com.yidigun.base">DomainObject(도메인 객체 인터페이스)</a></li>
 <li><a href="examples/MemberKey.html" title="class in com.yidigun.base.examples">MemberKey(독립 클래스방식 구현 예시)</a></li>
+<li><a href="examples/ResidentId.html" title="class in com.yidigun.base.examples">ResidendId(Semantic Key 예시 (주민등록번호))</a></li>
 </ul>
 </dd>
 </dl>

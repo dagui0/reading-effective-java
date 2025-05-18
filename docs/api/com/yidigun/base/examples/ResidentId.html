@@ -5,7 +5,7 @@
 <title>ResidentId (reading-effective-java unspecified)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="description" content="declaration: package: com.yidigun.base.examples, record: ResidentId">
+<meta name="description" content="declaration: package: com.yidigun.base.examples, class: ResidentId">
 <meta name="generator" content="javadoc/ClassWriter">
 <link rel="stylesheet" type="text/css" href="../../../../resource-files/jquery-ui.min.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../resource-files/stylesheet.css" title="Style">
@@ -68,6 +68,7 @@ loadScripts(document, 'script');</script>
 <ol class="toc-list">
 <li><a href="#PATTERN" tabindex="0">PATTERN</a></li>
 <li><a href="#PATTERN_WITH_DASH" tabindex="0">PATTERN_WITH_DASH</a></li>
+<li><a href="#residentId" tabindex="0">residentId</a></li>
 </ol>
 </li>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
@@ -78,19 +79,24 @@ loadScripts(document, 'script');</script>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
 <li><a href="#of(java.lang.String)" tabindex="0">of(String)</a></li>
+<li><a href="#ofUnchecked(java.lang.String)" tabindex="0">ofUnchecked(String)</a></li>
 <li><a href="#isValid()" tabindex="0">isValid()</a></li>
 <li><a href="#isMale()" tabindex="0">isMale()</a></li>
 <li><a href="#isFemale()" tabindex="0">isFemale()</a></li>
+<li><a href="#getBirthday()" tabindex="0">getBirthday()</a></li>
 <li><a href="#length()" tabindex="0">length()</a></li>
 <li><a href="#charAt(int)" tabindex="0">charAt(int)</a></li>
 <li><a href="#subSequence(int,int)" tabindex="0">subSequence(int, int)</a></li>
+<li><a href="#equals(java.lang.Object)" tabindex="0">equals(Object)</a></li>
+<li><a href="#hashCode()" tabindex="0">hashCode()</a></li>
 <li><a href="#toString()" tabindex="0">toString()</a></li>
 <li><a href="#valueAt(int)" tabindex="0">valueAt(int)</a></li>
-<li><a href="#isValid(java.lang.String)" tabindex="0">isValid(String)</a></li>
 <li><a href="#isValid(com.yidigun.base.examples.ResidentId)" tabindex="0">isValid(ResidentId)</a></li>
-<li><a href="#hashCode()" tabindex="0">hashCode()</a></li>
-<li><a href="#equals(java.lang.Object)" tabindex="0">equals(Object)</a></li>
-<li><a href="#residentId()" tabindex="0">residentId()</a></li>
+<li><a href="#isValid(java.lang.String)" tabindex="0">isValid(String)</a></li>
+<li><a href="#hasValidChecksum(java.lang.String)" tabindex="0">hasValidChecksum(String)</a></li>
+<li><a href="#valueAt(java.lang.String,int)" tabindex="0">valueAt(String, int)</a></li>
+<li><a href="#valueAt(com.yidigun.base.examples.ResidentId,int)" tabindex="0">valueAt(ResidentId, int)</a></li>
+<li><a href="#getBirthday(com.yidigun.base.examples.ResidentId)" tabindex="0">getBirthday(ResidentId)</a></li>
 </ol>
 </li>
 </ol>
@@ -98,28 +104,25 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<h1 title="Record Class ResidentId" class="title">Record Class ResidentId</h1>
+<h1 title="Class ResidentId" class="title">Class ResidentId</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">java.lang.Record</a>
 <div class="inheritance">com.yidigun.base.examples.ResidentId</div>
-</div>
 </div>
 <section class="class-description" id="class-description">
 <div class="horizontal-scroll">
-<dl class="notes">
-<dt>Record Components:</dt>
-<dd><code><span id="param-residentId">residentId</span></code> - 주민등록번호</dd>
-</dl>
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
 <dd><code><a href="../PrimaryKey.html" title="interface in com.yidigun.base">PrimaryKey</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ResidentId</span>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">ResidentId</span>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../PrimaryKey.html" title="interface in com.yidigun.base">PrimaryKey</a>, <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a></span></div>
 <div class="block"><p>Structured &amp; Semantic <a href="주민등록번호">PrimaryKey</a>의 구현 예시.</p>
+<p>데이터 검증을 포함해서 올바른 경우만 생성하려면 <a href="#of(java.lang.String)"><code>of(String)</code></a> 메소드를 사용할 수 있다.
+유효성 검사 없이 생성하려면(이미 검증되었거나 무조건 인스턴스를 만들어야 할 경우)
+<a href="#ofUnchecked(java.lang.String)"><code>ofUnchecked(String)</code></a>를 사용한다.</p>
 <p><code>1111111111118</code> 형식으로 저장된다.
 <a href="#of(java.lang.String)"><code>of(String)</code></a>로 생성시에는 <code>111111-1111118</code> 형식을 지원한다.</p>
 </div>
@@ -138,10 +141,19 @@ implements <a href="../PrimaryKey.html" title="interface in com.yidigun.base">Pr
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/regex/Pattern.html" title="class or interface in java.util.regex" class="external-link">Pattern</a></code></div>
 <div class="col-second even-row-color"><code><a href="#PATTERN" class="member-name-link">PATTERN</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block"><code>1111111111111</code> 형식 검사 패턴</div>
+</div>
 <div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/regex/Pattern.html" title="class or interface in java.util.regex" class="external-link">Pattern</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#PATTERN_WITH_DASH" class="member-name-link">PATTERN_WITH_DASH</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block"><code>111111-1111111</code> 형식 검사 패턴</div>
+</div>
+<div class="col-first even-row-color"><code>private final <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#residentId" class="member-name-link">residentId</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">주민등록번호</div>
+</div>
 </div>
 </section>
 </li>
@@ -150,12 +162,14 @@ implements <a href="../PrimaryKey.html" title="interface in com.yidigun.base">Pr
 <section class="constructor-summary" id="constructor-summary">
 <h2>Constructor Summary</h2>
 <div class="caption"><span>Constructors</span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Constructor</div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier</div>
+<div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>private </code></div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String)" class="member-name-link">ResidentId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Creates an instance of a <code>ResidentId</code> record class.</div>
+<div class="block">주민번호의 유효성을 검사하지 않고 생성한다.</div>
 </div>
 </div>
 </section>
@@ -174,54 +188,67 @@ implements <a href="../PrimaryKey.html" title="interface in com.yidigun.base">Pr
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>char</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#charAt(int)" class="member-name-link">charAt</a><wbr>(int&nbsp;index)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Indicates whether some other object is "equal to" this one.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns a hash code value for this object.</div>
-</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isFemale()" class="member-name-link">isFemale</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isMale()" class="member-name-link">isMale</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBirthday()" class="member-name-link">getBirthday</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isValid()" class="member-name-link">isValid</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isValid(com.yidigun.base.examples.ResidentId)" class="member-name-link">isValid</a><wbr>(<a href="ResidentId.html" title="class in com.yidigun.base.examples">ResidentId</a>&nbsp;residentId)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isValid(java.lang.String)" class="member-name-link">isValid</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getBirthday(com.yidigun.base.examples.ResidentId)" class="member-name-link">getBirthday</a><wbr>(<a href="ResidentId.html" title="class in com.yidigun.base.examples">ResidentId</a>&nbsp;residentId)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#length()" class="member-name-link">length</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="ResidentId.html" title="class in com.yidigun.base.examples">ResidentId</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(java.lang.String)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#hasValidChecksum(java.lang.String)" class="member-name-link">hasValidChecksum</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#residentId()" class="member-name-link">residentId</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <a href="#param-residentId"><code>residentId</code></a> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://javadoc.io/doc/org.jetbrains/annotations/latest/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a> <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subSequence(int,int)" class="member-name-link">subSequence</a><wbr>(int&nbsp;start,
- int&nbsp;end)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isFemale()" class="member-name-link">isFemale</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isMale()" class="member-name-link">isMale</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns a string representation of this record class.</div>
-</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isValid()" class="member-name-link">isValid</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isValid(com.yidigun.base.examples.ResidentId)" class="member-name-link">isValid</a><wbr>(<a href="ResidentId.html" title="class in com.yidigun.base.examples">ResidentId</a>&nbsp;residentId)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isValid(java.lang.String)" class="member-name-link">isValid</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#valueAt(int)" class="member-name-link">valueAt</a><wbr>(int&nbsp;index)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#length()" class="member-name-link">length</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="ResidentId.html" title="class in com.yidigun.base.examples">ResidentId</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(java.lang.String)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">주민번호의 유효성을 검사하여 올바른 경우만 생성한다.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="ResidentId.html" title="class in com.yidigun.base.examples">ResidentId</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#ofUnchecked(java.lang.String)" class="member-name-link">ofUnchecked</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">유효성 검사 없이 생성한다.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://javadoc.io/doc/org.jetbrains/annotations/26.0.2/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a> <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subSequence(int,int)" class="member-name-link">subSequence</a><wbr>(int&nbsp;start,
+ int&nbsp;end)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://javadoc.io/doc/org.jetbrains/annotations/26.0.2/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a> <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#valueAt(int)" class="member-name-link">valueAt</a><wbr>(int&nbsp;index)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#valueAt(com.yidigun.base.examples.ResidentId,int)" class="member-name-link">valueAt</a><wbr>(<a href="ResidentId.html" title="class in com.yidigun.base.examples">ResidentId</a>&nbsp;residentId,
+ int&nbsp;index)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#valueAt(java.lang.String,int)" class="member-name-link">valueAt</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId,
+ int&nbsp;index)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -247,6 +274,7 @@ implements <a href="../PrimaryKey.html" title="interface in com.yidigun.base">Pr
 <h3>PATTERN</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/regex/Pattern.html" title="class or interface in java.util.regex" class="external-link">Pattern</a></span>&nbsp;<span class="element-name">PATTERN</span></div>
+<div class="block"><code>1111111111111</code> 형식 검사 패턴</div>
 </div>
 </section>
 </li>
@@ -255,6 +283,16 @@ implements <a href="../PrimaryKey.html" title="interface in com.yidigun.base">Pr
 <h3>PATTERN_WITH_DASH</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/regex/Pattern.html" title="class or interface in java.util.regex" class="external-link">Pattern</a></span>&nbsp;<span class="element-name">PATTERN_WITH_DASH</span></div>
+<div class="block"><code>111111-1111111</code> 형식 검사 패턴</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="residentId">
+<h3>residentId</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">residentId</span></div>
+<div class="block">주민등록번호</div>
 </div>
 </section>
 </li>
@@ -270,12 +308,8 @@ implements <a href="../PrimaryKey.html" title="interface in com.yidigun.base">Pr
 <section class="detail" id="&lt;init&gt;(java.lang.String)">
 <h3>ResidentId</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ResidentId</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)</span></div>
-<div class="block">Creates an instance of a <code>ResidentId</code> record class.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>residentId</code> - the value for the <a href="#param-residentId"><code>residentId</code></a> record component</dd>
-</dl>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="element-name">ResidentId</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)</span></div>
+<div class="block">주민번호의 유효성을 검사하지 않고 생성한다.</div>
 </div>
 </section>
 </li>
@@ -292,6 +326,21 @@ implements <a href="../PrimaryKey.html" title="interface in com.yidigun.base">Pr
 <h3>of</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ResidentId.html" title="class in com.yidigun.base.examples">ResidentId</a></span>&nbsp;<span class="element-name">of</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)</span></div>
+<div class="block">주민번호의 유효성을 검사하여 올바른 경우만 생성한다.
+유효성이 검증되지 않은 번호에 대해서는 예외를 던진다.</div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 주민등록번호 형식이 잘못된 경우</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="ofUnchecked(java.lang.String)">
+<h3>ofUnchecked</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ResidentId.html" title="class in com.yidigun.base.examples">ResidentId</a></span>&nbsp;<span class="element-name">ofUnchecked</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)</span></div>
+<div class="block">유효성 검사 없이 생성한다. 기존에 DB에 저장된 값을 로드하는 경우 등 검사가 필요없는 경우 사용한다.</div>
 </div>
 </section>
 </li>
@@ -316,6 +365,14 @@ implements <a href="../PrimaryKey.html" title="interface in com.yidigun.base">Pr
 <h3>isFemale</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isFemale</span>()</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getBirthday()">
+<h3>getBirthday</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">getBirthday</span>()</div>
 </div>
 </section>
 </li>
@@ -347,8 +404,8 @@ implements <a href="../PrimaryKey.html" title="interface in com.yidigun.base">Pr
 <section class="detail" id="subSequence(int,int)">
 <h3>subSequence</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="annotations"><a href="https://javadoc.io/doc/org.jetbrains/annotations/latest/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a>
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://javadoc.io/doc/org.jetbrains/annotations/latest/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a> <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">subSequence</span><wbr><span class="parameters">(int&nbsp;start,
+<div class="member-signature"><span class="annotations"><a href="https://javadoc.io/doc/org.jetbrains/annotations/26.0.2/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://javadoc.io/doc/org.jetbrains/annotations/26.0.2/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a> <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">subSequence</span><wbr><span class="parameters">(int&nbsp;start,
  int&nbsp;end)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -358,18 +415,40 @@ implements <a href="../PrimaryKey.html" title="interface in com.yidigun.base">Pr
 </section>
 </li>
 <li>
+<section class="detail" id="equals(java.lang.Object)">
+<h3>equals</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</span></div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="hashCode()">
+<h3>hashCode</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">hashCode</span>()</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
-<div class="block">Returns a string representation of this record class. The representation contains the name of the class, followed by the name and value of each of the record components.</div>
+<div class="member-signature"><span class="annotations"><a href="https://javadoc.io/doc/org.jetbrains/annotations/26.0.2/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://javadoc.io/doc/org.jetbrains/annotations/26.0.2/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a> <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/CharSequence.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link">CharSequence</a></code></dd>
-<dt>Specified by:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Record.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
-<dt>Returns:</dt>
-<dd>a string representation of this object</dd>
+<dt>Overrides:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
 </dl>
 </div>
 </section>
@@ -383,14 +462,6 @@ implements <a href="../PrimaryKey.html" title="interface in com.yidigun.base">Pr
 </section>
 </li>
 <li>
-<section class="detail" id="isValid(java.lang.String)">
-<h3>isValid</h3>
-<div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isValid</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)</span></div>
-</div>
-</section>
-</li>
-<li>
 <section class="detail" id="isValid(com.yidigun.base.examples.ResidentId)">
 <h3>isValid</h3>
 <div class="horizontal-scroll">
@@ -399,47 +470,44 @@ implements <a href="../PrimaryKey.html" title="interface in com.yidigun.base">Pr
 </section>
 </li>
 <li>
-<section class="detail" id="hashCode()">
-<h3>hashCode</h3>
+<section class="detail" id="isValid(java.lang.String)">
+<h3>isValid</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">hashCode</span>()</div>
-<div class="block">Returns a hash code value for this object. The value is derived from the hash code of each of the record components.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Record.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
-<dt>Returns:</dt>
-<dd>a hash code value for this object</dd>
-</dl>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isValid</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)</span></div>
 </div>
 </section>
 </li>
 <li>
-<section class="detail" id="equals(java.lang.Object)">
-<h3>equals</h3>
+<section class="detail" id="hasValidChecksum(java.lang.String)">
+<h3>hasValidChecksum</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
-<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>o</code> - the object with which to compare</dd>
-<dt>Returns:</dt>
-<dd><code>true</code> if this object is the same as the <code>o</code> argument; <code>false</code> otherwise.</dd>
-</dl>
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">hasValidChecksum</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId)</span></div>
 </div>
 </section>
 </li>
 <li>
-<section class="detail" id="residentId()">
-<h3>residentId</h3>
+<section class="detail" id="valueAt(java.lang.String,int)">
+<h3>valueAt</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">residentId</span>()</div>
-<div class="block">Returns the value of the <a href="#param-residentId"><code>residentId</code></a> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <a href="#param-residentId"><code>residentId</code></a> record component</dd>
-</dl>
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">valueAt</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;residentId,
+ int&nbsp;index)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="valueAt(com.yidigun.base.examples.ResidentId,int)">
+<h3>valueAt</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">valueAt</span><wbr><span class="parameters">(<a href="ResidentId.html" title="class in com.yidigun.base.examples">ResidentId</a>&nbsp;residentId,
+ int&nbsp;index)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getBirthday(com.yidigun.base.examples.ResidentId)">
+<h3>getBirthday</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">getBirthday</span><wbr><span class="parameters">(<a href="ResidentId.html" title="class in com.yidigun.base.examples">ResidentId</a>&nbsp;residentId)</span></div>
 </div>
 </section>
 </li>

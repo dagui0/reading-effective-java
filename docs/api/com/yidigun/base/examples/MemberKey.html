@@ -63,10 +63,17 @@ loadScripts(document, 'script');</script>
 <li><a href="#" tabindex="0">Description</a></li>
 <li><a href="#nested-class-summary" tabindex="0">Nested Class Summary</a></li>
 <li><a href="#field-summary" tabindex="0">Field Summary</a></li>
+<li><a href="#constructor-summary" tabindex="0">Constructor Summary</a></li>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
 <li><a href="#field-detail" tabindex="0">Field Details</a>
 <ol class="toc-list">
 <li><a href="#NULL_MEMBER_NO" tabindex="0">NULL_MEMBER_NO</a></li>
+<li><a href="#memberNo" tabindex="0">memberNo</a></li>
+</ol>
+</li>
+<li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
+<ol class="toc-list">
+<li><a href="#%3Cinit%3E(long)" tabindex="0">MemberKey(long)</a></li>
 </ol>
 </li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
@@ -118,11 +125,11 @@ public class Post implements DomainObject&lt;Post.Key&gt;, MemberKey.Aware {
 </code></pre>
 <h3 id="--heading1"><a href="MemberKey.Aware.Builder.html" title="interface in com.yidigun.base.examples"><code>MemberKey.Aware.Builder</code></a> 인터페이스</h3>
 <p><a href="MemberKey.Aware.html" title="interface in com.yidigun.base.examples"><code>MemberKey.Aware</code></a> 객체 생성에 사용할 Builder 용 인터페이스이다.</p>
-<p><a href="https://javadoc.io/doc/org.projectlombok/lombok/latest/lombok/Builder.html" title="class or interface in lombok" class="external-link"><code>Builder</code></a>를 이용하여 빌더를 자동생성하면 <code>클래스명 + Builder</code>라는 이름으로
+<p><a href="https://javadoc.io/doc/org.projectlombok/lombok/1.18.38/lombok/Builder.html" title="class or interface in lombok" class="external-link"><code>Builder</code></a>를 이용하여 빌더를 자동생성하면 <code>클래스명 + Builder</code>라는 이름으로
 <code>static</code> 중첩 클래스가 생성된다. 이 클래스는 미리 중첩클래스를 생성해 놓아도
 lombok은 잘 알아서 빌더 메소드들을 추가해준다.</p>
 <p><a href="MemberKey.Aware.Builder.html#memberKey(com.yidigun.base.examples.MemberKey)"><code>MemberKey.Aware.Builder.memberKey(MemberKey)</code></a>가 기본 메소드로 구현되어있어
-<a href="https://javadoc.io/doc/org.projectlombok/lombok/latest/lombok/Builder.html" title="class or interface in lombok" class="external-link"><code>Builder</code></a>과 함께 사용하면 중첩 클래스를 만들기만 하면 추가로 할 일이 없다.</p>
+<a href="https://javadoc.io/doc/org.projectlombok/lombok/1.18.38/lombok/Builder.html" title="class or interface in lombok" class="external-link"><code>Builder</code></a>과 함께 사용하면 중첩 클래스를 만들기만 하면 추가로 할 일이 없다.</p>
 <pre><code>@Builder(toBuilder = true)
 class Member implements DomainObject&lt;MemberKey&gt;, MemberKey.Aware {
     ...
@@ -135,14 +142,14 @@ class Member implements DomainObject&lt;MemberKey&gt;, MemberKey.Aware {
 이때, 기본 메소드가 <code>this</code>를 리턴하면 <code>this</code>는 실제 빌더 인스턴스의 클래스가 아니라
 인터페이스 타입이 되어서 이후 빌드 메소드 체인이 깨지게 된다.</p>
 <h3 id="null--heading"><code>null</code> 값 변환 문제</h3>
-<p>이 클래스는 <code>memberNo</code>가 <code>&lt;= 0</code>인 경우 null로 간주한다는 정책에 따라 구현되었다.
+<p>이 클래스는 <a href="#memberNo"><code>memberNo</code></a>가 <code>&lt;= 0</code>인 경우 null로 간주한다는 정책에 따라 구현되었다.
 <code>null</code> 관련 정책은 프로젝트의 DB설계 및 개발 컨벤션의 기본 정책에 따라서 얼마든지 달라질 수 있다.
 (<code>long</code> 대신 <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link"><code>Long</code></a>을 사용하면 <code>null</code>을 자연스럽게 허용할 수도 있다.)</p>
 <p>이 예시에서는 <a href="MemberKey.html" title="class in com.yidigun.base.examples"><code>MemberKey</code></a> 객체를 사용하여 기본 타입 <code>long</code>과의 호환성을
 최대한 가져가는 방법을 탐구한다.</p>
 <ul>
 <li>기본 정책: <code>memberNo &lt;= 0</code> 인 경우 <code>null</code>로 간주한다.</li>
-<li>생성자 <code>MemberKey(long)</code>와 팩토리 메소드 <a href="#of(long)"><code>of(long)</code></a>를 통해
+<li>생성자 <a href="#%3Cinit%3E(long)"><code>MemberKey(long)</code></a>와 팩토리 메소드 <a href="#of(long)"><code>of(long)</code></a>를 통해
 객체를 생성할 때는 <code>memberNo &lt;= 0</code> 이면 <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> 예외를 던진다.</li>
 <li>그렇지만, <a href="MemberKey.Aware.Builder.html" title="interface in com.yidigun.base.examples"><code>MemberKey.Aware.Builder</code></a> 인터페이스를 통해서
 <a href="MemberKey.Aware.html" title="interface in com.yidigun.base.examples"><code>MemberKey.Aware</code></a> 객체가 생성될 때는 <code>memberNo</code>를 <code>0</code>으로 설정할 수 있는데,
@@ -156,6 +163,9 @@ PK가 아닌 <code>memberNo</code> 필드의 값이 <code>null</code>임을 의�
 <dd>
 <ul class="tag-list">
 <li><a href="../PrimaryKey.html" title="interface in com.yidigun.base"><code>PrimaryKey</code></a></li>
+<li><a href="Member.html" title="class in com.yidigun.base.examples"><code>Member</code></a></li>
+<li><a href="Address.html" title="class in com.yidigun.base.examples"><code>Address</code></a></li>
+<li><a href="Post.html" title="class in com.yidigun.base.examples"><code>Post</code></a></li>
 </ul>
 </dd>
 </dl>
@@ -189,10 +199,32 @@ PK가 아닌 <code>memberNo</code> 필드의 값이 <code>null</code>임을 의�
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final long</code></div>
-<div class="col-second even-row-color"><code><a href="#NULL_MEMBER_NO" class="member-name-link">NULL_MEMBER_NO</a></code></div>
+<div class="col-first even-row-color"><code>private final long</code></div>
+<div class="col-second even-row-color"><code><a href="#memberNo" class="member-name-link">memberNo</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">회원번호</div>
+</div>
+<div class="col-first odd-row-color"><code>static final long</code></div>
+<div class="col-second odd-row-color"><code><a href="#NULL_MEMBER_NO" class="member-name-link">NULL_MEMBER_NO</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block"><code>null</code>로 간주할 <code>memberNo</code>의 값.</div>
+</div>
+</div>
+</section>
+</li>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<li>
+<section class="constructor-summary" id="constructor-summary">
+<h2>Constructor Summary</h2>
+<div class="caption"><span>Constructors</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier</div>
+<div class="table-header col-second">Constructor</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>private </code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long)" class="member-name-link">MemberKey</a><wbr>(long&nbsp;memberNo)</code></div>
+<div class="col-last even-row-color">
+<div class="block">생성자.</div>
 </div>
 </div>
 </section>
@@ -209,7 +241,7 @@ PK가 아닌 <code>memberNo</code> 필드의 값이 <code>null</code>임을 의�
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#compareTo(com.yidigun.base.examples.MemberKey)" class="member-name-link">compareTo</a><wbr>(<a href="https://javadoc.io/doc/org.jetbrains/annotations/latest/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a> <a href="MemberKey.html" title="class in com.yidigun.base.examples">MemberKey</a>&nbsp;o)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#compareTo(com.yidigun.base.examples.MemberKey)" class="member-name-link">compareTo</a><wbr>(<a href="https://javadoc.io/doc/org.jetbrains/annotations/26.0.2/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a> <a href="MemberKey.html" title="class in com.yidigun.base.examples">MemberKey</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">정렬을 위해 사용할 수 있는 크기 비교 메소드</div>
 </div>
@@ -262,6 +294,39 @@ PK가 아닌 <code>memberNo</code> 필드의 값이 <code>null</code>임을 의�
 <li><a href="../../../../constant-values.html#com.yidigun.base.examples.MemberKey.NULL_MEMBER_NO">Constant Field Values</a></li>
 </ul>
 </dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="memberNo">
+<h3>memberNo</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">memberNo</span></div>
+<div class="block">회원번호</div>
+</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<li>
+<section class="constructor-details" id="constructor-detail">
+<h2>Constructor Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="&lt;init&gt;(long)">
+<h3>MemberKey</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="element-name">MemberKey</span><wbr><span class="parameters">(long&nbsp;memberNo)</span></div>
+<div class="block">생성자. <code>memberNo</code>가 올바르지 않은 경우(<code>&lt;= 0</code>)
+<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a>을 던진다.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>memberNo</code> - 회원 번호</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if memberNo &lt;= 0</dd>
 </dl>
 </div>
 </section>
@@ -337,8 +402,8 @@ PK가 아닌 <code>memberNo</code> 필드의 값이 <code>null</code>임을 의�
 <section class="detail" id="compareTo(com.yidigun.base.examples.MemberKey)">
 <h3>compareTo</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">compareTo</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/org.jetbrains/annotations/latest/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a>
- <a href="https://javadoc.io/doc/org.jetbrains/annotations/latest/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a> <a href="MemberKey.html" title="class in com.yidigun.base.examples">MemberKey</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">compareTo</span><wbr><span class="parameters">(<a href="https://javadoc.io/doc/org.jetbrains/annotations/26.0.2/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a>
+ <a href="https://javadoc.io/doc/org.jetbrains/annotations/26.0.2/org/jetbrains/annotations/NotNull.html" title="class or interface in org.jetbrains.annotations" class="external-link">@NotNull</a> <a href="MemberKey.html" title="class in com.yidigun.base.examples">MemberKey</a>&nbsp;o)</span></div>
 <div class="block">정렬을 위해 사용할 수 있는 크기 비교 메소드</div>
 <dl class="notes">
 <dt>Specified by:</dt>

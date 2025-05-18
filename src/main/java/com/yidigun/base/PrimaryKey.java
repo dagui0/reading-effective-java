@@ -1,6 +1,7 @@
 package com.yidigun.base;
 
 import com.yidigun.base.examples.MemberKey;
+import com.yidigun.base.examples.ResidentId;
 
 import java.util.Map;
 
@@ -117,12 +118,17 @@ import java.util.Map;
 ///     public Address.Key getPrimaryKey() { return new Address.Key(memberNo, addressNo); }
 ///     ...
 ///     // Address.Key 역시 MemberKey.Aware임
+///     // 단, record 클래스에는 @Getter를 붙일 수 없다.
 ///     public static record Key(long memberNo, long addressNo) implements PrimaryKey, MemberKey.Aware {
-///         @Override public MemberKey getMemberKey() { return MemberKey.of(memberNo); }
 ///         @Override public long getMemberNo() { return memberNo; }
 ///     }
 ///     ...
-///     public static class AddressBuilder implements MemberKey.Aware.Builder<AddressBuilder> {}
+///     public static class AddressBuilder implements MemberKey.Aware.Builder<AddressBuilder> {
+///         AddressBuilder addressKey(Address.Key key) {
+///             return memberNo(key.memberNo())
+///                   .addressNo(key.addressNo());
+///         }
+///     }
 ///     ...
 /// }
 ///
@@ -143,5 +149,6 @@ import java.util.Map;
 /// 
 /// @see DomainObject DomainObject(도메인 객체 인터페이스)
 /// @see MemberKey MemberKey(독립 클래스방식 구현 예시)
+/// @see ResidentId ResidendId(Semantic Key 예시 (주민등록번호))
 public interface PrimaryKey {
 }

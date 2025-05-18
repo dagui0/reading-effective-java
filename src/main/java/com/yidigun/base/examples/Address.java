@@ -16,9 +16,13 @@ import java.time.Instant;
 @EqualsAndHashCode
 public class Address implements DomainObject<Address.Key>, MemberKey.Aware {
 
-    private final long memberNo;        // primary key from Member
-    private final long addressNo;       // primary key
-    private final String address;       // semantic field
+    /// primary key from Member
+    private final long memberNo;
+    /// primary key
+    private final long addressNo;
+    /// semantic field
+    private final String address;
+    /// logging field
     @EqualsAndHashCode.Exclude
     private final Instant createDate;   // logging field
 
@@ -27,22 +31,32 @@ public class Address implements DomainObject<Address.Key>, MemberKey.Aware {
         return new Key(memberNo, addressNo);
     }
 
-    public static class AddressBuilder implements MemberKey.Aware.Builder<AddressBuilder> {}
+    /// lombok @Builder 용 빌더클래스
+    public static class AddressBuilder implements MemberKey.Aware.Builder<AddressBuilder> {
+        AddressBuilder addressKey(Address.Key key) {
+            return memberNo(key.memberNo())
+                  .addressNo(key.addressNo());
+        }
+    }
 
+    /// PrimaryKey 클래스
+    /// @param memberNo 회원번호
+    /// @param addressNo 주소 일련번호
     public static record Key(long memberNo, long addressNo) implements PrimaryKey, MemberKey.Aware {
+
+        Key(MemberKey memberKey, long addressNo) {
+            this(memberKey.longValue(), addressNo);
+        }
 
         public static Key of(MemberKey memberKey, long addressNo) {
             return new Key(memberKey.longValue(), addressNo);
         }
-
-        @Override
-        public MemberKey getMemberKey() {
-            return MemberKey.of(memberNo);
-        }
-
         @Override
         public long getMemberNo() {
             return memberNo;
+        }
+        public long getAddressNo() {
+            return addressNo;
         }
     }
 }

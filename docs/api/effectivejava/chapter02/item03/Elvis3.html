@@ -61,13 +61,28 @@ loadScripts(document, 'script');</script>
 <button class="hide-sidebar"><span>Hide sidebar&nbsp;</span>&#10094;</button><button class="show-sidebar">&#10095;<span>&nbsp;Show sidebar</span></button>
 <ol class="toc-list">
 <li><a href="#" tabindex="0">Description</a></li>
+<li><a href="#field-summary" tabindex="0">Field Summary</a></li>
+<li><a href="#constructor-summary" tabindex="0">Constructor Summary</a></li>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
+<li><a href="#field-detail" tabindex="0">Field Details</a>
+<ol class="toc-list">
+<li><a href="#serialVersionUID" tabindex="0">serialVersionUID</a></li>
+<li><a href="#INSTANCE" tabindex="0">INSTANCE</a></li>
+<li><a href="#name" tabindex="0">name</a></li>
+</ol>
+</li>
+<li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
+<ol class="toc-list">
+<li><a href="#%3Cinit%3E()" tabindex="0">Elvis3()</a></li>
+</ol>
+</li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
 <li><a href="#getInstance()" tabindex="0">getInstance()</a></li>
 <li><a href="#getName()" tabindex="0">getName()</a></li>
 <li><a href="#setName(java.lang.String)" tabindex="0">setName(String)</a></li>
 <li><a href="#leaveTheBuilding()" tabindex="0">leaveTheBuilding()</a></li>
+<li><a href="#readResolve()" tabindex="0">readResolve()</a></li>
 </ol>
 </li>
 </ol>
@@ -102,6 +117,42 @@ implements <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>private static final <a href="Elvis3.html" title="class in effectivejava.chapter02.item03">Elvis3</a></code></div>
+<div class="col-second even-row-color"><code><a href="#INSTANCE" class="member-name-link">INSTANCE</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#name" class="member-name-link">name</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>private static final long</code></div>
+<div class="col-second even-row-color"><code><a href="#serialVersionUID" class="member-name-link">serialVersionUID</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<li>
+<section class="constructor-summary" id="constructor-summary">
+<h2>Constructor Summary</h2>
+<div class="caption"><span>Constructors</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier</div>
+<div class="table-header col-second">Constructor</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>private </code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">Elvis3</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
 <!-- ========== METHOD SUMMARY =========== -->
 <li>
 <section class="method-summary" id="method-summary">
@@ -122,9 +173,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leaveTheBuilding()" class="member-name-link">leaveTheBuilding</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setName(java.lang.String)" class="member-name-link">setName</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readResolve()" class="member-name-link">readResolve</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setName(java.lang.String)" class="member-name-link">setName</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -137,6 +191,62 @@ implements <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="serialVersionUID">
+<h3>serialVersionUID</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">serialVersionUID</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../constant-values.html#effectivejava.chapter02.item03.Elvis3.serialVersionUID">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="INSTANCE">
+<h3>INSTANCE</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="Elvis3.html" title="class in effectivejava.chapter02.item03">Elvis3</a></span>&nbsp;<span class="element-name">INSTANCE</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="name">
+<h3>name</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private transient</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">name</span></div>
+</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<li>
+<section class="constructor-details" id="constructor-detail">
+<h2>Constructor Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="&lt;init&gt;()">
+<h3>Elvis3</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="element-name">Elvis3</span>()</div>
+</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ============ METHOD DETAIL ========== -->
 <li>
 <section class="method-details" id="method-detail">
@@ -171,6 +281,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base
 <h3>leaveTheBuilding</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">leaveTheBuilding</span>()</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="readResolve()">
+<h3>readResolve</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name">readResolve</span>()</div>
 </div>
 </section>
 </li>

@@ -62,8 +62,19 @@ loadScripts(document, 'script');</script>
 <ol class="toc-list">
 <li><a href="#" tabindex="0">Description</a></li>
 <li><a href="#nested-class-summary" tabindex="0">Nested Class Summary</a></li>
+<li><a href="#field-summary" tabindex="0">Field Summary</a></li>
 <li><a href="#constructor-summary" tabindex="0">Constructor Summary</a></li>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
+<li><a href="#field-detail" tabindex="0">Field Details</a>
+<ol class="toc-list">
+<li><a href="#keyPart1" tabindex="0">keyPart1</a></li>
+<li><a href="#keyPart2" tabindex="0">keyPart2</a></li>
+<li><a href="#otherField1" tabindex="0">otherField1</a></li>
+<li><a href="#otherField2" tabindex="0">otherField2</a></li>
+<li><a href="#createDate" tabindex="0">createDate</a></li>
+<li><a href="#updateDate" tabindex="0">updateDate</a></li>
+</ol>
+</li>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
 <ol class="toc-list">
 <li><a href="#%3Cinit%3E()" tabindex="0">ComplexKeyExample()</a></li>
@@ -73,6 +84,7 @@ loadScripts(document, 'script');</script>
 <ol class="toc-list">
 <li><a href="#getPrimaryKey()" tabindex="0">getPrimaryKey()</a></li>
 <li><a href="#hashCode()" tabindex="0">hashCode()</a></li>
+<li><a href="#equalsCoreFields(com.yidigun.base.examples.ComplexKeyExample)" tabindex="0">equalsCoreFields(ComplexKeyExample)</a></li>
 <li><a href="#equals(java.lang.Object)" tabindex="0">equals(Object)</a></li>
 <li><a href="#equalsAllFields(java.lang.Object)" tabindex="0">equalsAllFields(Object)</a></li>
 </ol>
@@ -98,7 +110,9 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../DomainObject.html" title="interface in com.yidigun.base">DomainObject</a>&lt;<a href="ComplexKeyExample.Key.html" title="class in com.yidigun.base.examples">ComplexKeyExample.Key</a>&gt;</span></div>
 <div class="block"><p>복합 키를 가진 도메인 객체 예시.</p>
-<p><a href="ComplexKeyExample.Key.html" title="class in com.yidigun.base.examples"><code>ComplexKeyExample.Key</code></a> 레코드는 <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link"><code>Comparable</code></a> 인터페이스를구현하여 정렬에 사용할 수 있다.</p>
+<p>이 예시 클래스는 setter 메소드를 지원하지 않는 불변 클래스이며
+lombok의 <a href="https://javadoc.io/doc/org.projectlombok/lombok/1.18.38/lombok/Builder.html" title="class or interface in lombok" class="external-link"><code>Builder</code></a>를 사용하여 빌더 패턴으로 객체를 생성한다.</p>
+<p>또한 <a href="https://javadoc.io/doc/org.projectlombok/lombok/1.18.38/lombok/EqualsAndHashCode.html" title="class or interface in lombok" class="external-link"><code>EqualsAndHashCode</code></a>를 사용하지 않고 직접 <a href="#equals(java.lang.Object)"><code>equals(Object)</code></a>와 <a href="#hashCode()"><code>hashCode()</code></a>를 구현하였다.</p>
 </div>
 </div>
 </section>
@@ -113,9 +127,58 @@ implements <a href="../DomainObject.html" title="interface in com.yidigun.base">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="ComplexKeyExample.Key.html" class="type-name-link" title="class in com.yidigun.base.examples">ComplexKeyExample.Key</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="ComplexKeyExample.ComplexKeyExampleBuilder.html" class="type-name-link" title="class in com.yidigun.base.examples">ComplexKeyExample.ComplexKeyExampleBuilder</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">lombok @Builder 용 빌더클래스</div>
+</div>
+<div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="ComplexKeyExample.Key.html" class="type-name-link" title="class in com.yidigun.base.examples">ComplexKeyExample.Key</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block"><a href="ComplexKeyExample.html" title="class in com.yidigun.base.examples"><code>ComplexKeyExample</code></a>의 PK 타입 클래스.</div>
+</div>
+</div>
+</section>
+</li>
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>private final <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
+<div class="col-second even-row-color"><code><a href="#createDate" class="member-name-link">createDate</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Logging field</div>
+</div>
+<div class="col-first odd-row-color"><code>private final int</code></div>
+<div class="col-second odd-row-color"><code><a href="#keyPart1" class="member-name-link">keyPart1</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Primary Key field #1</div>
+</div>
+<div class="col-first even-row-color"><code>private final <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#keyPart2" class="member-name-link">keyPart2</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Primary Key field #2</div>
+</div>
+<div class="col-first odd-row-color"><code>private final <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#otherField1" class="member-name-link">otherField1</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Semantic field</div>
+</div>
+<div class="col-first even-row-color"><code>private final <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#otherField2" class="member-name-link">otherField2</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Semantic field</div>
+</div>
+<div class="col-first odd-row-color"><code>private final <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#updateDate" class="member-name-link">updateDate</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Logging field</div>
+</div>
 </div>
 </section>
 </li>
@@ -145,21 +208,29 @@ implements <a href="../DomainObject.html" title="interface in com.yidigun.base">
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">의미론적 동등성을 위한 비교 메소드.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equalsAllFields(java.lang.Object)" class="member-name-link">equalsAllFields</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link"><code>Object.equals(Object)</code></a>와 <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link"><code>Object.hashCode()</code></a>는
-의미론적인 동등성을 위해 필요한 필드만을 비교에 포함시킨다.</div>
+<div class="block">모든 필드를 비교하는 메소드.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ComplexKeyExample.Key.html" title="class in com.yidigun.base.examples">ComplexKeyExample.Key</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPrimaryKey()" class="member-name-link">getPrimaryKey</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equalsCoreFields(com.yidigun.base.examples.ComplexKeyExample)" class="member-name-link">equalsCoreFields</a><wbr>(<a href="ComplexKeyExample.html" title="class in com.yidigun.base.examples">ComplexKeyExample</a>&nbsp;that)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">PK와 값데이터만 비교하는 메소드</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ComplexKeyExample.Key.html" title="class in com.yidigun.base.examples">ComplexKeyExample.Key</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPrimaryKey()" class="member-name-link">getPrimaryKey</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block"><a href="../PrimaryKey.html" title="interface in com.yidigun.base"><code>PrimaryKey</code></a>를 구현한 키 객체를 반환한다.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block"><a href="#equals(java.lang.Object)"><code>equals(Object)</code></a>와 동일한 기준(의미론적 동등성에 관련된 필드)만의 해시코드를 계산한다.</div>
+</div>
 </div>
 </div>
 </div>
@@ -175,6 +246,68 @@ implements <a href="../DomainObject.html" title="interface in com.yidigun.base">
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="keyPart1">
+<h3>keyPart1</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">keyPart1</span></div>
+<div class="block">Primary Key field #1</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="keyPart2">
+<h3>keyPart2</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">keyPart2</span></div>
+<div class="block">Primary Key field #2</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="otherField1">
+<h3>otherField1</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">otherField1</span></div>
+<div class="block">Semantic field</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="otherField2">
+<h3>otherField2</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">otherField2</span></div>
+<div class="block">Semantic field</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="createDate">
+<h3>createDate</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">createDate</span></div>
+<div class="block">Logging field</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="updateDate">
+<h3>updateDate</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">updateDate</span></div>
+<div class="block">Logging field</div>
+</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -217,9 +350,27 @@ implements <a href="../DomainObject.html" title="interface in com.yidigun.base">
 <h3>hashCode</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">hashCode</span>()</div>
+<div class="block"><a href="#equals(java.lang.Object)"><code>equals(Object)</code></a>와 동일한 기준(의미론적 동등성에 관련된 필드)만의 해시코드를 계산한다.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
+<dt>Returns:</dt>
+<dd>해시코드</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="equalsCoreFields(com.yidigun.base.examples.ComplexKeyExample)">
+<h3>equalsCoreFields</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equalsCoreFields</span><wbr><span class="parameters">(<a href="ComplexKeyExample.html" title="class in com.yidigun.base.examples">ComplexKeyExample</a>&nbsp;that)</span></div>
+<div class="block">PK와 값데이터만 비교하는 메소드</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>that</code> - 비교할 대상 객체</dd>
+<dt>Returns:</dt>
+<dd>true: 동등(의미론적), false: 비동등</dd>
 </dl>
 </div>
 </section>
@@ -229,9 +380,18 @@ implements <a href="../DomainObject.html" title="interface in com.yidigun.base">
 <h3>equals</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</span></div>
+<div class="block"><p>의미론적 동등성을 위한 비교 메소드. PK와 값데이터만 비교 대상으로 포함하고
+로그, 캐시 용 필드는 비교에서 제외한다.</p>
+<p>비교 로직은 <a href="#equalsCoreFields(com.yidigun.base.examples.ComplexKeyExample)"><code>equalsCoreFields(ComplexKeyExample)</code></a> private 메소드로 분리되어
+<a href="#equalsAllFields(java.lang.Object)"><code>equalsAllFields(Object)</code></a>에서 재활용 할 수 있다.</p>
+</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>obj</code> - 비교할 대상 객체</dd>
+<dt>Returns:</dt>
+<dd>true: 동등(의미론적), false: 비동등</dd>
 </dl>
 </div>
 </section>
@@ -241,22 +401,16 @@ implements <a href="../DomainObject.html" title="interface in com.yidigun.base">
 <h3>equalsAllFields</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equalsAllFields</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</span></div>
-<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../DomainObject.html#equalsAllFields(java.lang.Object)">DomainObject</a></code></span></div>
-<div class="block"><p><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link"><code>Object.equals(Object)</code></a>와 <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link"><code>Object.hashCode()</code></a>는
-의미론적인 동등성을 위해 필요한 필드만을 비교에 포함시킨다.
-만약 모든 필드를 비교해야 하는 요구사항이 있는 경우 이 메서드를 사용하도록 한다.</p>
-<p>기본 메소드는 <a href="https://mvnrepository.com/artifact/org.apache.commons/commons-lang3">Apache Commons Lang</a>의
-<a href="https://javadoc.io/doc/org.apache.commons/commons-lang3/latest/org/apache/commons/lang3/builder/EqualsBuilder.html#reflectionEquals(java.lang.Object,java.lang.Object,java.lang.String...)" title="class or interface in org.apache.commons.lang3.builder" class="external-link"><code>EqualsBuilder.reflectionEquals(Object, Object, String...)</code></a>를
-제외 필드 설정 없이 모든 필드를 비교하도록 하여 사용한다.
-리플렉션 API의 오버헤드가 문제가 되거나, 일부 필드를 제외해야 하는 경우라면 직접 <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Override.html" title="class or interface in java.lang" class="external-link"><code>Override</code></a>하여 구현하도록 한다.</p>
-</div>
+<div class="block">모든 필드를 비교하는 메소드.
+<a href="#equalsCoreFields(com.yidigun.base.examples.ComplexKeyExample)"><code>equalsCoreFields(ComplexKeyExample)</code></a>를 이용하여 의미론적 동등성을 평가한 후
+로그 필드(생성일, 수정일 등)도 비교한다.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../DomainObject.html#equalsAllFields(java.lang.Object)">equalsAllFields</a></code>&nbsp;in interface&nbsp;<code><a href="../DomainObject.html" title="interface in com.yidigun.base">DomainObject</a>&lt;<a href="ComplexKeyExample.Key.html" title="class in com.yidigun.base.examples">ComplexKeyExample.Key</a>&gt;</code></dd>
 <dt>Parameters:</dt>
-<dd><code>obj</code> - 비교할 객체</dd>
+<dd><code>obj</code> - 비교할 대상 객체</dd>
 <dt>Returns:</dt>
-<dd>모든 필드가 같으면 true, 아니면 false</dd>
+<dd>true: 동등(기술적), false: 비동등</dd>
 </dl>
 </div>
 </section>

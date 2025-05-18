@@ -62,8 +62,15 @@ loadScripts(document, 'script');</script>
 <ol class="toc-list">
 <li><a href="#" tabindex="0">Description</a></li>
 <li><a href="#nested-class-summary" tabindex="0">Nested Class Summary</a></li>
+<li><a href="#field-summary" tabindex="0">Field Summary</a></li>
 <li><a href="#constructor-summary" tabindex="0">Constructor Summary</a></li>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
+<li><a href="#field-detail" tabindex="0">Field Details</a>
+<ol class="toc-list">
+<li><a href="#buckets" tabindex="0">buckets</a></li>
+<li><a href="#entryCopyMethod" tabindex="0">entryCopyMethod</a></li>
+</ol>
+</li>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
 <ol class="toc-list">
 <li><a href="#%3Cinit%3E()" tabindex="0">HashTable()</a></li>
@@ -111,9 +118,30 @@ implements <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static enum&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="HashTable.EntryCopyMethod.html" class="type-name-link" title="enum class in effectivejava.chapter03.item13">HashTable.EntryCopyMethod</a></code></div>
+<div class="col-first even-row-color"><code>private static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="HashTable.Entry.html" class="type-name-link" title="class in effectivejava.chapter03.item13">HashTable.Entry</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static enum&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="HashTable.EntryCopyMethod.html" class="type-name-link" title="enum class in effectivejava.chapter03.item13">HashTable.EntryCopyMethod</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>private <a href="HashTable.Entry.html" title="class in effectivejava.chapter03.item13">HashTable.Entry</a>[]</code></div>
+<div class="col-second even-row-color"><code><a href="#buckets" class="member-name-link">buckets</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>private static <a href="HashTable.EntryCopyMethod.html" title="enum class in effectivejava.chapter03.item13">HashTable.EntryCopyMethod</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#entryCopyMethod" class="member-name-link">entryCopyMethod</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -169,6 +197,30 @@ implements <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="buckets">
+<h3>buckets</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="HashTable.Entry.html" title="class in effectivejava.chapter03.item13">HashTable.Entry</a>[]</span>&nbsp;<span class="element-name">buckets</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="entryCopyMethod">
+<h3>entryCopyMethod</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="HashTable.EntryCopyMethod.html" title="enum class in effectivejava.chapter03.item13">HashTable.EntryCopyMethod</a></span>&nbsp;<span class="element-name">entryCopyMethod</span></div>
+</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">

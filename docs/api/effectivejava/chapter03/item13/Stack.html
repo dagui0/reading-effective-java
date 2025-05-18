@@ -61,8 +61,16 @@ loadScripts(document, 'script');</script>
 <button class="hide-sidebar"><span>Hide sidebar&nbsp;</span>&#10094;</button><button class="show-sidebar">&#10095;<span>&nbsp;Show sidebar</span></button>
 <ol class="toc-list">
 <li><a href="#" tabindex="0">Description</a></li>
+<li><a href="#field-summary" tabindex="0">Field Summary</a></li>
 <li><a href="#constructor-summary" tabindex="0">Constructor Summary</a></li>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
+<li><a href="#field-detail" tabindex="0">Field Details</a>
+<ol class="toc-list">
+<li><a href="#elements" tabindex="0">elements</a></li>
+<li><a href="#size" tabindex="0">size</a></li>
+<li><a href="#DEFAULT_INITIAL_CAPACITY" tabindex="0">DEFAULT_INITIAL_CAPACITY</a></li>
+</ol>
+</li>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
 <ol class="toc-list">
 <li><a href="#%3Cinit%3E()" tabindex="0">Stack()</a></li>
@@ -72,6 +80,7 @@ loadScripts(document, 'script');</script>
 <ol class="toc-list">
 <li><a href="#push(java.lang.Object)" tabindex="0">push(Object)</a></li>
 <li><a href="#pop()" tabindex="0">pop()</a></li>
+<li><a href="#ensureCapacity()" tabindex="0">ensureCapacity()</a></li>
 <li><a href="#clone()" tabindex="0">clone()</a></li>
 </ol>
 </li>
@@ -99,6 +108,27 @@ implements <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>private static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#DEFAULT_INITIAL_CAPACITY" class="member-name-link">DEFAULT_INITIAL_CAPACITY</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]</code></div>
+<div class="col-second odd-row-color"><code><a href="#elements" class="member-name-link">elements</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>private int</code></div>
+<div class="col-second even-row-color"><code><a href="#size" class="member-name-link">size</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -126,12 +156,17 @@ implements <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Stack.html" title="class in effectivejava.chapter03.item13">Stack</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clone()" class="member-name-link">clone</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pop()" class="member-name-link">pop</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#push(java.lang.Object)" class="member-name-link">push</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;e)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#ensureCapacity()" class="member-name-link">ensureCapacity</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">적어도 하나 이상의 원소를 담을 공간을 보장한다.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pop()" class="member-name-link">pop</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#push(java.lang.Object)" class="member-name-link">push</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;e)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -144,6 +179,46 @@ implements <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="elements">
+<h3>elements</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]</span>&nbsp;<span class="element-name">elements</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="size">
+<h3>size</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">size</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="DEFAULT_INITIAL_CAPACITY">
+<h3>DEFAULT_INITIAL_CAPACITY</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">DEFAULT_INITIAL_CAPACITY</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../constant-values.html#effectivejava.chapter03.item13.Stack.DEFAULT_INITIAL_CAPACITY">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -178,6 +253,16 @@ implements <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base
 <h3>pop</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name">pop</span>()</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="ensureCapacity()">
+<h3>ensureCapacity</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">ensureCapacity</span>()</div>
+<div class="block">적어도 하나 이상의 원소를 담을 공간을 보장한다.
+ 배열의 길이를 늘려야 할 때마다 대략 두배가 늘어난다.</div>
 </div>
 </section>
 </li>

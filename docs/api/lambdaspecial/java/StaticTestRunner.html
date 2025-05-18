@@ -61,6 +61,7 @@ loadScripts(document, 'script');</script>
 <button class="hide-sidebar"><span>Hide sidebar&nbsp;</span>&#10094;</button><button class="show-sidebar">&#10095;<span>&nbsp;Show sidebar</span></button>
 <ol class="toc-list">
 <li><a href="#" tabindex="0">Description</a></li>
+<li><a href="#nested-class-summary" tabindex="0">Nested Class Summary</a></li>
 <li><a href="#constructor-summary" tabindex="0">Constructor Summary</a></li>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
@@ -71,6 +72,9 @@ loadScripts(document, 'script');</script>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
 <li><a href="#runTest(java.lang.Class)" tabindex="0">runTest(Class)</a></li>
+<li><a href="#invokeStaticTestMethod(java.lang.reflect.Method)" tabindex="0">invokeStaticTestMethod(Method)</a></li>
+<li><a href="#invokeStaticThrowTestMethod(java.lang.reflect.Method)" tabindex="0">invokeStaticThrowTestMethod(Method)</a></li>
+<li><a href="#invokeStaticExceptionTestMethod(java.lang.reflect.Method)" tabindex="0">invokeStaticExceptionTestMethod(Method)</a></li>
 </ol>
 </li>
 </ol>
@@ -92,6 +96,24 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<li>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>(package private) static final record&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="StaticTestRunner.TestResult.html" class="type-name-link" title="class in lambdaspecial.java">StaticTestRunner.TestResult</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>(package private) static enum&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="StaticTestRunner.TestType.html" class="type-name-link" title="enum class in lambdaspecial.java">StaticTestRunner.TestType</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -116,9 +138,24 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#runTest(java.lang.Class)" class="member-name-link">runTest</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../effectivejava/chapter06/item39/StaticTestRunner.html" title="class in effectivejava.chapter06.item39">StaticTestRunner</a>&gt;&nbsp;testClass)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="StaticTestRunner.TestResult.html" title="class in lambdaspecial.java">StaticTestRunner.TestResult</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeStaticExceptionTestMethod(java.lang.reflect.Method)" class="member-name-link">invokeStaticExceptionTestMethod</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block"><a href="../../effectivejava/chapter06/item39/StaticExceptionTest.html" title="annotation interface in effectivejava.chapter06.item39"><code>StaticExceptionTest</code></a> 애너테이션이 붙은 테스트 메서드를 실행한다.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="StaticTestRunner.TestResult.html" title="class in lambdaspecial.java">StaticTestRunner.TestResult</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeStaticTestMethod(java.lang.reflect.Method)" class="member-name-link">invokeStaticTestMethod</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block"><a href="../../effectivejava/chapter06/item39/StaticTest.html" title="annotation interface in effectivejava.chapter06.item39"><code>StaticTest</code></a> 애너테이션이 붙은 테스트 메서드를 실행한다.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="StaticTestRunner.TestResult.html" title="class in lambdaspecial.java">StaticTestRunner.TestResult</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeStaticThrowTestMethod(java.lang.reflect.Method)" class="member-name-link">invokeStaticThrowTestMethod</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block"><a href="../../effectivejava/chapter06/item39/StaticThrowTest.html" title="annotation interface in effectivejava.chapter06.item39"><code>StaticThrowTest</code></a> 애너테이션이 붙은 테스트 메서드를 실행한다.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#runTest(java.lang.Class)" class="member-name-link">runTest</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../effectivejava/chapter06/item39/StaticTestRunner.html" title="class in effectivejava.chapter06.item39">StaticTestRunner</a>&gt;&nbsp;testClass)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -161,6 +198,57 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code></dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="invokeStaticTestMethod(java.lang.reflect.Method)">
+<h3>invokeStaticTestMethod</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="StaticTestRunner.TestResult.html" title="class in lambdaspecial.java">StaticTestRunner.TestResult</a></span>&nbsp;<span class="element-name">invokeStaticTestMethod</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m)</span></div>
+<div class="block"><a href="../../effectivejava/chapter06/item39/StaticTest.html" title="annotation interface in effectivejava.chapter06.item39"><code>StaticTest</code></a> 애너테이션이 붙은 테스트 메서드를 실행한다.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>m</code> - 실행할 테스트 메서드</dd>
+<dt>Returns:</dt>
+<dd>테스트 결과</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code> - 실행 오류 발생시 테스트를 중단한다.</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="invokeStaticThrowTestMethod(java.lang.reflect.Method)">
+<h3>invokeStaticThrowTestMethod</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="StaticTestRunner.TestResult.html" title="class in lambdaspecial.java">StaticTestRunner.TestResult</a></span>&nbsp;<span class="element-name">invokeStaticThrowTestMethod</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m)</span></div>
+<div class="block"><a href="../../effectivejava/chapter06/item39/StaticThrowTest.html" title="annotation interface in effectivejava.chapter06.item39"><code>StaticThrowTest</code></a> 애너테이션이 붙은 테스트 메서드를 실행한다.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>m</code> - 실행할 테스트 메서드</dd>
+<dt>Returns:</dt>
+<dd>테스트 결과</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code> - 실행 오류 발생시 테스트를 중단한다.</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="invokeStaticExceptionTestMethod(java.lang.reflect.Method)">
+<h3>invokeStaticExceptionTestMethod</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="StaticTestRunner.TestResult.html" title="class in lambdaspecial.java">StaticTestRunner.TestResult</a></span>&nbsp;<span class="element-name">invokeStaticExceptionTestMethod</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m)</span></div>
+<div class="block"><a href="../../effectivejava/chapter06/item39/StaticExceptionTest.html" title="annotation interface in effectivejava.chapter06.item39"><code>StaticExceptionTest</code></a> 애너테이션이 붙은 테스트 메서드를 실행한다.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>m</code> - 실행할 테스트 메서드</dd>
+<dt>Returns:</dt>
+<dd>테스트 결과</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code> - 실행 오류 발생시 테스트를 중단한다.</dd>
 </dl>
 </div>
 </section>

@@ -14,18 +14,24 @@ import java.time.Instant;
 @EqualsAndHashCode
 public class Member implements DomainObject<MemberKey>, MemberKey.Aware {
 
-    private long memberNo;          // primary key
-    private String name;            // semantic field
-    private Instant registerDate;   // semantic field
+    /// primary key
+    private long memberNo;
+    /// semantic field
+    private String name;
+    /// semantic field
+    private Instant registerDate;
+    /// logging field
     @EqualsAndHashCode.Exclude
-    private Instant createDate;     // logging field
+    private Instant createDate;
+    /// logging field
     @EqualsAndHashCode.Exclude
-    private Instant updateDate;     // logging field
+    private Instant updateDate;
 
     @Override
     public MemberKey getPrimaryKey() {
         return MemberKey.of(memberNo);
     }
 
+    /// lombok @Builder 용 빌더클래스
     public static class MemberBuilder implements MemberKey.Aware.Builder<MemberBuilder> {}
 }

@@ -75,6 +75,9 @@ import java.util.Optional;
 /// * 마찬가지로 [MemberKey.Aware#getMemberKey()] 메소드는 `memberNo <= 0`인 경우 `null`을 리턴한다.
 ///
 /// @see PrimaryKey
+/// @see Member
+/// @see Address
+/// @see Post
 ///
 @EqualsAndHashCode
 public final class MemberKey implements PrimaryKey, Comparable<MemberKey> {
@@ -82,6 +85,8 @@ public final class MemberKey implements PrimaryKey, Comparable<MemberKey> {
     /// `null`로 간주할 `memberNo`의 값.
     /// `memberNo`가 `<= 0`인 경우 `null`로 간주한다.
     public static final long NULL_MEMBER_NO = 0L;
+
+    /// 회원번호
     private final long memberNo;
 
     /// 생성자. `memberNo`가 올바르지 않은 경우(`<= 0`)

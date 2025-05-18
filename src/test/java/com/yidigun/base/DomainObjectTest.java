@@ -1,8 +1,6 @@
 package com.yidigun.base;
 
 import com.yidigun.base.examples.*;
-import lombok.Builder;
-import lombok.Getter;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -13,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DomainObjectTest {
 
     @Test
-    public void testEquals() {
+    public void testSemanticEquality() {
 
         Instant now = Instant.now();
         ComplexKeyExample original = ComplexKeyExample.builder()
@@ -34,8 +32,11 @@ public class DomainObjectTest {
                 .updateDate(now2)
                 .build();
 
+        // semantic equality
         assertEquals(original, modified);
         assertEquals(original.hashCode(), modified.hashCode());
+
+        // technical equality
         assertFalse(original.equalsAllFields(modified));
     }
 
@@ -43,10 +44,13 @@ public class DomainObjectTest {
     public void testComparableKeyType() {
 
         // uncomparable pk
-        NonComparableKeyExample example1 = NonComparableKeyExample.builder()
-                .no(1)
-                .name("example")
-                .build();
+        ComplexKeyExample example1 = ComplexKeyExample.builder()
+                .keyPart1(1)
+                .keyPart2("A")
+                .otherField1("field1")
+                .otherField2("field2")
+                .createDate(Instant.now())
+                .updateDate(Instant.now()).build();
 
         // 컴파일 경고 발생하고, 실제 런타임에 예외 발생함
         assertThrows(ClassCastException.class, () -> {
@@ -58,14 +62,10 @@ public class DomainObjectTest {
 
         // comparable pk
         Instant now = Instant.now();
-        ComplexKeyExample example2 = ComplexKeyExample.builder()
-                .keyPart1(1)
-                .keyPart2("A")
-                .otherField1("field1")
-                .otherField2("field2")
-                .createDate(now)
-                .updateDate(now)
-                .build();
+        SimpleKeyExample example2 = new SimpleKeyExample();
+        example2.setNo(1);
+        example2.setName("example");
+        example2.setCreateDate(now);
 
         assertDoesNotThrow(() -> {
             // <K extends PrimaryKey & Comparable<K>, V extends BaseDomainObject<K>>
@@ -82,83 +82,84 @@ public class DomainObjectTest {
     }
 
     @Test
-    public void testIndependentPrimaryKey() {
+    public void testIndependentPrimaryKeyType() {
 
+        MemberKey someMemberKey = MemberKey.of(1);
+
+        // Master table
         Instant now = Instant.now();
         Member member = Member.builder()
-                .memberKey(MemberKey.of(1))
+                .memberKey(someMemberKey)
                 .name("member1")
                 .registerDate(now)
                 .createDate(now)
                 .updateDate(now)
                 .build();
 
-        assertEquals(member.getMemberNo(), member.getPrimaryKey().longValue());
+        assertEquals(someMemberKey.longValue(), member.getPrimaryKey().longValue());
+        assertEquals(someMemberKey.longValue(), member.getMemberKey().longValue());
 
+        // Child table
         Address address = Address.builder()
-                .memberKey(member.getPrimaryKey())
+                .memberKey(someMemberKey)
                 .addressNo(1)
                 .address("address1")
                 .createDate(now)
                 .build();
 
-        assertEquals(address.getMemberNo(), address.getPrimaryKey().getMemberKey().longValue());
+        assertEquals(someMemberKey, address.getMemberKey());
+        // Address.Key is also MemberKey.Aware
+        assertEquals(someMemberKey.longValue(), address.getPrimaryKey().getMemberKey().longValue());
 
+        // Address.Key type is a standalone value type.
         Address.Key key = Address.Key.of(member.getPrimaryKey(), 1);
         assertEquals(key, address.getPrimaryKey());
 
+        // Post table has reference to Member table
         Post post = Post.builder()
-                .memberKey(member.getPrimaryKey())
                 .postNo(1)
                 .title("title")
                 .content("content")
+                .memberKey(someMemberKey)
                 .createDate(now)
                 .updateDate(now)
                 .build();
 
-        assertEquals(post.getMemberNo(), post.getMemberKey().longValue());
+        assertEquals(someMemberKey, post.getMemberKey());
+        assertEquals(someMemberKey.longValue(), post.getMemberKey().longValue());
     }
 
     @Test
     public void testResidentId() {
 
-        ResidentId residentId = new ResidentId("1111111111118");
+        ResidentId residentId = ResidentId.of("1111111111118");
         assertTrue(residentId.isMale());
         assertTrue(residentId.isValid());
 
-        String[] s = { "1111111111118", "1234561222331" };
-        for (String ss : s) {
-            ResidentId id = new ResidentId(ss);
+        String[] valids = { "1111111111118", "1234561222331" };
+        for (String s : valids) {
+            ResidentId id = ResidentId.of(s);
             assertTrue(id.isValid());
         }
-    }
-}
 
-@Getter
-@Builder
-class NonComparableKeyExample implements DomainObject<NonComparableKeyExample.Key> {
-    private int no;
-    private String name;
+        String[] nonValids = { "1234561234567", "9553179792331" };
+        for (String s : nonValids) {
+            ResidentId id = ResidentId.ofUnchecked(s);
+            assertFalse(id.isValid());
+        }
 
-    public static record Key(int no) implements PrimaryKey {
-    }
+        // parse alt pattern
+        ResidentId id1 = ResidentId.of("1234561222331");
+        ResidentId id2 = ResidentId.of("123456-1222331");
+        assertEquals(id1, id2);
 
-    @Override
-    public Key getPrimaryKey() {
-        return new Key(no);
-    }
+        // Birthday
+        ResidentId id3 = ResidentId.of("1111111111118");
 
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) return true;
-        if (that == null || getClass() != that.getClass()) return false;
-        NonComparableKeyExample thatObj = (NonComparableKeyExample) that;
-        return Objects.equals(getPrimaryKey(), thatObj.getPrimaryKey()) &&
-                Objects.equals(name, thatObj.name);
-    }
+        assertEquals("111111", id3.subSequence(0, 6));
 
-    @Override
-    public int hashCode() {
-        return Integer.hashCode(no);
+        Calendar cal = Calendar.getInstance();
+        cal.set(1911, 10, 11);
+        assertEquals(cal.toInstant(), id3.getBirthday());
     }
 }

@@ -62,8 +62,17 @@ loadScripts(document, 'script');</script>
 <ol class="toc-list">
 <li><a href="#" tabindex="0">Description</a></li>
 <li><a href="#nested-class-summary" tabindex="0">Nested Class Summary</a></li>
+<li><a href="#field-summary" tabindex="0">Field Summary</a></li>
 <li><a href="#constructor-summary" tabindex="0">Constructor Summary</a></li>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
+<li><a href="#field-detail" tabindex="0">Field Details</a>
+<ol class="toc-list">
+<li><a href="#memberNo" tabindex="0">memberNo</a></li>
+<li><a href="#addressNo" tabindex="0">addressNo</a></li>
+<li><a href="#address" tabindex="0">address</a></li>
+<li><a href="#createDate" tabindex="0">createDate</a></li>
+</ol>
+</li>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
 <ol class="toc-list">
 <li><a href="#%3Cinit%3E()" tabindex="0">Address()</a></li>
@@ -111,14 +120,50 @@ implements <a href="../DomainObject.html" title="interface in com.yidigun.base">
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="Address.AddressBuilder.html" class="type-name-link" title="class in com.yidigun.base.examples">Address.AddressBuilder</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">lombok @Builder 용 빌더클래스</div>
+</div>
 <div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="Address.Key.html" class="type-name-link" title="class in com.yidigun.base.examples">Address.Key</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">PrimaryKey 클래스</div>
+</div>
 </div>
 <div class="inherited-list">
 <h3 id="nested-classes-inherited-from-class-com.yidigun.base.examples.MemberKey.Aware">Nested classes/interfaces inherited from interface&nbsp;com.yidigun.base.examples.<a href="MemberKey.Aware.html" title="interface in com.yidigun.base.examples">MemberKey.Aware</a></h3>
 <code><a href="MemberKey.Aware.Builder.html" title="interface in com.yidigun.base.examples">MemberKey.Aware.Builder</a>&lt;<a href="MemberKey.Aware.Builder.html" title="type parameter in MemberKey.Aware.Builder">B</a> extends <a href="MemberKey.Aware.Builder.html" title="interface in com.yidigun.base.examples">MemberKey.Aware.Builder</a>&lt;<a href="MemberKey.Aware.Builder.html" title="type parameter in MemberKey.Aware.Builder">B</a>&gt;&gt;</code></div>
+</section>
+</li>
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>private final <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#address" class="member-name-link">address</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">semantic field</div>
+</div>
+<div class="col-first odd-row-color"><code>private final long</code></div>
+<div class="col-second odd-row-color"><code><a href="#addressNo" class="member-name-link">addressNo</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">primary key</div>
+</div>
+<div class="col-first even-row-color"><code>private final <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
+<div class="col-second even-row-color"><code><a href="#createDate" class="member-name-link">createDate</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">logging field</div>
+</div>
+<div class="col-first odd-row-color"><code>private final long</code></div>
+<div class="col-second odd-row-color"><code><a href="#memberNo" class="member-name-link">memberNo</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">primary key from Member</div>
+</div>
+</div>
 </section>
 </li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -168,6 +213,50 @@ implements <a href="../DomainObject.html" title="interface in com.yidigun.base">
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="memberNo">
+<h3>memberNo</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">memberNo</span></div>
+<div class="block">primary key from Member</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="addressNo">
+<h3>addressNo</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">addressNo</span></div>
+<div class="block">primary key</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="address">
+<h3>address</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">address</span></div>
+<div class="block">semantic field</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="createDate">
+<h3>createDate</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">private final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">createDate</span></div>
+<div class="block">logging field</div>
+</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">

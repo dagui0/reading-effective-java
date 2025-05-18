@@ -16,21 +16,30 @@ import java.time.Instant;
 @EqualsAndHashCode
 public class Post implements DomainObject<Post.Key>, MemberKey.Aware {
 
-    private long postNo;          // primary key
-    private String title;         // semantic field
-    private String content;       // semantic field
-    private long memberNo;        // semantic field from Member
+    /// primary key
+    private long postNo;
+    /// semantic field
+    private String title;
+    /// semantic field
+    private String content;
+    /// semantic field from Member
+    private long memberNo;
+    /// logging field
     @EqualsAndHashCode.Exclude
-    private Instant createDate;   // logging field
+    private Instant createDate;
+    /// logging field
     @EqualsAndHashCode.Exclude
-    private Instant updateDate;   // logging field
+    private Instant updateDate;
 
     @Override
     public Post.Key getPrimaryKey() {
         return new Key(postNo);
     }
 
+    /// lombok @Builder 용 빌더클래스
     public static class PostBuilder implements MemberKey.Aware.Builder<PostBuilder> {}
 
+    /// PrimaryKey 클래스
+    /// @param postNo 게시물 일련번호
     public static record Key(long postNo) implements PrimaryKey {}
 }
