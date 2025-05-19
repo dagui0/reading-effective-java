@@ -45,7 +45,7 @@ import java.util.Objects;
 ///     private Date createDate; // logging field
 ///
 ///     // 중첩 record를 이용하여 PrimaryKey 구현체를 간편하게 만들 수 있다. (Java 14 이상)
-///     public static record Key(int no) implements PrimaryKey, Comparable<Key> {
+///     public record Key(int no) implements PrimaryKey, Comparable<Key> {
 ///        @Override
 ///        public int compareTo(@NotNull Key o) { return Integer.compare(this.no, o.no()); }
 ///     }
@@ -68,7 +68,7 @@ import java.util.Objects;
 ///     private final int keyPart1;      // primary key
 ///     private final String keyPart2;   // primary key
 ///     ...
-///     public static record Key(int keyPart1, String keyPart2) {}
+///     public record Key(int keyPart1, String keyPart2) {}
 ///     ...
 ///     /// @Builder 용 빌더클래스
 ///     public static class ComplexKeyExampleBuilder {

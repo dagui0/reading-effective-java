@@ -37,9 +37,13 @@ public class Post implements DomainObject<Post.Key>, MemberKey.Aware {
     }
 
     /// lombok @Builder 용 빌더클래스
-    public static class PostBuilder implements MemberKey.Aware.Builder<PostBuilder> {}
+    public static class PostBuilder implements MemberKey.Aware.Builder<PostBuilder> {
+        PostBuilder primaryKey(Post.Key key) {
+            return postNo(key.postNo());
+        }
+    }
 
     /// PrimaryKey 클래스
     /// @param postNo 게시물 일련번호
-    public static record Key(long postNo) implements PrimaryKey {}
+    public record Key(long postNo) implements PrimaryKey {}
 }

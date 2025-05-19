@@ -2,6 +2,7 @@ package com.yidigun.base.examples;
 
 import com.yidigun.base.DomainObject;
 import com.yidigun.base.PrimaryKey;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +34,7 @@ public class SimpleKeyExample implements DomainObject<SimpleKeyExample.Key> {
     ///
     /// [Comparable]을 구현하여 크기 비교 및 정렬에 사용할 수 있도록 확장되어있다.
     /// @param no PK 필드
-    public static record Key(int no) implements PrimaryKey, Comparable<Key> {
+    public record Key(int no) implements PrimaryKey, Comparable<Key> {
         @Override
         public int compareTo(@NotNull Key o) {
             return Integer.compare(this.no, o.no());

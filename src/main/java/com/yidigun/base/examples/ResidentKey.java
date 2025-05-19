@@ -29,13 +29,13 @@ public final class ResidentKey implements PrimaryKey, CharSequence, Comparable<R
     /// 주민등록번호
     private final String residentId;
 
-    /// 주민번호의 유효성을 검사하지 않고 생성한다.
+    /// 주민등록번호의 유효성을 검사하지 않고 생성한다.
     /// @param residentId 주민등록번호 문자열
     private ResidentKey(String residentId) {
         this.residentId = residentId;
     }
 
-    /// 주민번호의 유효성을 검사하여 올바른 경우만 생성한다.
+    /// 주민등록번호의 유효성을 검사하여 올바른 경우만 생성한다.
     /// 유효성이 검증되지 않은 번호에 대해서는 예외를 던진다.
     /// @param residentId 주민등록번호 문자열
     /// @return ResidentId 주민등록번호 객체(성공적인 경우)
@@ -52,7 +52,7 @@ public final class ResidentKey implements PrimaryKey, CharSequence, Comparable<R
         return new ResidentKey(residentId);
     }
 
-    /// 주민등록 번호 유효성을 검사하여 성공적일 경우, Optional로 감싸서 반환한다.
+    /// 주민등록번호 유효성을 검사하여 성공적일 경우, Optional로 감싸서 반환한다.
     /// 실패할 경우 Optional.empty()를 반환한다.
     ///
     /// @param residentId 주민등록번호
@@ -107,7 +107,7 @@ public final class ResidentKey implements PrimaryKey, CharSequence, Comparable<R
         return residentId.hashCode();
     }
 
-    /// 기본형식(1111111111118) 주민등록 번호 문자열을 리턴한다.
+    /// 기본형식(1111111111118) 주민등록번호 문자열을 리턴한다.
     /// @return 주민등록번호 문자열
     @Override
     public @NotNull String toString() {

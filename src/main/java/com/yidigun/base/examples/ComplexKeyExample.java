@@ -37,7 +37,7 @@ public final class ComplexKeyExample implements DomainObject<ComplexKeyExample.K
     /// 복합키 이지만 `record`를 이용하여 매우 단순한 코드로 정의 가능하다.
     /// @param keyPart1 PK 필드 #1
     /// @param keyPart2 PK 필드 #2
-    public static record Key(int keyPart1, String keyPart2) implements PrimaryKey {}
+    public record Key(int keyPart1, String keyPart2) implements PrimaryKey {}
 
     /// lombok @Builder 용 빌더클래스
     ///

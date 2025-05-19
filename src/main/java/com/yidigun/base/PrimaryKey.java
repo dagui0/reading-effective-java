@@ -27,7 +27,7 @@ import java.util.Map;
 /// ```
 /// public class Example implements DomainObject<Example.Key> {
 ///     primary int no; // primary key
-///     public static record Key(int no) implements PrimaryKey, Comparable<Key> {
+///     public record Key(int no) implements PrimaryKey, Comparable<Key> {
 ///         @Override
 ///         public int compareTo(@NotNull Key key) {
 ///             return Integer.compare(this.no, key.no());
@@ -119,7 +119,7 @@ import java.util.Map;
 ///     ...
 ///     // Address.Key 역시 MemberKey.Aware임
 ///     // 단, record 클래스에는 @Getter를 붙일 수 없다.
-///     public static record Key(long memberNo, long addressNo) implements PrimaryKey, MemberKey.Aware {
+///     public record Key(long memberNo, long addressNo) implements PrimaryKey, MemberKey.Aware {
 ///         @Override public long getMemberNo() { return memberNo; }
 ///     }
 ///     ...
@@ -141,7 +141,7 @@ import java.util.Map;
 ///     private long memberNo; // semantic field from Member
 ///     ...
 ///     @Override public Post.Key getPrimaryKey() { return new Post.Key(postNo); }
-///     public static record Key(long postNo) implements PrimaryKey {}
+///     public record Key(long postNo) implements PrimaryKey {}
 ///     public static class PostBuilder implements MemberKey.Aware.Builder<PostBuilder> {}
 ///     ...
 ///  }

@@ -33,7 +33,7 @@ public class Address implements DomainObject<Address.Key>, MemberKey.Aware {
 
     /// lombok @Builder 용 빌더클래스
     public static class AddressBuilder implements MemberKey.Aware.Builder<AddressBuilder> {
-        AddressBuilder addressKey(Address.Key key) {
+        AddressBuilder primaryKey(Address.Key key) {
             return memberNo(key.memberNo())
                   .addressNo(key.addressNo());
         }
@@ -42,7 +42,7 @@ public class Address implements DomainObject<Address.Key>, MemberKey.Aware {
     /// PrimaryKey 클래스
     /// @param memberNo 회원번호
     /// @param addressNo 주소 일련번호
-    public static record Key(long memberNo, long addressNo) implements PrimaryKey, MemberKey.Aware {
+    public record Key(long memberNo, long addressNo) implements PrimaryKey, MemberKey.Aware {
 
         Key(MemberKey memberKey, long addressNo) {
             this(memberKey.longValue(), addressNo);

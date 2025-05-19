@@ -157,5 +157,8 @@
 * 번개 스터디
   * [2025/3/5](docs/lightning_250305.md)
 * [Somewhat Effective Java](docs/somewhat.md)
-  * [**아이템 0.01**: Primary Key는 별도 타입을 만들라](docs/somewhat.md#아이템-001-primary-key는-별도-타입을-만들라)
+  * [**아이템 0.01**: 닥치고 Java 23으로 업그레이드 하라](docs/somewhat.md#아이템-001-닥치고-java-23으로-업그레이드-하라)
+  * [**아이템 0.02**: Primary Key는 별도 타입을 만들라](docs/somewhat.md#아이템-002-primary-key는-별도-타입을-만들라)
+  * [**아이템 0.03**: 마스터 테이블의 PK는 독립 클래스로 만들라](docs/somewhat.md#아이템-003-마스터-테이블의-pk는-독립-클래스로-만들라)
+  * [**아이템 0.04**: 원시 타입을 사용하는 경우 `null`처리를 위해 `Optional`을 고려하라](docs/somewhat.md#아이템-004-원시-타입을-사용하는-경우-null처리를-위해-optional을-고려하라)
 

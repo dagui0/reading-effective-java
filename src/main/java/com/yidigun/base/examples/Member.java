@@ -33,5 +33,9 @@ public class Member implements DomainObject<MemberKey>, MemberKey.Aware {
     }
 
     /// lombok @Builder 용 빌더클래스
-    public static class MemberBuilder implements MemberKey.Aware.Builder<MemberBuilder> {}
+    public static class MemberBuilder implements MemberKey.Aware.Builder<MemberBuilder> {
+        MemberBuilder primaryKey(MemberKey key) {
+            return memberKey(key);
+        }
+    }
 }
