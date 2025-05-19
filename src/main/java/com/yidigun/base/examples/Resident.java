@@ -4,6 +4,7 @@ import com.yidigun.base.DomainObject;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
 

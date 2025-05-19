@@ -42,6 +42,9 @@ public class ResidentKeyTest {
 
         Optional<ResidentKey> key2 = ResidentKey.ofNullable("1111111111118");
         assertTrue(key2.isPresent());
+
+        // null residentId?
+        assertTrue(ResidentKey.isValid("0000000000001"));
     }
 
     @Test

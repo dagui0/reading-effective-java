@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 /// [#of(String)]로 생성시에는 `111111-1111118` 형식을 지원한다.
 ///
 @Getter
-public final class ResidentKey implements PrimaryKey, CharSequence {
+public final class ResidentKey implements PrimaryKey, CharSequence, Comparable<ResidentKey> {
 
     /// `1111111111118` 형식 검사 패턴 `/^([0-9]{6})([0-9]{7})$/`
     public static final Pattern PATTERN = Pattern.compile("^([0-9]{6})([0-9]{7})$");
@@ -90,6 +90,11 @@ public final class ResidentKey implements PrimaryKey, CharSequence {
     }
 
     @Override
+    public int compareTo(@NotNull ResidentKey o) {
+        return residentId.compareTo(o.residentId);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
@@ -147,7 +152,7 @@ public final class ResidentKey implements PrimaryKey, CharSequence {
         int[] c = { 2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5 };
         for (int i = 0; i < 12; i++)
             s += valueAt(residentId, i) * c[i];
-        return valueAt(residentId, 12) == ((11 - (s % 11))%10);
+        return valueAt(residentId, 12) == ((11 - (s % 11)) % 10);
     }
 
     private static int valueAt(String residentId, int index) {
@@ -168,7 +173,7 @@ public final class ResidentKey implements PrimaryKey, CharSequence {
         cal.set(year, month - 1, day);
         return cal.toInstant();
     }
-    
+
     public interface Aware {
         default ResidentKey getResidentKey() {
             return ResidentKey.ofUnchecked(getResidentId());
