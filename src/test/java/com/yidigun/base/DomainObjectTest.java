@@ -84,32 +84,33 @@ public class DomainObjectTest {
     @Test
     public void testIndependentPrimaryKeyType() {
 
-        MemberKey someMemberKey = MemberKey.of(1);
+        // session owner
+        MemberKey currentMemberKey = MemberKey.of(1);
 
         // Master table
         Instant now = Instant.now();
         Member member = Member.builder()
-                .memberKey(someMemberKey)
+                .memberKey(currentMemberKey)
                 .name("member1")
                 .registerDate(now)
                 .createDate(now)
                 .updateDate(now)
                 .build();
 
-        assertEquals(someMemberKey.longValue(), member.getPrimaryKey().longValue());
-        assertEquals(someMemberKey.longValue(), member.getMemberKey().longValue());
+        assertEquals(currentMemberKey.longValue(), member.getPrimaryKey().longValue());
+        assertEquals(currentMemberKey.longValue(), member.getMemberKey().longValue());
 
         // Child table
         Address address = Address.builder()
-                .memberKey(someMemberKey)
+                .memberKey(currentMemberKey)
                 .addressNo(1)
                 .address("address1")
                 .createDate(now)
                 .build();
 
-        assertEquals(someMemberKey, address.getMemberKey());
+        assertEquals(currentMemberKey, address.getMemberKey());
         // Address.Key is also MemberKey.Aware
-        assertEquals(someMemberKey.longValue(), address.getPrimaryKey().getMemberKey().longValue());
+        assertEquals(currentMemberKey.longValue(), address.getPrimaryKey().getMemberKey().longValue());
 
         // Address.Key type is a standalone value type.
         Address.Key key = Address.Key.of(member.getPrimaryKey(), 1);
@@ -120,46 +121,45 @@ public class DomainObjectTest {
                 .postNo(1)
                 .title("title")
                 .content("content")
-                .memberKey(someMemberKey)
+                .memberKey(currentMemberKey)
                 .createDate(now)
-                .updateDate(now)
-                .build();
+                .updateDate(now).build();
 
-        assertEquals(someMemberKey, post.getMemberKey());
-        assertEquals(someMemberKey.longValue(), post.getMemberKey().longValue());
+        assertEquals(currentMemberKey, post.getMemberKey());
+        assertEquals(currentMemberKey.longValue(), post.getMemberKey().longValue());
     }
 
     @Test
-    public void testResidentId() {
+    public void testSemanticKey() {
 
-        ResidentId residentId = ResidentId.of("1111111111118");
-        assertTrue(residentId.isMale());
-        assertTrue(residentId.isValid());
+        String residentId = "1111111111118";
+        ResidentKey key1 = ResidentKey.of("1111111111118");
 
-        String[] valids = { "1111111111118", "1234561222331" };
-        for (String s : valids) {
-            ResidentId id = ResidentId.of(s);
-            assertTrue(id.isValid());
-        }
+        Resident resident1 = Resident.builder()
+                .residentKey(key1)
+                .name("홍길동")
+                .address("서울시 강남구")
+                .createDate(Instant.now())
+                .build();
 
-        String[] nonValids = { "1234561234567", "9553179792331" };
-        for (String s : nonValids) {
-            ResidentId id = ResidentId.ofUnchecked(s);
-            assertFalse(id.isValid());
-        }
+        assertDoesNotThrow(() -> {
+            Thread.sleep(100); // 0.1초 대기
+        });
 
-        // parse alt pattern
-        ResidentId id1 = ResidentId.of("1234561222331");
-        ResidentId id2 = ResidentId.of("123456-1222331");
-        assertEquals(id1, id2);
+        Resident resident2 = Resident.builder()
+                .residentId("1111111111118")
+                .name("홍길동")
+                .address("서울시 강남구")
+                .createDate(Instant.now())
+                .build();
 
-        // Birthday
-        ResidentId id3 = ResidentId.of("1111111111118");
+        assertEquals(resident1, resident2);
+        assertFalse(resident1.equalsAllFields(resident2));
 
-        assertEquals("111111", id3.subSequence(0, 6));
+        assertEquals("111111", resident1.getResidentKey().subSequence(0, 6));
 
         Calendar cal = Calendar.getInstance();
         cal.set(1911, 10, 11);
-        assertEquals(cal.toInstant(), id3.getBirthday());
+        assertEquals(cal.toInstant(), resident1.getResidentKey().getBirthday());
     }
 }

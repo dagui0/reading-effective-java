@@ -1,7 +1,7 @@
 package com.yidigun.base;
 
 import com.yidigun.base.examples.MemberKey;
-import com.yidigun.base.examples.ResidentId;
+import com.yidigun.base.examples.ResidentKey;
 
 import java.util.Map;
 
@@ -140,7 +140,7 @@ import java.util.Map;
 ///     private String content; // semantic field
 ///     private long memberNo; // semantic field from Member
 ///     ...
-///     public Post.Key getPrimaryKey() { return new Post.Key(postNo); }
+///     @Override public Post.Key getPrimaryKey() { return new Post.Key(postNo); }
 ///     public static record Key(long postNo) implements PrimaryKey {}
 ///     public static class PostBuilder implements MemberKey.Aware.Builder<PostBuilder> {}
 ///     ...
@@ -149,6 +149,6 @@ import java.util.Map;
 /// 
 /// @see DomainObject DomainObject(도메인 객체 인터페이스)
 /// @see MemberKey MemberKey(독립 클래스방식 구현 예시)
-/// @see ResidentId ResidendId(Semantic Key 예시 (주민등록번호))
+/// @see ResidentKey ResidendId(Semantic Key 예시 (주민등록번호))
 public interface PrimaryKey {
 }

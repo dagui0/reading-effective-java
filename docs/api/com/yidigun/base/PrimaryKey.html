@@ -72,7 +72,7 @@ loadScripts(document, 'script');</script>
 <div class="horizontal-scroll">
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="examples/Address.Key.html" title="class in com.yidigun.base.examples">Address.Key</a></code>, <code><a href="examples/ComplexKeyExample.Key.html" title="class in com.yidigun.base.examples">ComplexKeyExample.Key</a></code>, <code><a href="examples/MemberKey.html" title="class in com.yidigun.base.examples">MemberKey</a></code>, <code><a href="examples/Post.Key.html" title="class in com.yidigun.base.examples">Post.Key</a></code>, <code><a href="examples/ResidentId.html" title="class in com.yidigun.base.examples">ResidentId</a></code>, <code><a href="examples/SimpleKeyExample.Key.html" title="class in com.yidigun.base.examples">SimpleKeyExample.Key</a></code></dd>
+<dd><code><a href="examples/Address.Key.html" title="class in com.yidigun.base.examples">Address.Key</a></code>, <code><a href="examples/ComplexKeyExample.Key.html" title="class in com.yidigun.base.examples">ComplexKeyExample.Key</a></code>, <code><a href="examples/MemberKey.html" title="class in com.yidigun.base.examples">MemberKey</a></code>, <code><a href="examples/Post.Key.html" title="class in com.yidigun.base.examples">Post.Key</a></code>, <code><a href="examples/ResidentKey.html" title="class in com.yidigun.base.examples">ResidentKey</a></code>, <code><a href="examples/SimpleKeyExample.Key.html" title="class in com.yidigun.base.examples">SimpleKeyExample.Key</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">PrimaryKey</span></div>
@@ -195,7 +195,7 @@ public class Post implements DomainObject&lt;Post.Key&gt;, MemberKey.Aware {
     private String content; // semantic field
     private long memberNo; // semantic field from Member
     ...
-    public Post.Key getPrimaryKey() { return new Post.Key(postNo); }
+    @Override public Post.Key getPrimaryKey() { return new Post.Key(postNo); }
     public static record Key(long postNo) implements PrimaryKey {}
     public static class PostBuilder implements MemberKey.Aware.Builder&lt;PostBuilder&gt; {}
     ...
@@ -208,7 +208,7 @@ public class Post implements DomainObject&lt;Post.Key&gt;, MemberKey.Aware {
 <ul class="tag-list-long">
 <li><a href="DomainObject.html" title="interface in com.yidigun.base">DomainObject(도메인 객체 인터페이스)</a></li>
 <li><a href="examples/MemberKey.html" title="class in com.yidigun.base.examples">MemberKey(독립 클래스방식 구현 예시)</a></li>
-<li><a href="examples/ResidentId.html" title="class in com.yidigun.base.examples">ResidendId(Semantic Key 예시 (주민등록번호))</a></li>
+<li><a href="examples/ResidentKey.html" title="class in com.yidigun.base.examples">ResidendId(Semantic Key 예시 (주민등록번호))</a></li>
 </ul>
 </dd>
 </dl>

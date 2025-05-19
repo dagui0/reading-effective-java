@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="examples/Address.html" title="class in com.yidigun.base.examples">Address</a></code>, <code><a href="examples/ComplexKeyExample.html" title="class in com.yidigun.base.examples">ComplexKeyExample</a></code>, <code><a href="examples/Member.html" title="class in com.yidigun.base.examples">Member</a></code>, <code><a href="examples/Post.html" title="class in com.yidigun.base.examples">Post</a></code>, <code><a href="examples/SimpleKeyExample.html" title="class in com.yidigun.base.examples">SimpleKeyExample</a></code></dd>
+<dd><code><a href="examples/Address.html" title="class in com.yidigun.base.examples">Address</a></code>, <code><a href="examples/ComplexKeyExample.html" title="class in com.yidigun.base.examples">ComplexKeyExample</a></code>, <code><a href="examples/Member.html" title="class in com.yidigun.base.examples">Member</a></code>, <code><a href="examples/Post.html" title="class in com.yidigun.base.examples">Post</a></code>, <code><a href="examples/Resident.html" title="class in com.yidigun.base.examples">Resident</a></code>, <code><a href="examples/SimpleKeyExample.html" title="class in com.yidigun.base.examples">SimpleKeyExample</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">DomainObject&lt;K extends <a href="PrimaryKey.html" title="interface in com.yidigun.base">PrimaryKey</a>&gt;</span></div>
@@ -103,6 +103,8 @@ loadScripts(document, 'script');</script>
 <p>lombok의 <a href="https://javadoc.io/doc/org.projectlombok/lombok/1.18.38/lombok/EqualsAndHashCode.html" title="class or interface in lombok" class="external-link"><code>EqualsAndHashCode</code></a>를 사용하여 자동 생성을 할 수도 있다.
 다만 비교에서 제외할 필드를 분명하게 구분해서 <a href="https://javadoc.io/doc/org.projectlombok/lombok/1.18.38/lombok/EqualsAndHashCode.Exclude.html" title="class or interface in lombok" class="external-link"><code>EqualsAndHashCode.Exclude</code></a>를 지정해야 한다.</p>
 <h3 id="--heading1">단순 키 예시</h3>
+<p><a href="PrimaryKey.html" title="interface in com.yidigun.base"><code>PrimaryKey</code></a>인터페이스를 구현한 중첩 클래스(record) <code>SimpleKeyExample.Key</code>를 사용하여 구현하였다.
+<a href="#getPrimaryKey()"><code>getPrimaryKey()</code></a>에 대응하는 <code>setPrimaryKey(SimpleKeyExample.Key key)</code> 메소드를 구현해 주었다.</p>
 <pre><code>@Getter
 @Setter
 @EqualsAndHashCode
@@ -125,7 +127,7 @@ public final class SimpleKeyExample implements DomainObject&lt;SimpleKeyExample.
 <h4 id="--heading2">복합 키 예시</h4>
 <p>단순 키의 경우도 마찬가지지만,
 복합 키의 경우는 PK 타입인 <a href="examples/ComplexKeyExample.Key.html" title="class in com.yidigun.base.examples"><code>ComplexKeyExample.Key</code></a>는 단일 값으로 취급되어야 하므로
-setter 메소드나 빌더 메소드를 추가해주는 것이 필요하다.</p>
+setter 메소드나 빌더 메소드를 반드시 추가해주는 것이 필요하다.</p>
 <pre><code>@Getter
 @Builder(toBuilder = true)
 public final class ComplexKeyExample implements DomainObject&lt;ComplexKeyExample.Key&gt; {
