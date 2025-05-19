@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <p>정렬에 사용될 수 있게 하려면 <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link"><code>Comparable</code></a>를 추가로 구현할 수 있다.</p>
 <pre><code>public class Example implements DomainObject&lt;Example.Key&gt; {
     primary int no; // primary key
-    public static record Key(int no) implements PrimaryKey, Comparable&lt;Key&gt; {
+    public record Key(int no) implements PrimaryKey, Comparable&lt;Key&gt; {
         @Override
         public int compareTo(@NotNull Key key) {
             return Integer.compare(this.no, key.no());
@@ -174,7 +174,7 @@ public class Address implements DomainObject&lt;Address.Key&gt;, MemberKey.Aware
     ...
     // Address.Key 역시 MemberKey.Aware임
     // 단, record 클래스에는 @Getter를 붙일 수 없다.
-    public static record Key(long memberNo, long addressNo) implements PrimaryKey, MemberKey.Aware {
+    public record Key(long memberNo, long addressNo) implements PrimaryKey, MemberKey.Aware {
         @Override public long getMemberNo() { return memberNo; }
     }
     ...
@@ -196,7 +196,7 @@ public class Post implements DomainObject&lt;Post.Key&gt;, MemberKey.Aware {
     private long memberNo; // semantic field from Member
     ...
     @Override public Post.Key getPrimaryKey() { return new Post.Key(postNo); }
-    public static record Key(long postNo) implements PrimaryKey {}
+    public record Key(long postNo) implements PrimaryKey {}
     public static class PostBuilder implements MemberKey.Aware.Builder&lt;PostBuilder&gt; {}
     ...
  }

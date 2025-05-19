@@ -1,6 +1,12 @@
 package effectivejava.chapter05.item29;
 
+import java.io.Serial;
+
 public class StackOverflowException extends RuntimeException {
+
+    @Serial
+    private static final long serialVersionUID = -9143380554964922527L;
+
     public StackOverflowException(Throwable cause) {
         super(cause);
     }

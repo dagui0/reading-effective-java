@@ -23,6 +23,7 @@ public class Chooser4<T> {
     }
 
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public Chooser4(T... choices) {
         this.choiceList = List.of(choices);
     }

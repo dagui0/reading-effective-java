@@ -20,6 +20,7 @@ public enum PayrollDay1 {
             case SATURDAY:
             case SUNDAY:
                 overtimePay = basePay / 2;
+                break;
             default:
                 overtimePay = minutesWorked > MINS_PER_SHIFT ?
                         (minutesWorked - MINS_PER_SHIFT) * payRate / 2 : 0;

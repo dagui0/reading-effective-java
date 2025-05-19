@@ -11,6 +11,7 @@ public class Chooser3<T> {
     private final List<T> choiceList;
 
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public Chooser3(T... choices) {
         this.choiceList = List.of(choices);
     }

@@ -9,16 +9,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RawTypeTest {
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Test
     public void testRawTypeConverting() {
 
-        @SuppressWarnings("rawtypes") List rawList = new ArrayList();
-        //noinspection unchecked
+        List rawList = new ArrayList();
         rawList.add("Hello");
-        //noinspection unchecked
         rawList.add(1234);
 
-        //noinspection unchecked
         assertEquals(2, getSizeOfStringList(rawList));
         assertThrows(ClassCastException.class, () -> {
             @SuppressWarnings("unchecked")
@@ -26,6 +24,7 @@ public class RawTypeTest {
             System.out.println(str);
         });
 
+        @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
         List<Object> objectList = new ArrayList<>();
         objectList.add("Hello");
         objectList.add(1234);
