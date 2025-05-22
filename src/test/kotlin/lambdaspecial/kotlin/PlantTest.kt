@@ -46,6 +46,20 @@ class PlantTest {
         assertTrue(filterByLifeCycle4.test(plant))
     }
 
+    /// 테이블 Plant
+    /// |name|koName|lifeCycle|
+    /// |----|------|---------|
+    /// |Rose|장미|Perennial|
+    /// |Tulip|튤립|Perennial|
+    /// |Daisy|데이지|Biennial|
+    /// |Lily|백합|Perennial|
+    /// |Sunflower|해바라기|Annual|
+    /// |Daffodil|수선화|Perennial|
+    /// |Orchid|난초|Perennial|
+    /// |Marigold|천수국|Annual|
+    /// |Pansy|팬지|Biennial|
+    /// |Chrysanthemum|국화|Biennial|
+    /// |Petunia|피튜니아|Annual|
     private val plants: List<Plant> = listOf(
         Plant("Rose", "장미", Plant.LifeCycle.PERENNIAL),
         Plant("Tulip", "튤립", Plant.LifeCycle.PERENNIAL),
@@ -67,7 +81,6 @@ class PlantTest {
 
         for (p in plants) {
             if (p.lifeCycle == annual) {
-                val name = p.name
                 println(p.name)
             }
         }
@@ -77,10 +90,14 @@ class PlantTest {
     fun testLambda() {
         val annual = Plant.LifeCycle.ANNUAL
 
+        /*
+         * SELECT name FROM plant;
+         */
+
         plants.stream()
             .filter { it.lifeCycle == annual }
-            .map(Plant::name)   // .map { it.name } 와 같음
-            .forEach(::println)  // .forEach { println(it) } 와 같음
+            .map { it.name }
+            .forEach { println(it) }
     }
 
     @Test
@@ -88,8 +105,8 @@ class PlantTest {
         val annual = Plant.LifeCycle.ANNUAL
 
         /*
- * SELECT UPPER(name) FROM plant WHERE lifeCycle = 'annual';
- */
+         * SELECT UPPER(name) FROM plant WHERE lifeCycle = 'annual';
+         */
 
         plants.stream()
             .filter { it.lifeCycle == annual }
