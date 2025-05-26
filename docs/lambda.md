@@ -3,11 +3,11 @@
 ## 목차
 
 * [람다 그거 먹는건가요?](#람다-그거-먹는건가요)
-* [함수형 프로그래밍의 진화](#함수형-프로그래밍의-진화)
-* [무엇에 쓰는 물건인고?](#무엇에-쓰는-물건인고)
+* [함수형 프로그래밍](#함수형-프로그래밍)
 * [Java 람다 표현식](#Java-람다-표현식)
 * [스트림 API와 컬렉션 조작](#스트림-API와-컬렉션-조작)
 * [그럼 람다가 짱인가요?](#그럼-람다가-짱인가요)
+* [결론: 3줄 요약](#결론-3줄-요약)
 
 ## 람다 그거 먹는건가요?
 
@@ -18,47 +18,60 @@
 * 람다(Lamda, λ)는 그리스어 알파벳의 11번째 글자로, 로마 알파벳의 L에 해당함.
 * 람다 대수는 알론조 처치(Alonzo Church)가 1930년대에 제안한 수학적 모델로, 함수와 함수의 적용을 다루는 이론적 체계임.
 * 함수를 나타낼때 `λ` 기호를 사용하였기 때문에 람다라는 용어를 사용하게됨
-* 람다식(Lambda expression) 또는 람다항(Lamda term)의 문법
-  * 변수(Variable): 값을 나타내는 식별자 `$x$`
-  * 추상화(Abstraction): 함수를 말함
-    * 함수 정의를 나타내는 식.
-    * `$λx.M$` 형태로 표현됨. `λ`는 함수의 시작을, `x`는 인자,
-      `M`은 함수의 본체(body)를 나타내는 또다른 람다 항이다.
-    * 람다 추상화(함수)는 이름이 없다.
-      * `$λx.x + 1$`은 Javascript로 `function(x) { return x + 1; }`와 같음
-  * 적용(Application): 함수 호출을 말함
-    * 함수에 인자를 적용하는 것을 나타내는 식.
-    * `$MN$` 형태로 표현됨. 여기서 `$M$`은 함수, `$N$`은 인자
-    * 연산 순서는 왼쪽결합으로 `$MNP$`는 `$(MN)P$`와 같음.
-    * `$λx.x + 1$`에 `2`를 적용하는 것은 `$λx.x + 1(2)$`로 표현됨.
-      * 이는 Javascript로 `(function(x) { return x + 1; })(2)`와 같다.
-    * 람다식에서 함수 호출은 함수의 본체에 인자를 전달하는 것을 의미함
-      * `$λx.(x + 1) (2)$`는 Javascript로 `(function(x) { return x + 1; })(2)`와 같다.
-* 커링(Curring)
-  * 람다 함수는 원칙상 인자가 1개뿐이다.
-  * `$λ(x,y).x + y$`는 `$λx.λy.x + y$`로 표현되어야 한다.
-  * 이렇게 다중 인자를 가진 함수를 하나의 인자를 가진 함수들의 연쇄로 변환하는 것을 커링이라고 한다.
-    ```javascript
-    (function(a, b) {
-        return a + b;
-    })(3, 4); // 3 + 4
-     
-    (function(a) {
-        return function(b) {
-            return a + b;
-        };
-    })(3)(4); // 3 + 4
-    ```
-* 처치-튜링 명제(Church-Turing thesis) 
+* 처치-튜링 명제(Church-Turing thesis)
   * 람다 대수는 모든 계산 가능한 함수를 표현할 수 있음
   * 튜링 완전성(Turing completeness): 튜링 기계(Turing machine)와 동등한 계산 능력을 가짐
-* 자유변수(free variable) vs. 속박변수(bound variable)
-  * 속박변수(bound variable): 람다 추상화에 정의된 변수(인자로 선언된 변수)
-  * 자유변수(free variable): 람다항 내에 나타나지만 해당변수를 속박되지 않은 변수(인자가 아닌 변수)
-  * `$λx.x + y$`에서 `x`는 속박변수이고, `y`는 자유변수임
-  * 스포일러: 이 구분은 이후 계산 과정에서 중요해짐
 
-### 계산 규칙
+#### 람다 대수(Lambda Calculus) 기본 표기법
+
+* 변수(Variable): 값을 나타내는 식별자 `$x$`
+* 추상화(Abstraction): 함수를 말함
+  * 함수 정의를 나타내는 식.
+  * `$λx.M$` 형태로 표현됨. `λ`는 함수의 시작을, `x`는 인자,
+    `M`은 함수의 본체(body)를 나타내는 또다른 람다 항이다.
+  * 람다 추상화(함수)는 이름이 없다.
+    * `$λx.x + 1$`은 Javascript로 `function(x) { return x + 1; }`와 같음
+  * 수학시간에 배운 함수 표기와 차이
+    * `f(x) = x + 1, g(x) = f(x) + 2`
+      * `f`, `g`라는 함수 이름이 있음
+      * `f(x)`를 호출하기 전에 정의되어 있어야 함
+    * `$(λx.x + 2) (λx.x + 1)$`
+      * 함수 이름이 없음
+      * 함수 정의와 호출이 동시에 이루어짐
+* 적용(Application): 함수 호출을 말함
+  * 함수에 인자를 적용하는 것을 나타내는 식.
+  * `$MN$` 형태로 표현됨. 여기서 `$M$`은 함수, `$N$`은 인자
+  * 연산 순서는 왼쪽결합으로 `$MNP$`는 `$(MN)P$`와 같음.
+  * `$λx.x + 1$`에 `2`를 적용하는 것은 `$λx.x + 1(2)$`로 표현됨.
+    * 이는 Javascript로 `(function(x) { return x + 1; })(2)`와 같다.
+  * 람다식에서 함수 호출은 함수의 본체에 인자를 전달하는 것을 의미함
+    * `$λx.(x + 1) (2)$`는 Javascript로 `(function(x) { return x + 1; })(2)`와 같다.
+
+#### 자유변수(free variable) vs. 속박변수(bound variable)
+
+* 속박변수(bound variable): 람다 추상화에 정의된 변수(인자로 선언된 변수)
+* 자유변수(free variable): 람다항 내에 나타나지만 해당변수를 속박되지 않은 변수(인자가 아닌 변수)
+* `$λx.x + y$`에서 `x`는 속박변수이고, `y`는 자유변수임
+* 스포일러: 이 구분은 이후 계산 과정에서 중요해짐
+
+#### 커링(Curring)
+
+* 람다 함수는 원칙상 인자가 1개뿐이다.
+* `$λ(x,y).x + y$`는 `$λx.λy.x + y$`로 표현되어야 한다.
+* 이렇게 다중 인자를 가진 함수를 하나의 인자를 가진 함수들의 연쇄로 변환하는 것을 커링이라고 한다.
+  ```javascript
+  (function(a, b) {
+      return a + b;
+  })(3, 4); // 3 + 4
+     
+  (function(a) {
+      return function(b) {
+          return a + b;
+      };
+  })(3)(4); // 3 + 4
+  ```
+
+### 람다 대수(Lambda Calculus) 계산 규칙
 
 * 알파 변환(α-conversion)
   * 람다식의 속박 변수를 다른 변수로 치환해도 함수는 동등하다. 이때 자유변수는 건드리지 않는다.
@@ -86,11 +99,11 @@
     * `$λx.(M x)$`는 `$M$`과 동등하다.
     * `$λx.x + 1 x$`는 `$x + 1$`과 같다.
       ```javascript
-      function(y) {
-          return (function(x) { return x + 1; })(y);
+      let f1 = function(y) {
+          return (function(x) { return x + 1 })(y)
       }
       
-      function(x) { return x + 1; }  // 두 함수는 같다.
+      let f2 = function(x) { return x + 1 }  // 두 함수는 같다.
       ```
   * 에타 변환은 람다식을 간결하게 하고 때로 추가적인 베타축약을 가능하게 한다.
   * Java에서는 메소드 참조(Method Reference)라는 개념의 이론적 배경이 된다.
@@ -134,7 +147,7 @@ plus_4(5)               // 9
 
 > Q: 람다는 그냥 메소드를 인라인으로 쓸 수 있는 것 아닌가요? \
 > A: 네 아닙니다. 람다식은 클로저이며 객체로 생각해야 합니다. \
->    포획된 변수를 필드로 하고, 함수의 본체를 메소드로 하는 하나의 객체라고 생각하세요.
+>    포획된 변수를 필드로 하고, 함수의 본체를 메소드로 하는 (실행 가능한) 객체라고 생각하세요.
 
 #### 변수 포획(Capturing Variables)
 
@@ -167,11 +180,13 @@ plus_4(5)               // 9
   }
   ```
 
-## 함수형 프로그래밍의 진화
+## 함수형 프로그래밍
 
 ![진화](img/evolution.png)
 
-### 알론조 처치(Alonzo Church, 1903 ~ 1995)
+### 람다 대수(Lambda Calculus)에서 함수형 프로그래밍(Functional Programming) 까지
+
+#### 알론조 처치(Alonzo Church, 1903 ~ 1995)
 
 ![Alonzo Church](img/alonzo_church.jpg)
 
@@ -186,7 +201,7 @@ plus_4(5)               // 9
 > * 재귀 함수론과 람다 대수 사이의 관계를 연구
 > * 정규 표현식(regular expression)이라는 용어와 기초가 되는 논리 연산자(`|`, `+`, `*` 등)를 제안
 
-### 하스켈 커리(Haskell Brooks Curry, 1900 ~ 1982)
+#### 하스켈 커리(Haskell Brooks Curry, 1900 ~ 1982)
 
 ![Haskell Curry](img/haskell_curry.jpg)
 
@@ -203,7 +218,7 @@ plus_4(5)               // 9
 > * 러시아 출신 논리학자로 커링 개념의 원작자
 > * 1920년대 다중 인자를 받는 함수를 하나의 인자만 받는 함수들의 연속으로 변환하는 아이디어를 제시
 
-### 1급 시민(First-Class Citizen)
+#### 1급 시민(First-Class Citizen)
 
 프로그래밍 언어에서 다음 조건을 만족하는 것를 1급 시민이라고 함.
 
@@ -229,7 +244,7 @@ plus_4(5)               // 9
 > * Lisp개발에 참여한건 아니고, 이후 C언어의 조상인 CPL(Combined Programming Language)
     >   언어 개발에 참여하심
 
-### ISWIM (If You See What I Mean)
+#### ISWIM (If You See What I Mean)
 
 피터 랜딘이 실험적으로 만든 언어로 모든 함수형 언어의 조상에 해당.
 
@@ -245,7 +260,7 @@ let fact n =
 > * SECD 기계: 람다 대수 표현식을 평가하기 위한 추상 기계. 이는 많은 함수형 언어 인터프리터의 기초가 됨
 > * "Syntactic sugar" (문법적 설탕)라는 표현을 대중화 시킴
 
-### Hindley-Milner 타입 추론 알고리즘
+#### Hindley-Milner 타입 추론 알고리즘
 
 * 프로그래머가 명시적으로 타입을 선언하지 않아도 컴파일러가 타입을 추론할 수 있는 알고리즘.
 * J. Roger Hindley에 의해서 처음 발견하였고, 로빈 밀러가 (독립적으로?) 다시 발견함
@@ -260,18 +275,18 @@ var f = (x) -> x + 1; // f는 (int) -> int 타입(Function<Integer>)으로 추�
 > ![Robin Milner](img/robin_milner.jpg)
 > * ML(Meta Language) 함수형 언어 개발 (Standard ML, OCaml, F# 등의 조상)
 
-## 무엇에 쓰는 물건인고?
+### 무엇에 쓰는 물건인고?
 
 ![무엇에 쓰는 물건인고?](img/what-might-this-thing-be-for.webp)
 
-### 절차적 vs. 선언적
+#### 절차적 vs. 선언적
 
 * 거창하게 함수형 프로그래밍이라고 말하면 이해하기 어렵지만,
   하고자 하는 일을 **선언적**으로 기술하는 언어라고 생각하면 쉬움
   * 우리는 SQL을 배울 때 절차적 사고를 버려야 한다고 배웠음
   * 그 외에도 HTML, CSS 등 선언적 언어를 우리는 많이 다루고 있음
 
-### Collection과 Stream API
+#### Collection과 Stream API
 
 ```sql
 SELECT name FROM plant WHERE lifeCycle = @annual
@@ -306,7 +321,7 @@ SELECT name FROM plant WHERE lifeCycle = @annual
   }
   ```
 
-### 콜백 함수를 간단히
+#### 콜백 함수를 간단히
 
 * 비동기/동시성 처리(Asynchronous/Concurrent Processing)
   ```java
@@ -575,9 +590,9 @@ TODO: 준비중
     * 예를들어 Kotlin의 경우 기본적으로 TCO를 지원하지 않지만, `tailrec` 키워드를 사용하여
       컴파일러가 꼬리 호출을 반복문처럼 바꾸어 컴파일 한다.
 
-### 결론
+## 결론: 3줄 요약
 
-* Stream API와 람다식을 이용하여 가독성을 높이고 코드의 복잡성을 줄이는 것은 좋다.
+* Stream API와 람다식은 자바를 고전 자바와 모던 자바로 나누고 있다.
 * 하지만 함수형 프로그래밍에 심취하여 알고리즘을 함수형으로 구현하는 개발자가 있다면 혼쭐 내주자.
 * 그래도 람다식이 눈에 안들어온다면 성능과 짬밥을 무기로 찍어 누르자.
 
