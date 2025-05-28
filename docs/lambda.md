@@ -1838,7 +1838,7 @@ public void testConcurrency() {
     </details>
   * Scala, Kotlin은 Java와 같은 JVM에서 실행되지만 TCO를 지원하는데,
     컴파일러 수준에서 지원하는 것이고 함수형 언어들과 같은 본격적인 지원은 아니다.
-    * 예를들어 Kotlin의 경우 기본적으로 TCO를 지원하지 않지만, `tailrec` 키워드를 사용하여
+    * 예를들어 Kotlin의 경우 기본적으로 TCO를 지원하지 않지만, 메소드 선언에 `tailrec` 키워드를 주면
       컴파일러가 꼬리 호출을 반복문처럼 바꾸어 컴파일 한다.
 
 ## 결론: 3줄 요약
