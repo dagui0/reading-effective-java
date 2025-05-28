@@ -1,13 +1,29 @@
 package lambdaspecial.java;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LambdaTest {
+
+    @Test
+    public void testLambdaWithType() {
+
+        BinaryOperator<Integer> sumAndDouble = (Integer a, Integer b) -> (a + b) * 2;
+        assertEquals(30, sumAndDouble.apply(5, 10));
+    }
 
     @Test
     public void testLambda() {
@@ -115,6 +131,33 @@ public class LambdaTest {
         }
     }
 
+    @Test
+    public void testHaskellBrooksCurrying() {
+
+        BinaryOperator<Integer> add = (a, b) -> a + b;
+        assertEquals(7, add.apply(3, 4));
+
+        Function<Integer, UnaryOperator<Integer>> addCurrying = (a) -> (b) -> a + b;
+        assertEquals(7, addCurrying.apply(3).apply(4));
+
+    }
+
+    @Test
+    public void testFunctionClassName() {
+
+        // 람다식은 리터럴이 아니다.
+        // int val = ((a, b) -> a + b)(1, 2);  // 컴파일 안됨
+
+        BinaryOperator<Integer> addLambda = (a, b) -> a + b;
+        BinaryOperator<Integer> addAnonClz = new BinaryOperator<Integer>() {
+            @Override
+            public Integer apply(Integer a, Integer b) {
+                return a + b;
+            }
+        };
+
+        // 람다식은 익명 클래스이지만 .class 파일이 만들어지지는 않는다!! 클래스명은 매번 달라짐
+        // assertEquals("lambdaspecial.java.LambdaTest$$Lambda/0x00000288811608c0", addLambda.getClass().getName());
+        assertEquals("lambdaspecial.java.LambdaTest$1", addAnonClz.getClass().getName());
+    }
 }
-
-

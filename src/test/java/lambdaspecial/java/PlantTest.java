@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -23,7 +27,7 @@ public class PlantTest {
     @Test
     public void testLambdaCurring() {
 
-        Plant plant = new Plant("Sunflower", "해바라기", Plant.LifeCycle.ANNUAL);
+        Plant plant = new Plant("Sunflower", "해바라기", "노랑", Plant.LifeCycle.ANNUAL);
         Plant.LifeCycle lifeCycleCriteria = Plant.LifeCycle.ANNUAL;
 
         /*
@@ -77,18 +81,18 @@ public class PlantTest {
     }
 
     List<Plant> plants = List.of(
-            new Plant("Rose", "장미", Plant.LifeCycle.PERENNIAL),
-            new Plant("Tulip", "튤립", Plant.LifeCycle.PERENNIAL),
-            new Plant("Daisy", "데이지", Plant.LifeCycle.BIENNIAL),
-            new Plant("Lily", "백합", Plant.LifeCycle.PERENNIAL),
-            new Plant("Sunflower", "해바라기", Plant.LifeCycle.ANNUAL),
-            new Plant("Daffodil", "수선화", Plant.LifeCycle.PERENNIAL),
-            new Plant("Orchid", "난초", Plant.LifeCycle.PERENNIAL),
-            new Plant("Marigold", "천수국", Plant.LifeCycle.ANNUAL),
-            new Plant("Pansy", "팬지", Plant.LifeCycle.BIENNIAL),
-            new Plant("Chrysanthemum", "국화", Plant.LifeCycle.BIENNIAL),
-            new Plant("Petunia", "피튜니아", Plant.LifeCycle.ANNUAL),
-            new Plant("Zinnia", "백일홍", Plant.LifeCycle.ANNUAL)
+            new Plant("Rose", "장미", "빨강", Plant.LifeCycle.PERENNIAL),
+            new Plant("Tulip", "튤립", "분홍", Plant.LifeCycle.PERENNIAL),
+            new Plant("Daisy", "데이지", "흰색", Plant.LifeCycle.BIENNIAL),
+            new Plant("Lily", "백합", "흰색", Plant.LifeCycle.PERENNIAL),
+            new Plant("Sunflower", "해바라기", "노랑", Plant.LifeCycle.ANNUAL),
+            new Plant("Daffodil", "수선화", "노랑", Plant.LifeCycle.PERENNIAL),
+            new Plant("Orchid", "난초", "분홍", Plant.LifeCycle.PERENNIAL),
+            new Plant("Marigold", "천수국", "주황", Plant.LifeCycle.ANNUAL),
+            new Plant("Pansy", "팬지", "파랑", Plant.LifeCycle.BIENNIAL),
+            new Plant("Chrysanthemum", "국화", "흰색", Plant.LifeCycle.BIENNIAL),
+            new Plant("Petunia", "피튜니아", "보라", Plant.LifeCycle.ANNUAL),
+            new Plant("Zinnia", "백일홍", "빨강", Plant.LifeCycle.ANNUAL)
     );
 
     @Test
@@ -183,7 +187,8 @@ public class PlantTest {
 
         plants.stream()
                 .filter(p -> p.lifeCycle() == annual)
-                .map(p -> p.name().toUpperCase())
+                .map(Plant::name)
+                .map(String::toUpperCase)
                 .forEach(System.out::println);
     }
 
@@ -353,5 +358,45 @@ public class PlantTest {
 
         r.formattedList.forEach(System.out::println);
         r.countsMap.forEach((k, v) -> System.out.println(k + ": " + v));
+    }
+
+    @Test
+    public void testConcurrency() {
+
+        // 화분이 3개 뿐이라 순차적으로 배분하여 키워야 함
+        int pots = 3;
+
+        // 3개의 worker 스레드를 생성
+        try (ExecutorService executorService = Executors.newFixedThreadPool(pots)) {
+
+            // 작업 제출
+            List<Future<Flower>> futures = plants.stream()
+                    .map(plant -> executorService.submit(
+                            () -> plant.grow(Thread.currentThread().getName())
+                        ))
+                    .toList();
+
+            // Future 객체에서 결과를 가져와 출력
+            futures.forEach(future -> {
+                try {
+                    Flower flower = future.get(); // 병렬 작업의 결과를 기다림
+                    System.out.println(flower);
+                }
+                catch (Exception e) {
+                    System.err.print("식물 키우기 실패: " + e.getMessage());
+                    if (e instanceof InterruptedException ||
+                            (e.getCause() != null && e.getCause() instanceof InterruptedException)) {
+                        System.err.println(": 작업이 인터럽트되었습니다.");
+                    }
+                    else if (e instanceof ExecutionException ||
+                            (e.getCause() != null && e.getCause() instanceof ExecutionException)) {
+                        System.err.println(": 작업 실행 중 예외가 발생했습니다");
+                    }
+                    else {
+                        System.err.println();
+                    }
+                }
+            });
+        }
     }
 }
