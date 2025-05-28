@@ -1682,162 +1682,159 @@ public void testConcurrency() {
     (예외 처리 Stack trace, `SecurityManager.checkMemberAccess()` 등 보안 관련 기능)
   * Java는 TCO는 지원하지 않지만 가상 스레드(Virtual Threads)를 통해서 스택 오버플로우 위험을 쪼금은 줄일 수 있음(Java 21)
     <details>
-        <summary>가상 스레드 예시</summary>
-        
-        ```java
-        public class Factorial {
-            public static long factorialDebug(int n) {
-                if (n < 0)
-                    throw new IllegalArgumentException("Factorial is not defined for negative numbers.");
-                if (n == 0 || n == 1)
-                    return 1;
-                // 스택 트레이스를 확인하기 위해 예외를 던짐
-                if (n == 2)
-                    throw new RuntimeException("for debug");
-                return n * factorialDebug(n - 1);
-            }
+    <summary>가상 스레드 예시</summary>
+
+    ```java
+    public class Factorial {
+        public static long factorialDebug(int n) {
+            if (n < 0)
+                throw new IllegalArgumentException("Factorial is not defined for negative numbers.");
+            if (n == 0 || n == 1)
+                return 1;
+            // 스택 트레이스를 확인하기 위해 예외를 던짐
+            if (n == 2)
+                throw new RuntimeException("for debug");
+            return n * factorialDebug(n - 1);
         }
-        @Test
-        public void testCheckStackTrace() {
+    }
+    @Test
+    public void testCheckStackTrace() {
+        try {
+            Factorial.factorialDebug(5);
+        }
+        catch (RuntimeException e) {
+            System.out.println("Stack trace for testCheckStackTrace:");
+            e.printStackTrace();
+        }
+    }
+    ```
+
+    결과:
+    ```
+    Stack trace for testCheckStackTrace:
+    java.lang.RuntimeException: for debug
+        at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:26)
+        at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
+        at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
+        at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
+        at lambdaspecial.java.FactorialTest.testCheckStackTrace(FactorialTest.java:20)
+        at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+        at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+        at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:766)
+        at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+        at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+        at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+        at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)
+        at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86)
+        at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+        at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+        at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+        at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+        at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+        at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+        at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+        at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+        at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$8(TestMethodTestDescriptor.java:217)
+        at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+        at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:213)
+        at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:138)
+        at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:68)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:156)
+        at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+        at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+        at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+        at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+        at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+        at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+        at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+        at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+        at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+        at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+        at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+        at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+        at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+        at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+        at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+        at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+        at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+        at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198)
+        at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169)
+        at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93)
+        at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58)
+        at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141)
+        at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57)
+        at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+        at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+        at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+        at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.processAllTestClasses(JUnitPlatformTestClassProcessor.java:124)
+        at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:99)
+        at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:94)
+        at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:63)
+        at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+        at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+        at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+        at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+        at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+        at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:92)
+        at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
+        at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:200)
+        at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:132)
+        at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:103)
+        at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:63)
+        at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+        at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:121)
+        at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:71)
+        at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+        at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+    ```
+
+    가상 스레드를 사용하여 콜 스택을 분리하면
+    ```java
+    @Test
+    public void testCheckVirtualThreadStackTrace() {
+        ValueHolder holder = new ValueHolder();
+        Thread virtualThread = Thread.ofVirtual().start(() -> {
             try {
-                Factorial.factorialDebug(5);
+                holder.value = Factorial.factorialDebug(5);
             }
             catch (RuntimeException e) {
-                System.out.println("Stack trace for testCheckStackTrace:");
+                System.out.println("Stack trace for testCheckVirtualThreadStackTrace:");
                 e.printStackTrace();
             }
+        });
+        try {
+            virtualThread.join();
         }
-        ```
-        
-        결과:
-        ```
-        Stack trace for testCheckStackTrace:
-        java.lang.RuntimeException: for debug
-            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:26)
-            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
-            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
-            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
-            at lambdaspecial.java.FactorialTest.testCheckStackTrace(FactorialTest.java:20)
-            at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-            at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-            at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:766)
-            at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
-            at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
-            at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
-            at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)
-            at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86)
-            at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
-            at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
-            at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
-            at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
-            at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
-            at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
-            at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
-            at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
-            at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$8(TestMethodTestDescriptor.java:217)
-            at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-            at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:213)
-            at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:138)
-            at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:68)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:156)
-            at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
-            at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
-            at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
-            at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
-            at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
-            at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
-            at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
-            at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
-            at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
-            at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
-            at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
-            at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
-            at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
-            at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
-            at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
-            at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
-            at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
-            at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198)
-            at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169)
-            at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93)
-            at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58)
-            at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141)
-            at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57)
-            at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
-            at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
-            at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
-            at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.processAllTestClasses(JUnitPlatformTestClassProcessor.java:124)
-            at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:99)
-            at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:94)
-            at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:63)
-            at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-            at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-            at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
-            at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
-            at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
-            at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:92)
-            at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
-            at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:200)
-            at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:132)
-            at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:103)
-            at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:63)
-            at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
-            at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:121)
-            at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:71)
-            at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
-            at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
-        ```
-        
-        가상 스레드를 사용하여 콜 스택을 분리하면
+        catch (InterruptedException e) {
+            fail("Virtual thread was interrupted");
+        }
+    }
+    ```
 
-        ```java
-        @Test
-        public void testCheckVirtualThreadStackTrace() {
-            ValueHolder holder = new ValueHolder();
-    
-            Thread virtualThread = Thread.ofVirtual().start(() -> {
-                try {
-                    holder.value = Factorial.factorialDebug(5);
-                }
-                catch (RuntimeException e) {
-                    System.out.println("Stack trace for testCheckVirtualThreadStackTrace:");
-                    e.printStackTrace();
-                }
-            });
-    
-            try {
-                virtualThread.join();
-            }
-            catch (InterruptedException e) {
-                fail("Virtual thread was interrupted");
-            }
-        }
-        ```
-        
-        결과:
-        ```
-        Stack trace for testCheckVirtualThreadStackTrace:
-        java.lang.RuntimeException: for debug
-            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:26)
-            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
-            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
-            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
-            at lambdaspecial.java.FactorialTest.lambda$testCheckVirtualThreadStackTrace$1(FactorialTest.java:56)
-            at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
-        ```
+    결과:
+    ```
+    Stack trace for testCheckVirtualThreadStackTrace:
+    java.lang.RuntimeException: for debug
+        at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:26)
+        at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
+        at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
+        at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
+        at lambdaspecial.java.FactorialTest.lambda$testCheckVirtualThreadStackTrace$1(FactorialTest.java:56)
+        at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
+    ```
     </details>
   * Scala, Kotlin은 Java와 같은 JVM에서 실행되지만 TCO를 지원하는데,
     컴파일러 수준에서 지원하는 것이고 함수형 언어들과 같은 본격적인 지원은 아니다.
