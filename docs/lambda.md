@@ -295,7 +295,7 @@ var f = (x) -> x + 1; // f는 (int) -> int 타입(Function<Integer>)으로 추�
   * Hindley-Milner 타입 추론 알고리즘을 사용함
   * 패턴 매칭(Pattern Matching) 기능으로 복잡한 데이터 구조를 간결하게 분해하고 처리 가능
   * 모듈 시스템을 통해 코드의 구조화와 재사용성을 높임
-  * Standard ML, OCaml, F# 등 많은 함수형 언어들의 직게 조상
+  * Standard ML, OCaml, F# 등 많은 함수형 언어들의 직계 조상
   * F#은 .NET에서 구동되는 함수형 언어
     ```fsharp
     let describeNumber number =
@@ -497,7 +497,7 @@ SELECT name FROM plant WHERE lifeCycle = @annual
 * 함수형 인터페이스
   * 추상 메소드(abstract method)가 한개뿐인 인터페이스
   * `@FunctionalInterface` 어노테이션을 사용하여 함수형 인터페이스임을 명시할 수 있음(없어도 됨)
-  * 메소드의 이름은 람다에서는 상관없고, 직접 코드로 호출하는 경우 적절한 이름으로 하면 된다.
+  * 메소드의 이름은 람다에서는 상관없고, 직접 코드로 호출하는 경우에 적절한 이름으로 선택하면 된다.
 
 ```java
 @FunctionalInterface
@@ -555,7 +555,7 @@ int add(int a, int b) {
 | `(T) -> R`       | `Function<T, R>`     | `R apply(T t)`        | `Arrays::asList`      |
 | `() -> T`        | `Supplier<T>`        | `T get()`             | `Instant::now`        |
 | `(T) -> void`    | `Consumer<T>`        | `void accept(T t)`    | `System.out::println` |
-| `(void) -> void` | `java.lang.Runnable` | `void run()`          | `Thread::run`         |
+| `() -> void`     | `java.lang.Runnable` | `void run()`          | `Thread::run`         |
 
 * 위 예제의 `Operation<T>` 인터페이스는 `BinaryOperator<T>`와 같은 시그니처이며
   새로 인터페이스를 만들 필요 없이 그냥 `BinaryOperator<T>`를 사용하면 됨.
@@ -731,8 +731,8 @@ public void testDailyHomework() {
 
     // 첫째날
     String firstHomework = homeworkStream
-            .map((s) -> s + " 그림")
             .findFirst()
+            .map((s) -> s + " 그림")
             .orElse("숙제 끝!");
   
     assertEquals("장미 그림", firstHomework);
@@ -740,16 +740,16 @@ public void testDailyHomework() {
     // 둘째날
     assertThrows(IllegalStateException.class, () -> {
         String secondHomework = homeworkStream
-                .map((s) -> s + " 그림")
                 .findFirst()
+                .map((s) -> s + " 그림")
                 .orElse("숙제 끝!");
         assertEquals("튤립 그림", secondHomework);
     });
 
     // 아 안되네 다시 둘째날
     String secondHomework = dailyHomeworks.stream()
-            .map((s) -> s + " 그림")
             .findFirst()
+            .map((s) -> s + " 그림")
             .orElse("숙제 끝!");
 
     assertNotEquals("튤립 그림", secondHomework);
@@ -758,8 +758,8 @@ public void testDailyHomework() {
     // 아씨 이것도 안되네 다시 둘째날
     String againSecondHomework = dailyHomeworks.stream()
             .skip(1)
-            .map((s) -> s + " 그림")
             .findFirst()
+            .map((s) -> s + " 그림")
             .orElse("숙제 끝!");
 
     assertEquals("튤립 그림", againSecondHomework);
@@ -785,6 +785,7 @@ void main() {
     );
 
     // SELECT name FROM plant WHERE lifeCycle = 'annual'
+    Plant.LifeCycle annual = Plant.LifeCycle.ANNUAL;
     plants.stream()                                     // 스트림 생성
             .filter(p -> p.lifeCycle() == annual)       // 중간 연산(Intermediate Operation)
             .map(Plant::name)                           // 중간 연산(Intermediate Operation)
@@ -1624,32 +1625,34 @@ public void testConcurrency() {
 </details>
 
 * 일반적인 성능에 대한 커뮤니티 의견(Kotlin >= Java)이 맞는 것으로 보임
+  * 특히 서버 API에서는 주로 100건 이하일텐데 이 경우는 분명하게 Kotlin이 빠름
+  * 람다의 경우 Kotlin이 Java보다 확실히 빠름
 * Kotlin 3건 대상의 경우 매우 느린데, Java에서 Kotlin 코드 실행시 초기화 작업(jit 컴파일 같은)이 필요한 것으로 보임
-* 반대로 Kotlin에서 Java 코드 실행시에는 훨씬 덜한 것으로 보이며 `java lamda`에서만 발생함.
-  <details>
-    <summary>숫자 보기</summary>
+  * 반대로 Kotlin에서 Java 코드 실행시에는 초기 오버헤드가 훨씬 덜한 것으로 보임
+    <details>
+      <summary>숫자 보기</summary>
 
-    > 테스트 실행시마다 랜덤수로 배열을 생성하므로 java에서 실행한 결과와 1:1 비교는 불가능함
+    >   테스트 실행시마다 랜덤수로 배열을 생성하므로 java에서 실행한 결과와 1:1 비교는 불가능함
 
-    | lang   | method | 3     | 10   | 100  | 1k   | 10k  | 100k  | 1M   |
-    |--------|--------|-------|------|------|------|------|-------|------|
-    | java   | array  | 1.0   | 1.0  | 1.0  | 1.0  | 1.0  | 1.0   | 1.0  |
-    | java   | list   | 2.9   | 3.3  | 3.3  | 2.1  | 2.8  | 2.6   | 4.2  |
-    | java   | lambda | 227.6 | 55.2 | 34.1 | 21.7 | 24.7 | 19.1  | 13.7 |
-    | kotlin | array  | 0.7   | 0.9  | 0.7  | 0.9  | 1.0  | 1.0   | 1.0  |
-    | kotlin | list   | 1.7   | 3.1  | 1.8  | 2.1  | 2.7  | 3.1   | 4.2  |
-    | kotlin | lambda | 7.2   | 23.5 | 10.6 | 11.4 | 12.0 | 10.6  | 11.0 |
+      | lang   | method | 3     | 10   | 100  | 1k   | 10k  | 100k  | 1M   |
+      |--------|--------|-------|------|------|------|------|-------|------|
+      | java   | array  | 1.0   | 1.0  | 1.0  | 1.0  | 1.0  | 1.0   | 1.0  |
+      | java   | list   | 2.9   | 3.3  | 3.3  | 2.1  | 2.8  | 2.6   | 4.2  |
+      | java   | lambda | 227.6 | 55.2 | 34.1 | 21.7 | 24.7 | 19.1  | 13.7 |
+      | kotlin | array  | 0.7   | 0.9  | 0.7  | 0.9  | 1.0  | 1.0   | 1.0  |
+      | kotlin | list   | 1.7   | 3.1  | 1.8  | 2.1  | 2.7  | 3.1   | 4.2  |
+      | kotlin | lambda | 7.2   | 23.5 | 10.6 | 11.4 | 12.0 | 10.6  | 11.0 |
     
-    | lang   | method | 3     | 10    | 100   | 1k    | 10k    | 100k    | 1M      |
-    |--------|--------|-------|-------|-------|-------|--------|---------|---------|
-    | java   | array  | 0.006 | 0.003 | 0.060 | 0.325 | 1.183  | 5.947   | 69.891  |
-    | java   | list   | 0.018 | 0.011 | 0.199 | 0.670 | 3.288  | 15.225  | 294.623 |
-    | java   | lambda | 1.389 | 0.177 | 2.030 | 7.040 | 29.266 | 113.410 | 958.802 |
-    | kotlin | array  | 0.004 | 0.003 | 0.043 | 0.306 | 1.156  | 6.237   | 69.246  |
-    | kotlin | list   | 0.010 | 0.010 | 0.106 | 0.672 | 3.147  | 18.153  | 295.639 |
-    | kotlin | lambda | 0.044 | 0.075 | 0.630 | 3.710 | 14.202 | 63.236  | 770.101 |
+      | lang   | method | 3     | 10    | 100   | 1k    | 10k    | 100k    | 1M      |
+      |--------|--------|-------|-------|-------|-------|--------|---------|---------|
+      | java   | array  | 0.006 | 0.003 | 0.060 | 0.325 | 1.183  | 5.947   | 69.891  |
+      | java   | list   | 0.018 | 0.011 | 0.199 | 0.670 | 3.288  | 15.225  | 294.623 |
+      | java   | lambda | 1.389 | 0.177 | 2.030 | 7.040 | 29.266 | 113.410 | 958.802 |
+      | kotlin | array  | 0.004 | 0.003 | 0.043 | 0.306 | 1.156  | 6.237   | 69.246  |
+      | kotlin | list   | 0.010 | 0.010 | 0.106 | 0.672 | 3.147  | 18.153  | 295.639 |
+      | kotlin | lambda | 0.044 | 0.075 | 0.630 | 3.710 | 14.202 | 63.236  | 770.101 |
 
-  </details>
+    </details>
 
 ### 꼬리 호출 최적화(Tail Call Optimization)
 
@@ -1677,7 +1680,165 @@ public void testConcurrency() {
 * Java의 경우 TCO를 지원하지 않음
   * 이는 Java의 콜 스택이 언어의 다른 메커니즘들과 깊은 관련이 있기 때문이다.
     (예외 처리 Stack trace, `SecurityManager.checkMemberAccess()` 등 보안 관련 기능)
-  * Java는 TCO는 지원하지 않지만 가상 스레드(Virtual Threads)를 통해서 스택 오버플로우 위험을 줄일 수 있음(Java 21)
+  * Java는 TCO는 지원하지 않지만 가상 스레드(Virtual Threads)를 통해서 스택 오버플로우 위험을 쪼금은 줄일 수 있음(Java 21)
+    <details>
+        <summary>가상 스레드 예시</summary>
+        
+        ```java
+        public class Factorial {
+            public static long factorialDebug(int n) {
+                if (n < 0)
+                    throw new IllegalArgumentException("Factorial is not defined for negative numbers.");
+                if (n == 0 || n == 1)
+                    return 1;
+                // 스택 트레이스를 확인하기 위해 예외를 던짐
+                if (n == 2)
+                    throw new RuntimeException("for debug");
+                return n * factorialDebug(n - 1);
+            }
+        }
+        @Test
+        public void testCheckStackTrace() {
+            try {
+                Factorial.factorialDebug(5);
+            }
+            catch (RuntimeException e) {
+                System.out.println("Stack trace for testCheckStackTrace:");
+                e.printStackTrace();
+            }
+        }
+        ```
+        
+        결과:
+        ```
+        Stack trace for testCheckStackTrace:
+        java.lang.RuntimeException: for debug
+            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:26)
+            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
+            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
+            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
+            at lambdaspecial.java.FactorialTest.testCheckStackTrace(FactorialTest.java:20)
+            at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+            at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+            at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:766)
+            at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+            at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+            at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+            at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)
+            at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86)
+            at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+            at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+            at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+            at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+            at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+            at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+            at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+            at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+            at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$8(TestMethodTestDescriptor.java:217)
+            at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+            at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:213)
+            at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:138)
+            at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:68)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:156)
+            at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+            at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+            at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+            at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+            at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+            at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+            at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+            at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+            at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
+            at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:160)
+            at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:146)
+            at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:144)
+            at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:143)
+            at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:100)
+            at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+            at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+            at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+            at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198)
+            at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169)
+            at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93)
+            at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58)
+            at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141)
+            at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57)
+            at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+            at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+            at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+            at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.processAllTestClasses(JUnitPlatformTestClassProcessor.java:124)
+            at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:99)
+            at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:94)
+            at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:63)
+            at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+            at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+            at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+            at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+            at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+            at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:92)
+            at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
+            at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:200)
+            at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:132)
+            at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:103)
+            at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:63)
+            at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+            at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:121)
+            at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:71)
+            at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+            at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+        ```
+        
+        가상 스레드를 사용하여 콜 스택을 분리하면
+
+        ```java
+        @Test
+        public void testCheckVirtualThreadStackTrace() {
+            ValueHolder holder = new ValueHolder();
+    
+            Thread virtualThread = Thread.ofVirtual().start(() -> {
+                try {
+                    holder.value = Factorial.factorialDebug(5);
+                }
+                catch (RuntimeException e) {
+                    System.out.println("Stack trace for testCheckVirtualThreadStackTrace:");
+                    e.printStackTrace();
+                }
+            });
+    
+            try {
+                virtualThread.join();
+            }
+            catch (InterruptedException e) {
+                fail("Virtual thread was interrupted");
+            }
+        }
+        ```
+        
+        결과:
+        ```
+        Stack trace for testCheckVirtualThreadStackTrace:
+        java.lang.RuntimeException: for debug
+            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:26)
+            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
+            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
+            at lambdaspecial.java.Factorial.factorialDebug(Factorial.java:28)
+            at lambdaspecial.java.FactorialTest.lambda$testCheckVirtualThreadStackTrace$1(FactorialTest.java:56)
+            at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
+        ```
+    </details>
   * Scala, Kotlin은 Java와 같은 JVM에서 실행되지만 TCO를 지원하는데,
     컴파일러 수준에서 지원하는 것이고 함수형 언어들과 같은 본격적인 지원은 아니다.
     * 예를들어 Kotlin의 경우 기본적으로 TCO를 지원하지 않지만, `tailrec` 키워드를 사용하여
