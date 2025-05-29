@@ -1,10 +1,6 @@
 package lambdaspecial.java.enroll.domain;
 
-import effectivejava.chapter02.item02.Pizza;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Date;
-import java.util.Objects;
 
 // Student.java
 public class Student {

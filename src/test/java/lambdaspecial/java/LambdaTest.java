@@ -1,13 +1,7 @@
 package lambdaspecial.java;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.*;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;

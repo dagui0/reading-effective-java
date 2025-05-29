@@ -135,6 +135,7 @@ plus_4(5)               // 9
 
 * 클로저(closure)란 함수와 함수가 정의된 환경이 캡슐화된 객체임
   * `function(b) { return a + b; }`는 `a`라는 자유변수를 가진 클로저
+  * 클로저는 함수의 커링을 지원하기 위해서 고안된 개념이고 Lisp언어에서 유래함
 * 클로저 인스턴스(closure instance)
   * 클로저에 자유변수에 대한 정의(`a := 3`)가 적용된 `plus_3`같은 함수
   * 딱히 규정된 이름은 없는 듯 하고, 다양하게 부른다.
@@ -143,9 +144,57 @@ plus_4(5)               // 9
     * 커링된 함수 (Curried Function)
   * `plus_a` 함수의 지역변수인 `a`가 클로저 내에 자유변수로 포획(captured)되었다고 말한다.
 
-> Q: 람다는 그냥 메소드를 인라인으로 쓸 수 있는 것 아닌가요? \
+> Q: 람다는 그냥 메소드를 인라인으로 쓸 수 있는 것 아닌가요?
+> 
 > A: 네 아닙니다. 람다식은 클로저이며 객체로 생각해야 합니다. \
 >    포획된 변수를 필드로 하고, 함수의 본체를 메소드로 하는 (실행 가능한) 객체라고 생각하세요.
+
+#### Javascript의 클로저
+
+* Javascript에서는 클로저를 이용해서 private 멤버를 가진 객체를 생성하는 패턴이 흔히 사용됨
+
+```javascript
+let Person = function(name, age) {
+
+    let _name = name || "John Doe"; // 클로저를 통해 private 상태 유지
+    let _age = age;
+
+    const personInstance = {
+        home: "Seoul",      // public 속성
+                            // delete person['home'] 같이 삭제도 가능
+    };
+    Object.defineProperties(personInstance, {
+        isAdult: {
+            // alice.isAdult() 형태로 접근 가능
+            value: () => _age >= 18,
+            enumerable: false,   // for (let prop in person) {} 같이
+                                 // 순회할때 포함되지 않음
+            configurable: false  // 프로퍼티를 read-only로 만듬
+        },
+        name:   {
+            // alice.name = "Alice" 형태로 접근 가능
+            get: () => _name,
+            set: (newName) => { _name = newName;},
+            enumerable: true,
+            configurable: false
+        },
+        age:    {
+            // alice.age = 30 형태로 접근 가능
+            get: () => _age,
+            set: (newAge) => { _age = newAge; },
+            enumerable: true,
+            configurable: false
+        },
+    });
+    return personInstance;
+}
+module.exports = Person
+```
+
+* Javascript에서는 지역변수가 클로저에 포획되면, 함수가 종료되더라도 클로저가 살아있는 동안까지 생명이 연장됨
+  * `_name`과 `_age`는 `Person()` 함수가 종료되더라도 getter와 setter, `isAdult()` 등의 메소드에서 포획되었으므로 계속 사용가능함
+  * ES6 부터 `class` 문법이 추가되었고, ES2022 부터는 `#`접두사를 사용하여 진정한 `private`멤버를 만들 수 있게 되었다. 
+  * 하지만 클로저를 이용해서 클래스를 흉내내는 코드도 아직 많이 사용되고 있다.
 
 #### 변수 포획(Capturing Variables)
 
@@ -163,7 +212,7 @@ plus_4(5)               // 9
       a = 4; // 컴파일 에러: 람다식에서 포획된 변수는 final 이나 effectively final 이어야 함
   }
   ```
-* `final` 객체 참조를 통한 변경 가능한 변수를 만드는 것은 가능함
+* `final` 객체 참조를 통한 변경 가능한 변수를 만드는 것은 가능함``
   ```java
   class Holder {
       int value;
@@ -666,30 +715,118 @@ public void testHaskellBrooksCurrying() {
       assertEquals("lambdaspecial.java.LambdaTest$1", addAnonClz.getClass().getName());
   }
   ```
-  * 람다식이 동작하는 방식
-    * 컴파일 타임
-      * 컴파일러는 람다식이 나오면 클래스에 함수 본체를 `private static` 메소드로 컴파일해놓음
-      * 람다식이 출현한 위치에는 `invokedynamic`이라는 JVM 명령을 넣음
-    * 런타임
-      * JVM은 `invokedynamic`을 발견하면 `java.lang.invoke.LambdaMetafactory`를 이용해
-        동적으로 클래스를 생성하고 앞서 만들었던 `private static` 메소드를 연결함
-      * 클래스명은 JVM 내부 규칙에 따라 자동으로 만들어지므로 매번 달라질 수 있음. \
-        람다식을 위해서 `Class.forName()`을 사용할 일은 없겠지만 근본적으로 불가능함.
-  * Java의 타입 시스템은 클래스와 인터페이스를 근간으로 하여 설계되어 있음
-    * 굴러온 돌인 람다(함수)라는 개념이 시스템의 근간을 흔들게 할 수는 없었던 모양
-    * `(a, b) -> a + b`는 `BinaryOperator<T>`일 수도 있고, `BiFunction<T,U,R>`일 수도 있고, `MyArithmeticOperator<T,R>`일 수도 있음.
-      * 따라서 `int r = ((a, b) -> a + b)(3, 4)`이라는 코드는 런타임에 어떤 인터페이스를 구현할 지 결정할 수 없음
-    * 람다식의 실제 클래스 타입은 위치한 곳(변수 선언이나 메소드 인자 선언)에서 요구되는 인터페이스에 따라 결정되는데
-      이를 목표 타이핑(target typing)이라고 함.
-  * 로딩 시점의 비교
-    * 익명클래스: 클래스는 보통 클래스가 로드될때 참조하는 다른 클래스가 연쇄적으로 같이 로딩됨 \
-      -> 익명 클래스들도 마찬가지로 애플리케이션 시작시 동시 로딩됨
-    * 람다: 해당 람다식이이 있는 코드가 처음 실행될 때 클래스가 생성됨 \
-      -> 지연 로딩(lazy loading)으로 로딩 속도가 빨라질 수 있음
+* Java의 람다식이 동작하는 방식
+  * 컴파일 타임
+    * 컴파일러는 람다식이 나오면 클래스에 함수 본체를 `private static` 메소드로 컴파일해놓음
+    * 람다식이 출현한 위치에는 `invokedynamic`이라는 JVM 명령을 넣음
+  * 런타임
+    * JVM은 `invokedynamic`을 발견하면 `java.lang.invoke.LambdaMetafactory`를 이용해
+      동적으로 클래스를 생성하고 앞서 만들었던 `private static` 메소드를 연결함
+    * 클래스명은 JVM 내부 규칙에 따라 자동으로 만들어지므로 매번 달라질 수 있음. \
+      람다식을 위해서 `Class.forName()`을 사용할 일은 없겠지만 근본적으로 불가능함.
+* Java의 타입 시스템은 클래스와 인터페이스를 근간으로 하여 설계되어 있음
+  * 굴러온 돌인 람다(함수)라는 개념이 시스템의 근간을 흔들게 할 수는 없었던 모양
+  * `(a, b) -> a + b`는 `BinaryOperator<T>`일 수도 있고, `BiFunction<T,U,R>`일 수도 있고, `MyArithmeticOperator<T,R>`일 수도 있음.
+    * 따라서 `int r = ((a, b) -> a + b)(3, 4)`이라는 코드는 런타임에 어떤 인터페이스를 구현할 지 결정할 수 없음
+  * 람다식의 실제 클래스 타입은 위치한 곳(변수 선언이나 메소드 인자 선언)에서 요구되는 인터페이스에 따라 결정되는데
+    이를 목표 타이핑(target typing)이라고 함.
+* 로딩 시점의 비교
+  * 익명클래스: 클래스는 보통 클래스가 로드될때 참조하는 다른 클래스가 연쇄적으로 같이 로딩됨 \
+    -> 익명 클래스들도 마찬가지로 애플리케이션 시작시 동시 로딩됨
+  * 람다: 해당 람다식이이 있는 코드가 처음 실행될 때 클래스가 생성됨 \
+    -> 지연 로딩(lazy loading)으로 로딩 속도가 빨라질 수 있음
 
 ## 스트림 API와 컬렉션 조작
 
 ![세대 차이](img/generation-gap.jpg)
+
+### 스트림이란 무엇인가?
+
+```
+Forged in the fires of Windows, this file emerges!
+What's kickin', Windows?
+
+Bill Gates for Emperor!!
+Microsoft shall inherit the Earth!!
+```
+
+* `ed`는 Unix에서 사용된 초기의 텍스트 편집기임
+  * `ed` 스크립트의 예시
+  ```
+  $ cat <<EOF | ed -s file.txt      # 문자열 치환을 수행하고 끝으로 `wq` 저장
+  g/Windows/s//Windows(TM)/g
+  g/Microsoft/s//Microsoft(TM)/g
+  /^Bill Gates/s//The Mighty Bill G/
+  wq
+  EOF
+  $ cat file.txt
+  Forged in the fires of Windows(TM), this file emerges!
+  What's kickin', Windows(TM)?
+  
+  The Mighty Bill G for Emperor!!
+  Microsoft(TM) shall inherit the Earth!!
+  ```
+
+* 쉘 스크립트에서 많이 사용하는 `sed`는 `stream ed`를 의미하는데, `ed`와 비슷하지만 약간 다름
+  * `sed`는 메모리에 올려놓기에는 너무 큰 파일을 편집하기 위해 개발되었음
+  ```
+  $ cat <<EOF | sed -f - file.txt >newfile.txt  # 명령이 약간 다르고 `wq`가 없음
+  s/Windows/Windows(TM)/g
+  s/Microsoft/Microsoft(TM)/g
+  s/^Bill Gates/The Mighty Bill G/
+  EOF
+  $ cat newfile.txt                      # newfile.txt에 저장됨
+  Forged in the fires of Windows(TM), this file emerges!
+  What's kickin', Windows(TM)?
+  
+  The Mighty Bill G for Emperor!!
+  Microsoft(TM) shall inherit the Earth!!
+  $ cat file.txt                         # 원본은 건드리지 않았음
+  Forged in the fires of Windows, this file emerges!
+  What's kickin', Windows?
+  
+  Bill Gates for Emperor!!
+  Microsoft shall inherit the Earth!!
+  ```
+
+* `ed`와 `sed`의 차이점 - 스트림이란 무엇인가?
+  * `ed`는 파일을 메모리 버퍼에 올려놓고, `ed` 명령어를 순차적으로 실행한다.
+    * 스크립트의 명령 1행을 읽은 후 버퍼에서 편집할 라인을 찾아가서 수행됨
+      * `g/Windows/` -> `Windows`가 있는 모든 행
+      * `/^Bill Gates/` -> `Bill Gates`로 시작하는 첫번째 행
+      ```ed
+      g/Windows/s//Windows(TM)/g
+      g/Microsoft/s//Microsoft(TM)/g
+      /^Bill Gates/s//The Mighty Bill G/
+      wq
+      ```
+    * 스크립트의 모든 행을 처리하면 끝남
+  * `sed`는 메모리 버퍼에 파일을 올려두지 않고 파일에서 한행씩 읽어서 처리한다.
+    * 입력 1행을 읽은 후 스크립트를 순차적으로 실행하고, 다음 행을 읽은 후 또 스크립트를 실행하는 식으로 파일의 끝까지 반복
+      * 명령에 행지정을 따로 안하면 "모든 행에 대한"(처음의 `g`)이란 설정이 암묵적으로 적용되는 효과가 있음
+        * 예시에서 `Bill Gates`로 시작하는 행이 여러개 있었다면 모두 적용됨 (`g/^Bill Gates/s//The Mighty Bill G/` 와 같음)
+      ```sed
+      s/Windows/Windows(TM)/g
+      s/Microsoft/Microsoft(TM)/g
+      s/^Bill Gates/The Mighty Bill G/
+      ```
+      * 입력의 모든 행을 다 읽으면 끝남 (입력:명령이 N:M으로 모두 적용됨)
+    * 그리고 기본적으로 편집된 내용을 원본에 덮어쓰지 않고 다른 파일(표준출력)로 저장함 (옵션으로 덮어쓰게 할 수도 있기는 함)
+
+* 스트림 API를 새로 배우는 상황은 `ed`만을 사용하다가 처음으로 `sed`를 사용해보는 것과 같으며 약간의 사고의 전환이 필요함
+  * 참고로 현재 Unix/Linux에서는 `ed`는 `vi`등으로 대체되었지만, `sed`는 여전히 많이 사용되고 있다.
+  * Java는 스트림과 람다의 등장(java 8+)을 기준으로 고전 자바(Classic Java)와 모던 자바(Modern Java)라고 할 만큼 개발 방식이 바뀌고 있다.
+
+* Stream 처리 방식을 사용하는 또다른 사례
+  * XML Parser를 사용할때 보통 DOM 기반 인터페이스를 사용하지만, 스트림 기반 인터페이스를 이용하는 SAX(Simple API for XML)도 있다.
+    * SAX는 문서를 전체 로드하지 않고 처리할 수 있으므로 메모리를 적게 쓰고, 경우에 따라 더 빠르고 효율적으로 처리할 수도 있다.
+  * 대용량 ETL이나 빅데이터 처리 파이프라인, 동영상 스트리밍, 이벤트 스트림 처리 특화 시스템(Kafka, Akka Streams, Spark Streaming 등)
+  * 스트림 처리의 특징
+    * 작은 단위로 나누어 단계별로 처리하여 메모리 사용량을 최적화
+    * 작은 단위는 독립적으로 실행되므로 병렬 처리가 가능
+    * 무한 데이터 스트림을 지원할 수 있음 (이벤트 로그 수집 등)
+
+#### 절차적 vs. 함수형
 
 ```java
 void main() {
@@ -770,6 +907,8 @@ public void testDailyHomework() {
 * 스트림에서 조작을 하더라도 원본 컬렉션에는 영향이 없다.
 
 ### 스트림 연산
+
+#### 스트림 파이프라인
 
 * 스트림 연산은 스트림 메소드의 체인으로 나타나고 이를 파이프라인(pipeline)이라고도 표현함
 
@@ -980,7 +1119,7 @@ void main() {
 | `COUNT(*)`         | `count()`                  |                      | `long`        | 개수 반환                                 |
 | `MAX()`            | `max(comparator)`          | `Comparator<T>`      | `Optional<T>` | 최대값 반환                                |
 | `MIN()`            | `min(comparator)`          | `Comparator<T>`      | `Optional<T>` | 최소값 반환                                |
-| `SUM(), AVG() ...` | `reduce(accumulator)`      | `(T, T) -> T`        | `Optional<T>` | 누산 (다른 버전 有)                          |
+| `SUM(), AVG() ...` | `reduce(accumulator)`      | `(T r, T e) -> T`    | `Optional<T>` | 누산 (다른 버전 有)                          |
 | `GROUP BY`         | `<R, A>collect(collector)` | `Collector<T, A, R>` | `R`           | `reduce()`의 커스텀 버전 (다른 버전 有)          |
 | -                  | `toList()`                 |                      | `List<T>`     | 리스트로 변환 (java 16+)                    |
 | -                  | `toArray()`                |                      | `Object[]`    | 배열로 변환                                |
@@ -1004,11 +1143,10 @@ void main() {
 * `reduce()`는 스트림의 요소를 누적하여 단일 결과를 생성하는데 사용됨
   * `count()`, `min()`, `max()`, `sum()` 등은 `reduce()`를 사용하여 구현된 응용 메소드라고 생각할 수 있음
 
-| 기본형        | 스트림 연산                                       | 인수 타입                                 | 결과 타입         | 설명           |
-|------------|----------------------------------------------|---------------------------------------|---------------|--------------|
-| `reduce()` | `reduce(accumulator)`                        | `(T r, T e) -> T`                     | `Optional<T>` | 단순 누산        |
-|            | `reduce(identity, accumulator)`              | `T, (T r, T e) -> T`                  | `T`           | 초기값을 지정하는 버전 |
-|            | `<U>reduce(identity, accumulator, combiner)` | `U, (U r, T e) -> U, (U a, U b) -> T` | `T`           | 병렬 처리용 버전    |
+| 기본형        | 스트림 연산                          | 인수 타입                | 결과 타입         | 설명           |
+|------------|---------------------------------|----------------------|---------------|--------------|
+| `reduce()` | `reduce(accumulator)`           | `   (T r, T e) -> T` | `Optional<T>` | 단순 누산        |
+|            | `reduce(identity, accumulator)` | `T, (T r, T e) -> T` | `T`           | 초기값을 지정하는 버전 |
 
 ```java
 void main() {
@@ -1086,10 +1224,10 @@ void main() {
 
 ### 확장된 `reduce()`: `collect()`
 
-| 기본형         | 스트림 연산                                        | 인수 타입                                     | 결과 타입         | 설명               |
-|-------------|-----------------------------------------------|-------------------------------------------|---------------|------------------|
-| `collect()` | `<R, A>collect(collector)`                    | `Collector<T, A, R>`                      | `R`           | 커스텀 컬렉터 객체 지정 버전 |
-|             | `<R>collect(supplier, accumulator, combiner)` | `() -> R, (R, T) -> void, (R, R) -> void` | `R`           | 컬렉터 생성을 풀어 쓴 버전  |
+| 기본형         | 스트림 연산                                        | 인수 타입                                         | 결과 타입     | 설명                |
+|-------------|-----------------------------------------------|-----------------------------------------------|-----------|-------------------|
+| `collect()` | `<R>collect(supplier, accumulator, combiner)` | `() -> R, (R r, T e) -> void, (R, R) -> void` | `R`       | 컬렉터 생성을 풀어 쓴 버전   |
+|             | `<R, A>collect(collector)`                    | `Collector<T, A, R>`                          | `R`       | 커스텀 컬렉터 객체 지정 버전  |
 
 * `reduce()`가 스트림을 하나의 값(scalar value)로 요약하는 것이라면, `collect()`는 하나의 객체(object)로 요약하는 것.
   * 즉 `reduce(identity, accumulator)`에서 `identity`로 객체를 제공하는 것으로 생각할 수 있음.
@@ -1129,6 +1267,15 @@ void main() {
 * `combiner`: 병렬 스트림에서 두 결과 객체를 합치는 함수
   * 병렬 스트림에서는 여러 스레드가 각자 `Summary`객체를 가지고 `accumulator`를 호출하게 되고,
     최종적으로 `combiner`를 이용해서 하나로 합쳐짐.
+
+| 기본형         | 스트림 연산                                        | 인수 타입                                         | 결과 타입 | 설명                |
+|-------------|-----------------------------------------------|-----------------------------------------------|-------|-------------------|
+| `reduce()`  | `<R>reduce(identity, accumulator, combiner)`  | `R,       (R r, T e) -> R,    (R, R) -> R`    | `R`   | 병렬 처리용 `reduce()` |
+| `collect()` | `<R>collect(supplier, accumulator, combiner)` | `() -> R, (R r, T e) -> void, (R, R) -> void` | `R`   | 컬렉터 생성을 풀어 쓴 버전   |
+
+* 평균은 `reduce`로는 구할 수 없다고 했지만 사실 가능한 `reduce`버전이 있다.
+* 하지만 `<R>reduce(identity, accumulator, combiner)`는 이름은 `reduce`이지만,
+  개념상 `collect(supplier, accumulator, combiner)`의 변형이라고 볼 수도 있다.
 
 #### `Collector` 인터페이스
 
@@ -1220,6 +1367,7 @@ void main() {
 
 * `Collectors` 클래스의 `static` 메소드로 많이 사용될법한 컬렉터가
   엄청 많이 정의되어있어서 `Collector`를 새로 만들 필요는 크지 않다.
+* `import static java.util.stream.Collectors.*` 로 `Collectors.` 을 생략 가능
 
 ##### 집계(aggregation)
 
@@ -1314,15 +1462,17 @@ void main() {
 |            | `partitioningBy(predicate, downstream)`                    | `(T) -> boolean, Collector<T, A, D>`    | `Collector<T, ?, Map<Boolean, D>>`           |
 
 ```java
+import static java.util.stream.Collectors.*;
+
 void main() {
     List<Employee> employees = getEmployees();
 
     Map<Department, List<Employee>> employeesByDepartment = employees.stream()
             .collect(
-                    Collectors.groupingBy(
+                    groupingBy(
                             Employee::getDepartment,   // classifier
                             TreeMap::new,              // mapFactory
-                            Collectors.toCollection(   // downstream
+                            toCollection(   // downstream
                                     LinkedList::new))  // collectionFactory
                     );
 }
@@ -1344,6 +1494,7 @@ void main() {
 
 * `downstream` 인자를 가지는 다른 `Collector`와 조합하여 체인을 만드는 용도
    ```java
+    import static java.util.stream.Collectors.*;
     void main() {
   
         // SELECT D.name, SUM(E.salary) AS totalSalary
@@ -1355,9 +1506,9 @@ void main() {
         List<Employee> employees = getEmployees();
         Map<Department, Long> byDepartment = employees.stream()
                 .collect(
-                        Collectors.groupingBy(
+                        groupingBy(
                                 Employee::getDepartment,     // classifier
-                                Collectors.reducing(
+                                reducing(
                                         0L,                  // identity
                                         Employee::getSalary, // mapper
                                         Long::sum            // accumulator
@@ -1391,6 +1542,8 @@ void main() {
 * 최대값과 최소값을 동시에 찾기
 
 ```java
+import static java.util.stream.Collectors.*;
+
 record MinMax(int min, int max) {}
 
 void main() {
@@ -1398,9 +1551,9 @@ void main() {
 
     MinMax result = numbers.stream()
             .collect(
-                    Collectors.teeing(
-                            Collectors.minBy(Comparator.naturalOrder()), // downstream1
-                            Collectors.maxBy(Comparator.naturalOrder()), // downstream2
+                    teeing(
+                            minBy(Comparator.naturalOrder()), // downstream1
+                            maxBy(Comparator.naturalOrder()), // downstream2
                             (min, max) -> new MinMax(min.orElse(0), max.orElse(0)) // merger
                     )
             );
@@ -1438,8 +1591,6 @@ void main() {
         );
 }
 ```
-
-* `import static java.util.stream.Collectors.*` 로 `Collectors.` 을 생략 가능
 
 #### 병렬 처리
 
@@ -1541,7 +1692,7 @@ public void testConcurrency() {
 
 ### One More Thing...
 
-![One More Thing](img/one-more-thing.jpg)
+![One More Thing...](img/one-more-thing.jpg)
 
 * `java.util.Optional<T>`는 `null`일 수도 있는 값을 담고 있는 컨테이너 객체인데,
   원소가 최대 1개인 스트림으로 생각할 수 있다.
@@ -1558,14 +1709,41 @@ public void testConcurrency() {
 
 #### 중간 연산
 
-| 연산                                     | 인수 타입                     | 결과 타입        |
-|----------------------------------------|---------------------------|--------------|
-| `stream()`                             |                           | `Stream<T>`  |
-| `filter(predicate)`                    | `(T) -> boolean`          | `Stream<T>`  |
-| `map(mapper)`                          | `(T) -> T2`               | `Stream<T2>` |
-| `flatMap(mapper)`                      | `(T) -> Stream<T2>`       | `Stream<T2>` |
+| 연산                  | 인수 타입               | 결과 타입        |
+|---------------------|---------------------|--------------|
+| `stream()`          |                     | `Stream<T>`  |
+| `filter(predicate)` | `(T) -> boolean`    | `Stream<T>`  |
+| `map(mapper)`       | `(T) -> T2`         | `Stream<T2>` |
+| `flatMap(mapper)`   | `(T) -> Stream<T2>` | `Stream<T2>` |
 
-#### 최종 연산(`null` 값 검사)
+* 하스켈의 `Maybe` 모나드
+  * `Maybe`는 Java의 `Optional`의 원형이 되는 하스켈의 내장 객체인데 아래와 같이 정의되어있다.
+    ```haskell
+    data Maybe a = Nothing | Just a
+    ```
+  * 호출 체인(모나딕 연산)의 중간에 하나라도 `Nothing`이 나오면 `Nothing`이 반환됨
+
+```haskell
+getCityName :: Int -> Maybe String
+getCityName userId = do
+    userName <- findUser userId
+    address  <- findAddress userName
+    city     <- findCity address
+    return city
+```
+
+* Java에서는 `Optional.flatMap()`을 사용하여 유사한 방식을 구현할 수 있음
+  * 호출 체인의 중간에 하나라도 `Optional.empty()`가 나오면 최종 결과도 `Optional.empty()`가 됨
+
+```java
+Optional<String> getCityName(int userId) {
+    return findUser(userId)                     // Optional<User>
+        .flatMap(user -> findAddress(user))     // Optional<Address>
+        .flatMap(address -> findCity(address)); // Optional<String>
+}
+```
+
+#### 최종 연산(`null` 값 검사 및 처리)
 
 | 연산                                     | 인수 타입                       | 결과 타입                                 |
 |----------------------------------------|-----------------------------|---------------------------------------|
@@ -1579,8 +1757,7 @@ public void testConcurrency() {
 | `ifPresent(action)`                    | `(T) -> void`               |                                       |
 | `ifPresentOrElse(action, emptyAction)` | `(T) -> void, () -> void`   |                                       |
 
-* 자세한 설명은 생략한다
-
+* 그밖의 자세한 설명은 생략한다
 
 ## 그럼 람다가 짱인가요?
 
