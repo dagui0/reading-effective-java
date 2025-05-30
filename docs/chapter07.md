@@ -284,7 +284,7 @@ class LinkedHashMapLambda<K, V> implements Map<K, V> {
     public V put(K key, V value) {
         if (removal.removeEldestEntry(this, new Entry<>(key, value)))
             return remove(null);
-        return null;
+        // ...
     }
     // ...
 }
@@ -560,6 +560,7 @@ class MySimpleCacheLambda<K, V> {
 * 스트림은 기능적으로는 `Iterable`처럼 동작할 수 있지만 `Iterable`을 구현하지 않았다.
   * 반면 `Iterator`는 `stream()` 메서드를 제공하여 스트림으로 변환 가능함
   * 꼭 `Iterable`이 필요하다면 스트림은 `iterator()`를 제공하기 때문에 간단한 어댑터로 변환할 수 있음
+    * 하지만 이렇게 만들어진 `Iterable` 역시 재사용은 불가능하다는 점 주의
 
 ```java
 public static <T> Iterable<T> iterableOf(Stream<T> stream) {
@@ -724,7 +725,7 @@ void main() {
     * 분할된 청크는 각자 독립적으로 처리 가능
   * 참조 지역성(locality of reference)이 좋은 경우 또는 순서가 있는 경우(ordered)
 * 병렬 처리와 잘 어울리는 스트림 연산
-  * `short-circuiting` 특성의 연산
+  * 단락(short-circuiting) 특성의 연산
     * `findFirst()`, `findAny()`, `anyMatch()`, `allMatch()`, `noneMatch()`
   * `reduce(identity, accumulator, combiner)`같이 병렬연산을 고려한 오버로드를 사용
   * 최종 연산(terminal operation)이나 순차 처리가 필요한 단계가 있다면
@@ -735,14 +736,14 @@ void main() {
 
 ### 병렬 스트림이 효과 없거나 문제가 될 경우
 
-* 함수가 제대로 구현되지 않은 경우 안전 실패(safe-failure)로 이어질 수 있음
+* 함수가 제대로 구현되지 않은 경우 안전 실패(safety failure)로 이어질 수 있음
   * `mapper`, `filter`, `accumulator` 같은 함수가 Stream API 규악을 위배한 경우 발생할 수 있다.
-  * 예를 들어 `accumulator`, `combiner`의 경우 다음 원칙을 만족해야함
+  * `accumulator`, `combiner` 등의 스트림 메서드의 인자로 제공되는 함수는 규칙을 지켜야함
     * 결합 법칙(associative): `(a + b) + c == a + (b + c)` 일 경우 `+`는 결합법칙을 만족
     * 불간섭(non-interfering): 파이프라인이 수행중에 스트림 소스가 변경되면 안됨
     * 무상태(stateless): 함수가 외부 상태에 의존하지 않아야 함
 * 병렬화에 들어가는 비용이 병렬화로 얻는 이점보다 더 클 수 있음
-  * 병렬화는 대량 처리의 경우 적용할 최적화를 수단이며 대부분은 효과를 보기 어렵다
+  * 병렬화는 대량 처리의 경우에 적용할 수 있는 최적화 수단이며 대부분은 효과를 보기 어렵다
     * `if (스트림의 원소수 * 파이프라인의 코드 라인수 >= 수십만) useParallelStream = true`
     * 병렬화를 적용한 후 반드시 성능을 비교해보고 효과가 있는지 확인해야함
   * 병렬화는 공용 스레드풀 `ForkJoinPool.commonPool()`을 사용하므로,
