@@ -911,6 +911,7 @@ public void testDailyHomework() {
 #### 스트림 파이프라인
 
 * 스트림 연산은 스트림 메소드의 체인으로 나타나고 이를 파이프라인(pipeline)이라고도 표현함
+  * 스트림이나 Builder 패턴 같이 메소드 체인으로 연결 가능한 API를 플루언트 API(Fluent API)라고도 부름
 
 ```java
 void main() {
