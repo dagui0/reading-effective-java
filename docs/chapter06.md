@@ -405,6 +405,21 @@ public enum LinkOption implements OpenOption, CopyOption {
 
 ## 아이템 39: 명명 패턴보다 애너테이션을 사용하라
 
+* 명명 패턴
+  * 식별자 이름에 역할을 알 수 있는 규칙을 적용하는 것. `MemberDto`, `MemberService` 등
+    * Spring AOP는 `*Service.set*` 같은 식으로 권한이나 로깅 규칙을 정하여 Aspect를 주입했었음
+    * JUnit은 `test*()`, `setUp()`, `tearDown()` 같은 식으로 테스트 네이밍 규칙이 있었음
+  * 단점
+    * 오타가 나면 안됨
+    * 반드시 정해진 규칙대로 만들어야 함 (이름이 의미를 전달하는 것 이상의 규칙에 제약됨)
+    * 이름 외에 추가적인 정보(매개변수)를 지정할 방법이 없음
+
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Test {}
+```
+
 
 ## 아이템 40: `@Override` 애너테이션을 일관되게 사용하라
 

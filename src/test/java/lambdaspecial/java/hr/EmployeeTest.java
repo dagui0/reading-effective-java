@@ -81,6 +81,16 @@ class MockEmployeeService implements EmployeeService {
             EmployeeDto.builder().id("3").name("Charlie").departmentId("D2").build()
     );
 
+    static {
+        // Set department for each employee
+        EMPLOYEES.forEach(employee -> {
+            DEPARTMENTS.stream()
+                .filter(department -> department.getId().equals(employee.getDepartmentId()))
+                .findFirst()
+                .ifPresent(employee::setDepartment);
+        });
+    }
+
     @Override
     public List<EmployeeDto> getAllEmployees() {
         return Collections.unmodifiableList(EMPLOYEES);

@@ -1,3 +1,4 @@
+unnamed package
 com.yidigun.base
 com.yidigun.base.examples
 com.yidigun.utils
@@ -25,6 +26,10 @@ effectivejava.chapter06.item36
 effectivejava.chapter06.item37
 effectivejava.chapter06.item38
 effectivejava.chapter06.item39
+effectivejava.chapter07.item43
+effectivejava.chapter07.item45
+effectivejava.chapter07.item47
 lambdaspecial.java
 lambdaspecial.java.enroll.domain
 lambdaspecial.java.enroll.dto
+lambdaspecial.java.hr

@@ -57,7 +57,6 @@ public class HashCodeBuilder {
      *
      * @return the computed hash code as an integer.
      */
-    @CheckHashCodeCalculated
     public int toHashCode() {
         return hashCode;
     }
