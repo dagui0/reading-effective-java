@@ -502,7 +502,8 @@ class MyTest {
 @Repeatable(ExcetpionTestContainer.class)
 public @interface ExcetpionTest {
     Class<? extends Throwable> value();
-    boolean allowSubclass() default true;
+    /// `false`이면 하위 클래스는 허용되지 않고 지정한 예외여야만 통과됨 
+    boolean allowSubclasses() default true;
 }
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -512,9 +513,9 @@ public @interface ExcetpionTestContainer {
 }
 
 class MyTest {
-    @ExcetpionTest(IOException.class, allowSubclass = false)
+    @ExcetpionTest(IOException.class, allowSubclasses = false)
     @ExcetpionTest(IllegalArgumentException.class)
-    public void testNullPointer() {
+    public void testExactIOExceptionAndOther() {
         // ...
     }
 }

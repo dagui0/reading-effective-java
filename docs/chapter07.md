@@ -116,8 +116,8 @@ public String getName() { return "Parent"; }
 }
 
 class Child extends Parent {
-@Override
-public String getName() { return "Child"; }
+    @Override
+    public String getName() { return "Child"; }
 
     @SuppressWarnings({"Convert2MethodRef"})
     void inInstanceContext() {
@@ -176,68 +176,71 @@ void main() {
 
 * 메서드 참조의 유형
 
-| 유형            | 람다                                                       | 예시                       |
-|---------------|----------------------------------------------------------|--------------------------|
-| 정적            | `str -> Integer.parseInt(str)`                           | `Integer::parseInt`      |
-| 한정적(인스턴스)     | `Instant then = Instant.now();`<br>`t -> then.isAfter()` | `Instant.now()::isAfter` |
-| 비한정적(인스턴스)    | `str -> str.toLowerCase()`                               | `String::toLowerCase`    |
-| 생성자           | `() -> new ArrayList<>()`                                | `ArrayList::new`         |
-| 배열 생성자        | `(len) -> new int[len]`                                  | `int[]::new`             |
+| 유형         | 람다                                                       | 예시                       |
+|------------|----------------------------------------------------------|--------------------------|
+| 정적         | `str -> Integer.parseInt(str)`                           | `Integer::parseInt`      |
+| 한정적(인스턴스)  | `Instant then = Instant.now();`<br>`t -> then.isAfter()` | `Instant.now()::isAfter` |
+| 비한정적(인스턴스) | `str -> str.toLowerCase()`                               | `String::toLowerCase`    |
+| 생성자        | `() -> new ArrayList<>()`                                | `ArrayList::new`         |
+| 배열 생성자     | `(len) -> new int[len]`                                  | `int[]::new`             |
 
 * Receiver란 메소드를 호출할 대상 인스턴스를 말함
   * 한정적(인스턴스): `Instant.now()`를 Bound receiver라고 함
   * 비한정적(인스턴스): `str`를 Unbound receiver라고 함
 
 ### 람다로는 불가능하고 정적 메소드로만 가능한 경우
-  * [옮긴이 주석] 제네릭 함수 타입(generic function type) 구현([Java 명세 - Example 9.9-2. Generic Function Types](https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.9))
-    ```java
-    interface G1 {
-        <E extends Exception> Object m() throws E;
-    }
-    interface G2 {
-        <F extends Exception> String m() throws Exception;
+
+* [옮긴이 주석] 제네릭 함수 타입(generic function type) 구현
+  ([Java 명세 - Example 9.9-2. Generic Function Types](https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.9))
+
+```java
+interface G1 {
+    <E extends Exception> Object m() throws E;
+}
+interface G2 {
+    <F extends Exception> String m() throws Exception;
+}
+
+// 두 인터페이스를 다중 상속하면 다음과 같은 시그니처로 간주됨
+// <F extends Exception> () -> String throws F
+// 하지만 람다에는 이런 제네릭 문법은 없다.
+@FunctionalInterface
+interface G extends G1, G2  {
+    // @Override
+    // <F extends Exception> String m() throws F;
+}
+
+class UsingG<F extends Exception> {
+    private final Class<F> exType;
+    public UsingG(Class<F> exType) {
+        this.exType = exType;
     }
 
-    // 두 인터페이스를 다중 상속하면 다음과 같은 시그니처로 간주됨
-    // <F extends Exception> () -> String throws F
-    // 하지만 람다에는 이런 제네릭 문법은 없다.
-    @FunctionalInterface
-    interface G extends G1, G2  {
-        // @Override
-        // <F extends Exception> String m() throws F;
-    }
+    public void usingGFuncMethod(G func) throws F { func.m(); }
 
-    class UsingG<F extends Exception> {
-        private final Class<F> exType;
-        public UsingG(Class<F> exType) {
-            this.exType = exType;
+    public void doSomething() {
+        try {
+            //usingGFuncMethod(() -> "Hello, World!"); // 컴파일 에러: 타깃 메서드는 제네릭입니다
+            usingGFuncMethod(MyStringUtils::helloWorld);
         }
-
-        public void usingGFuncMethod(G func) throws F { func.m(); }
-
-        public void doSomething() {
-            try {
-                //usingGFuncMethod(() -> "Hello, World!"); // 컴파일 에러: 타깃 메서드는 제네릭입니다
-                usingGFuncMethod(MyStringUtils::helloWorld);
+        catch (Exception e) {
+            if (exType.isInstance(e)) { // e instanceof F
+                // F 예외 처리
+            } else {
+                System.err.println("unknown exception: " + e);
             }
-            catch (Exception e) {
-                if (exType.isInstance(e)) { // e instanceof F
-                    // F 예외 처리
-                } else {
-                    System.err.println("unknown exception: " + e);
-                }
-            }
         }
     }
-    
-    class MyStringUtils {
-        public static <F extends Exception> String helloWorld() throws F {
-            if (false)
-                throw (F) new RuntimeException("Generic exception example");
-            return "Hello, World!";
-        }
+}
+  
+class MyStringUtils {
+    public static <F extends Exception> String helloWorld() throws F {
+        if (false)
+            throw (F) new RuntimeException("Generic exception example");
+        return "Hello, World!";
     }
-    ```
+}
+```
 
 ## 아이템 44: 표준 함수형 인터페이스를 사용하라
 
