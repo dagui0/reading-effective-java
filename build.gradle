@@ -69,7 +69,7 @@ java {
 }
 
 compileJava {
-    options.compilerArgs << '-Xlint:all'
+    options.compilerArgs << '-Xlint:all' << '-Xlint:-processing'
 }
 
 javadoc {

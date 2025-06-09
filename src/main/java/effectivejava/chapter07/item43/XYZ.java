@@ -32,6 +32,7 @@ interface A {
 interface B {
     List<String> foo(List<String> arg) throws EOFException, SQLException, TimoutException;
 }
+@SuppressWarnings("rawtypes")
 interface C {
     List foo(List arg) throws Exception;
 }

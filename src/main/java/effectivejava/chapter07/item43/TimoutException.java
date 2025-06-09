@@ -1,6 +1,12 @@
 package effectivejava.chapter07.item43;
 
+import java.io.Serial;
+
 public class TimoutException extends Exception {
+
+    @Serial
+    private static final long serialVersionUID = 4773668534711830477L;
+
     public TimoutException() {
     }
 
