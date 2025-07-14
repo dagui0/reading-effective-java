@@ -676,6 +676,7 @@ tasks.javadoc {
             title = "${project.name} ${project.version} API Documentation"
             version = project.version.toString()
             memberLevel = JavadocMemberLevel.PROTECTED
+            tags("implSpec:a:Implementation Requirements:")
             links = listOf(
                 "https://docs.oracle.com/en/java/javase/${libs.versions.java.get()}/docs/api/",
                 "https://javadoc.io/doc/org.projectlombok/lombok/${libs.versions.lombok.get()}/",
