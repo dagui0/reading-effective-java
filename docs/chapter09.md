@@ -473,7 +473,8 @@ public class ThreadLocal<T> {
     // try {
     //     cons.setAccessible(true);
     // }
-    // catch (SecurityException e) {
+    // catch (SecurityException                     // (java 8까지) 애플릿 등 보안 설정이 된 환경의 경우
+    //        | InaccessibleObjectException e) {    // (java 9+) 타 모듈에 접근하는 경우 오픈되지 않았으면
     //     throw new RuntimeException("Can't access constructor: " + className, e);
     // }
   
@@ -609,7 +610,7 @@ record LambdaProperty(String name,
 >
 > - Donald Knuth
 >
-> (전체의 97% 정도인) 자그마한 효율성은 모두 잊자. 섣부른 최적화가 만악의 근원이다.
+> (전체의 97% 정도인) 자그마한 효율성은 모두 잊자. 섣부른 최적화가 만악의 근원이다. 그러나 그 중요한 3%의 기회를 놓쳐서는 안된다.
 > 
 > - 도널드 크누스
 
@@ -621,7 +622,7 @@ record LambdaProperty(String name,
 >
 > 최적화를 할 때는 다음 두 규칙을 따르라. \
 > 첫 번째, 하지마라. \
-> 두 번째, (전문가 한정) 아직 하지 마라. 다시 말해, 완전히 명백하고 최적화되지 않은 해법을 찾을 때 까지는 하지 마라.
+> 두 번째, (전문가 한정) 아직 하지 마라.
 > 
 > - 마이클 A. 잭슨
 
